@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+  <title>SOG - Marché de proximité</title>
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <!-- React + ReactDOM (UMD) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel Standalone -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    /* Styles néumorphiques */
+    .neu-card {
+      background: #1e293b;
+      border-radius: 1.5rem;
+      box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.05),
+                  inset -2px -2px 4px rgba(0, 0, 0, 0.8),
+                  6px 6px 12px rgba(0, 0, 0, 0.6);
+    }
+    .neu-button {
+      background: #1e293b;
+      color: white;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1rem;
+      box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.1),
+                  inset -2px -2px 4px rgba(0, 0, 0, 0.9),
+                  4px 4px 8px rgba(0, 0, 0, 0.6);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      font-weight: 500;
+    }
+    .neu-button:hover {
+      box-shadow: inset -2px -2px 4px rgba(255, 255, 255, 0.05),
+                  inset 2px 2px 4px rgba(0, 0, 0, 0.9);
+      transform: scale(0.98);
+    }
+    .neu-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .neu-input {
+      background: #1e293b;
+      color: white;
+      border-radius: 0.75rem;
+      padding: 0.5rem 1rem;
+      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.8),
+                  inset -2px -2px 4px rgba(255, 255, 255, 0.05);
+      border: none;
+      outline: none;
+      width: 100%;
+      transition: box-shadow 0.2s;
+    }
+    .neu-input:focus {
+      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.9),
+                  inset -2px -2px 4px rgba(255, 255, 255, 0.1),
+                  0 0 0 2px #3b82f6;
+    }
+    .neu-input::placeholder {
+      color: #94a3b8;
+    }
+    .iframe-container {
+      height: calc(100vh - 7rem);
+      width: 100%;
+      background: white;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+    .iframe-container iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .modal-overlay {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 8px;
+    }
+  </style>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="apple-touch-icon" href="icon.png" />
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4b6cb7">
+<link rel="apple-touch-icon" href="icon.png"></head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+  // ---- PROTOCOLE LB REAACTOR ----
+  const { useState, useEffect, useRef, useMemo } = React;
+
+  // ---- FIREBASE INIT ----
+  const firebaseConfig = {
+    apiKey: "AIzaSyCegKjHSw2DzF1zcBVdG6iZyGK2P3ig1rM",
+    authDomain: "sog-hanout.firebaseapp.com",
+    projectId: "sog-hanout",
+    storageBucket: "sog-hanout.firebasestorage.app",
+    messagingSenderId: "108437302312",
+    appId: "1:108437302312:web:9faa1f7084e5797cf9591d",
+    measurementId: "G-V1VFE9YDE3"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  function App() {
+
+    // ---- ÉTATS ----
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [shops, setShops] = useState([]);
+    const [selectedShop, setSelectedShop] = useState(null);
+    const [showLogin, setShowLogin] = useState(false);
+    const [showRegister, setShowRegister] = useState(false);
+    const [loginForm, setLoginForm] = useState({ email: "", password: "" });
+    const [registerForm, setRegisterForm] = useState({
+      name: "", email: "", password: "", phone: "", address: ""
+    });
+    const [msg, setMsg] = useState({ text: "", type: "" });
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    // ---- RÉFÉRENCE POUR L'IFRAME ----
+    const iframeRef = useRef(null);
+
+    // ---- CONSTANTES ----
+    const SHOPS_URL = "https://raw.githubusercontent.com/mekeirish/sog/main/shops.json";
+
+    // ---- AUTH FIREBASE ----
+    useEffect(() => {
+      const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+        if (firebaseUser) {
+          const userData = {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email,
+            name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || "Client",
+            phone: firebaseUser.phoneNumber || "",
+            address: "",
+          };
+          setUser(userData);
+          sendAuthToIframe(userData);
+        } else {
+          setUser(null);
+          sendAuthToIframe(null);
+        }
+        setLoading(false);
+        loadShops();
+      });
+
+      return function() {
+        unsubscribe();
+      };
+    }, []);
+
+    const loadShops = async function() {
+      try {
+        const res = await fetch(SHOPS_URL);
+        if (res.ok) {
+          const data = await res.json();
+          setShops(data);
+        } else {
+          setShops([
+            { vendor: "milo", name: "Milo", url: "https://mekeirish.github.io/hanout-milo/" },
+            { vendor: "tartiza", name: "Tartiza", url: "https://mekeirish.github.io/hanout-tartiza/" },
+            { vendor: "baginjaxy", name: "Baginjaxy", url: "https://mekeirish.github.io/hanout-baginjaxy/" }
+          ]);
+        }
+      } catch (e) {
+        setShops([
+          { vendor: "milo", name: "Milo", url: "https://mekeirish.github.io/hanout-milo/" },
+          { vendor: "tartiza", name: "Tartiza", url: "https://mekeirish.github.io/hanout-tartiza/" },
+          { vendor: "baginjaxy", name: "Baginjaxy", url: "https://mekeirish.github.io/hanout-baginjaxy/" }
+        ]);
+      }
+    };
+
+    // ---- AUTHENTIFICATION ----
+    const handleLogin = async function(e) {
+      e.preventDefault();
+      setMsg({ text: "", type: "" });
+      setIsProcessing(true);
+      try {
+        await auth.signInWithEmailAndPassword(loginForm.email, loginForm.password);
+        setShowLogin(false);
+        setLoginForm({ email: "", password: "" });
+        setMsg({ text: "✅ Connexion réussie", type: "success" });
+      } catch (error) {
+        let errorMsg = "❌ Erreur de connexion";
+        if (error.code === 'auth/user-not-found') errorMsg = "❌ Utilisateur non trouvé";
+        else if (error.code === 'auth/wrong-password') errorMsg = "❌ Mot de passe incorrect";
+        else if (error.code === 'auth/invalid-email') errorMsg = "❌ Email invalide";
+        else if (error.code === 'auth/too-many-requests') errorMsg = "❌ Trop de tentatives, réessayez plus tard";
+        setMsg({ text: errorMsg, type: "error" });
+      }
+      setIsProcessing(false);
+    };
+
+    const handleRegister = async function(e) {
+      e.preventDefault();
+      setMsg({ text: "", type: "" });
+      setIsProcessing(true);
+      try {
+        const userCredential = await auth.createUserWithEmailAndPassword(
+          registerForm.email,
+          registerForm.password
+        );
+        await userCredential.user.updateProfile({
+          displayName: registerForm.name
+        });
+        setShowRegister(false);
+        setRegisterForm({ name: "", email: "", password: "", phone: "", address: "" });
+        setMsg({ text: "✅ Inscription réussie", type: "success" });
+      } catch (error) {
+        let errorMsg = "❌ Erreur d'inscription";
+        if (error.code === 'auth/email-already-in-use') errorMsg = "❌ Cet email est déjà utilisé";
+        else if (error.code === 'auth/weak-password') errorMsg = "❌ Mot de passe trop faible (6 caractères minimum)";
+        else if (error.code === 'auth/invalid-email') errorMsg = "❌ Email invalide";
+        setMsg({ text: errorMsg, type: "error" });
+      }
+      setIsProcessing(false);
+    };
+
+    const handleLogout = async function() {
+      try {
+        await auth.signOut();
+        setSelectedShop(null);
+        setMsg({ text: "Déconnecté", type: "info" });
+      } catch (error) {
+        setMsg({ text: "❌ Erreur lors de la déconnexion", type: "error" });
+      }
+    };
+
+    // ---- COMMUNICATION AVEC L'IFRAME ----
+    const sendAuthToIframe = function(userData) {
+      if (iframeRef.current) {
+        var message = {
+          type: 'SOG_AUTH',
+          payload: {
+            user: userData,
+          }
+        };
+        iframeRef.current.contentWindow.postMessage(message, '*');
+      }
+    };
+
+    const handleIframeLoad = function() {
+      sendAuthToIframe(user);
+    };
+
+    // ---- SÉLECTION D'UNE BOUTIQUE ----
+    const selectShop = function(shop) {
+      setSelectedShop(shop);
+    };
+
+    const closeShop = function() {
+      setSelectedShop(null);
+    };
+
+    // ---- RENDU ----
+    if (loading) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-slate-900">
+          <div className="text-white text-xl">Chargement...</div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="min-h-screen bg-slate-900 text-white p-4">
+        {/* Header */}
+        <header className="neu-card p-4 flex flex-wrap items-center justify-between sticky top-0 z-30">
+          <h1 className="text-2xl font-bold text-white">🛒 SOG - Marché</h1>
+          <div className="flex gap-3 items-center flex-wrap">
+            {user ? (
+              <div className="flex gap-3 items-center">
+                <span className="text-sm hidden sm:inline text-gray-300">👤 {user.name}</span>
+                <button onClick={handleLogout} className="neu-button text-sm">
+                  Déconnexion
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-3 items-center">
+                <button onClick={function() { setShowLogin(true); }} className="neu-button text-sm">
+                  Connexion
+                </button>
+                <button onClick={function() { setShowRegister(true); }} className="neu-button text-sm">
+                  Inscription
+                </button>
+              </div>
+            )}
+          </div>
+        </header>
+
+        {/* Messages */}
+        {msg.text && (
+          <div className={'mt-4 p-3 rounded-xl ' + (msg.type === 'success' ? 'bg-emerald-900/40 text-emerald-200' : msg.type === 'error' ? 'bg-red-900/40 text-red-200' : 'bg-blue-900/40 text-blue-200') + ' border border-slate-700'}>
+            {msg.text}
+          </div>
+        )}
+
+        {/* Contenu principal */}
+        <div className="max-w-7xl mx-auto mt-6">
+          {selectedShop ? (
+            // Boutique affichée en iframe
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <button onClick={closeShop} className="neu-button text-sm">
+                  ← Retour
+                </button>
+                <span className="text-xl font-semibold text-white">{selectedShop.name}</span>
+                {!user && (
+                  <span className="text-sm text-yellow-400 ml-2">🔒 Connectez-vous pour commander</span>
+                )}
+                {user && (
+                  <span className="text-sm text-emerald-400 ml-2">✅ Connecté en tant que {user.name}</span>
+                )}
+              </div>
+              <div className="iframe-container">
+                <iframe
+                  ref={iframeRef}
+                  key={selectedShop.vendor}
+                  src={selectedShop.url}
+                  title={selectedShop.name}
+                  sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                  loading="lazy"
+                  onLoad={handleIframeLoad}
+                />
+              </div>
+            </div>
+          ) : (
+            // Liste des boutiques
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-6">🏪 Nos boutiques</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {shops.map(function(shop) {
+                  return (
+                    <div
+                      key={shop.vendor}
+                      className="neu-card p-6 cursor-pointer hover:scale-[1.02] transition-transform duration-200"
+                      onClick={function() { selectShop(shop); }}
+                    >
+                      <h3 className="text-xl font-semibold text-white">{shop.name}</h3>
+                      <p className="text-sm text-gray-400 mt-1">Vendeur : {shop.vendor}</p>
+                      <button className="neu-button mt-4 w-full">Visiter</button>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-8 text-center text-gray-400 text-sm">
+                Toutes les boutiques sont visibles. Connectez‑vous pour passer une commande.
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ---- MODAL LOGIN ---- */}
+        {showLogin && (
+          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowLogin(false); }}>
+            <div className="neu-card max-w-md w-full p-6" onClick={function(e) { e.stopPropagation(); }}>
+              <h3 className="text-xl font-bold text-white mb-4">🔐 Connexion</h3>
+              <form onSubmit={handleLogin} className="space-y-4">
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="neu-input"
+                  value={loginForm.email}
+                  onChange={function(e) { setLoginForm({ email: e.target.value, password: loginForm.password }); }}
+                  required
+                />
+                <input
+                  type="password"
+                  placeholder="Mot de passe"
+                  className="neu-input"
+                  value={loginForm.password}
+                  onChange={function(e) { setLoginForm({ email: loginForm.email, password: e.target.value }); }}
+                  required
+                />
+                <button type="submit" className="neu-button w-full" disabled={isProcessing}>
+                  {isProcessing ? 'Connexion...' : 'Se connecter'}
+                </button>
+              </form>
+              <div className="mt-4 text-right">
+                <button onClick={function() { setShowLogin(false); }} className="text-gray-400 hover:text-white text-sm">Annuler</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ---- MODAL REGISTER ---- */}
+        {showRegister && (
+          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowRegister(false); }}>
+            <div className="neu-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
+              <h3 className="text-xl font-bold text-white mb-4">📝 Inscription</h3>
+              <form onSubmit={handleRegister} className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Nom complet"
+                  className="neu-input"
+                  value={registerForm.name}
+                  onChange={function(e) { setRegisterForm({ ...registerForm, name: e.target.value }); }}
+                  required
+                />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  className="neu-input"
+                  value={registerForm.email}
+                  onChange={function(e) { setRegisterForm({ ...registerForm, email: e.target.value }); }}
+                  required
+                />
+                <input
+                  type="password"
+                  placeholder="Mot de passe (6 caractères min)"
+                  className="neu-input"
+                  value={registerForm.password}
+                  onChange={function(e) { setRegisterForm({ ...registerForm, password: e.target.value }); }}
+                  required
+                  minLength="6"
+                />
+                <input
+                  type="tel"
+                  placeholder="Téléphone"
+                  className="neu-input"
+                  value={registerForm.phone}
+                  onChange={function(e) { setRegisterForm({ ...registerForm, phone: e.target.value }); }}
+                />
+                <input
+                  type="text"
+                  placeholder="Adresse (facultatif)"
+                  className="neu-input"
+                  value={registerForm.address}
+                  onChange={function(e) { setRegisterForm({ ...registerForm, address: e.target.value }); }}
+                />
+                <button type="submit" className="neu-button w-full" disabled={isProcessing}>
+                  {isProcessing ? 'Inscription...' : "S'inscrire"}
+                </button>
+              </form>
+              <div className="mt-4 text-right">
+                <button onClick={function() { setShowRegister(false); }} className="text-gray-400 hover:text-white text-sm">Annuler</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ---- RENDU DANS LE DOM ----
+  var container = document.getElementById('root');
+  var root = ReactDOM.createRoot(container);
+  root.render(React.createElement(App, null));
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('./sw.js');
+    });
+  }
+</script>
+
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));}</script>
+</body>
+</html>
