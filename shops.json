@@ -38,5 +38,10 @@
     "vendor": "hol",
     "name": "Hol",
     "url": "https://mekeirish.github.io/hanout-hol/"
+  },
+  {
+    "vendor": "jiji",
+    "name": "Jiji",
+    "url": "https://mekeirish.github.io/hanout-jiji/"
   }
 ]
