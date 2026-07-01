@@ -1,6 +1,27 @@
 [
-  { "vendor": "milo", "name": "Milo", "url": "https://mekeirish.github.io/hanout-milo/" },
-  { "vendor": "tartiza", "name": "Tartiza", "url": "https://mekeirish.github.io/hanout-tartiza/" },
-  { "vendor": "baginjaxy", "name": "Baginjaxy", "url": "https://mekeirish.github.io/hanout-baginjaxy/" },
-  { "vendor": "gomaziz", "name": "Gomaziz", "url": "https://mekeirish.github.io/hanout-gomaziz/" }
+  {
+    "vendor": "milo",
+    "name": "Milo",
+    "url": "https://mekeirish.github.io/hanout-milo/"
+  },
+  {
+    "vendor": "tartiza",
+    "name": "Tartiza",
+    "url": "https://mekeirish.github.io/hanout-tartiza/"
+  },
+  {
+    "vendor": "baginjaxy",
+    "name": "Baginjaxy",
+    "url": "https://mekeirish.github.io/hanout-baginjaxy/"
+  },
+  {
+    "vendor": "gomaziz",
+    "name": "Gomaziz",
+    "url": "https://mekeirish.github.io/hanout-gomaziz/"
+  },
+  {
+    "vendor": "{{VENDOR}}",
+    "name": "{{VENDOR}}",
+    "url": "https://mekeirish.github.io/hanout-{{VENDOR}}/"
+  }
 ]
