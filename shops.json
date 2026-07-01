@@ -53,5 +53,10 @@
     "vendor": "wawa",
     "name": "Wawa",
     "url": "https://mekeirish.github.io/hanout-wawa/"
+  },
+  {
+    "vendor": "polidiana",
+    "name": "Polidiana",
+    "url": "https://mekeirish.github.io/hanout-polidiana/"
   }
 ]
