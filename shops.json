@@ -48,5 +48,10 @@
     "vendor": "mezioud",
     "name": "Mezioud",
     "url": "https://mekeirish.github.io/hanout-mezioud/"
+  },
+  {
+    "vendor": "wawa",
+    "name": "Wawa",
+    "url": "https://mekeirish.github.io/hanout-wawa/"
   }
 ]
