@@ -28,5 +28,10 @@
     "vendor": "bigdol",
     "name": "Bigdol",
     "url": "https://mekeirish.github.io/hanout-bigdol/"
+  },
+  {
+    "vendor": "bola",
+    "name": "Bola",
+    "url": "https://mekeirish.github.io/hanout-bola/"
   }
 ]
