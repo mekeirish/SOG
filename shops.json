@@ -33,5 +33,10 @@
     "vendor": "bola",
     "name": "Bola",
     "url": "https://mekeirish.github.io/hanout-bola/"
+  },
+  {
+    "vendor": "hol",
+    "name": "Hol",
+    "url": "https://mekeirish.github.io/hanout-hol/"
   }
 ]
