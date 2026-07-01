@@ -43,5 +43,10 @@
     "vendor": "jiji",
     "name": "Jiji",
     "url": "https://mekeirish.github.io/hanout-jiji/"
+  },
+  {
+    "vendor": "mezioud",
+    "name": "Mezioud",
+    "url": "https://mekeirish.github.io/hanout-mezioud/"
   }
 ]
