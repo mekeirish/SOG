@@ -23,5 +23,10 @@
     "vendor": "{{VENDOR}}",
     "name": "{{VENDOR}}",
     "url": "https://mekeirish.github.io/hanout-{{VENDOR}}/"
+  },
+  {
+    "vendor": "bigdol",
+    "name": "Bigdol",
+    "url": "https://mekeirish.github.io/hanout-bigdol/"
   }
 ]
