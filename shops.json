@@ -83,5 +83,10 @@
     "vendor": "lalarinda",
     "name": "Lalarinda",
     "url": "https://mekeirish.github.io/hanout-lalarinda/"
+  },
+  {
+    "vendor": "badrokhan",
+    "name": "Badrokhan",
+    "url": "https://mekeirish.github.io/hanout-badrokhan/"
   }
 ]
