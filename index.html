@@ -1,4 +1,6 @@
-<html lang="fr"><head>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
@@ -7,11 +9,10 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-  <script crossorigin="" src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin="" src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    /* (styles identiques à la version précédente) */
     .glass-card { background: rgba(30,41,59,0.5); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 32px rgba(0,0,0,0.5); transition: all 0.3s ease; }
     .glass-card:hover { border-color: rgba(255,255,255,0.2); box-shadow: 0 12px 40px rgba(0,0,0,0.6); transform: translateY(-2px); }
     .glass-header { background: rgba(15,23,42,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -25,10 +26,9 @@
     .modal-overlay { background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
     .spinner { border: 3px solid #1e293b; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes fadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
     .modal-animate { animation: fadeIn 0.2s ease-out; }
-    .iframe-container { height: calc(100vh - 8rem); width: 100%; background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-    .iframe-container iframe { width: 100%; height: 100%; border: 0; }
+    .iframe-immersive { animation: fadeIn 0.3s ease-out; }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #0f172a; }
     ::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
@@ -36,13 +36,12 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f172a">
   <link rel="apple-touch-icon" href="icon.png">
-
-<link rel="manifest" href="./manifest.json">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#4b6cb7">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="icon.png">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#4b6cb7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icon.png">
 </head>
 <body>
 <div id="root"></div>
@@ -50,7 +49,7 @@
 <script type="text/babel">
   const { useState, useEffect, useRef } = React;
 
-  // ---- DÉCODE LES ENTITÉS HTML (SOLUTION MAGIQUE) ----
+  // ---- DÉCODE LES ENTITÉS HTML ----
   var decodeEntities = function(str) {
     if (!str) return "";
     try {
@@ -62,7 +61,7 @@
     }
   };
 
-  // ---- TEXTES STATIQUES (avec entités HTML pour les accents) ----
+  // ---- TEXTES STATIQUES ----
   var TEXTS = {
     appTitle: "SOG - March\u00E9",
     welcome: "Bienvenue sur SOG",
@@ -145,7 +144,6 @@
   var auth = firebase.auth();
   var db = firebase.database();
 
-  // ---- FONCTION POUR DÉCODER LES DONNÉES UTILISATEUR ----
   var cleanUserData = function(userData) {
     if (!userData) return null;
     var cleaned = { ...userData };
@@ -158,7 +156,6 @@
   };
 
   function App() {
-    // ---- ÉTATS ----
     var [user, setUser] = useState(null);
     var [loading, setLoading] = useState(true);
     var [shops, setShops] = useState([]);
@@ -181,7 +178,7 @@
     var iframeRef = useRef(null);
     var SHOPS_URL = "https://raw.githubusercontent.com/mekeirish/sog/main/shops.json";
 
-    // ---- AUTH FIREBASE ----
+    // ---- AUTH ----
     useEffect(function() {
       var unsubscribe = auth.onAuthStateChanged(async function(firebaseUser) {
         if (firebaseUser) {
@@ -201,7 +198,6 @@
               userData.address = extraData.address || "";
             }
           } catch (e) { /* ignore */ }
-          // Nettoyage des accents
           var cleanedUser = cleanUserData(userData);
           setUser(cleanedUser);
           sendAuthToIframe(cleanedUser);
@@ -219,7 +215,6 @@
       return function() { unsubscribe(); };
     }, []);
 
-    // ---- CHECK ADMIN ----
     var checkIfAdmin = function(uid) {
       db.ref('admins').once('value').then(function(snapshot) {
         var adminList = snapshot.val() || [];
@@ -229,7 +224,6 @@
       }).catch(function(err) { console.error(err); });
     };
 
-    // ---- CHARGEMENT DES BOUTIQUES ----
     var loadShops = async function() {
       try {
         var res = await fetch(SHOPS_URL);
@@ -253,7 +247,7 @@
       }
     };
 
-    // ---- AUTH ----
+    // ---- AUTH HANDLERS ----
     var handleLogin = async function(e) {
       e.preventDefault();
       setMsg({ text: "", type: "" });
@@ -324,7 +318,7 @@
       }
     };
 
-    // ---- COMMUNICATION IFRAME ----
+    // ---- IFRAME COMMUNICATION ----
     var sendAuthToIframe = function(userData) {
       if (iframeRef.current) {
         iframeRef.current.contentWindow.postMessage({
@@ -469,11 +463,35 @@
       );
     }
 
-    // Fonction pour décoder les textes à l'affichage
     var t = function(key) {
       return decodeEntities(TEXTS[key] || key);
     };
 
+    // ---- MODE IMMERSIF (plein écran) ----
+    if (selectedShop) {
+      return (
+        <div className="fixed inset-0 z-50 h-screen w-screen overflow-hidden bg-black iframe-immersive">
+          <iframe
+            ref={iframeRef}
+            key={selectedShop.vendor}
+            src={selectedShop.url}
+            title={selectedShop.name}
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+            loading="lazy"
+            onLoad={handleIframeLoad}
+            className="w-full h-full border-0"
+          />
+          <button
+            onClick={closeShop}
+            className="fixed top-4 left-4 z-[60] glass-btn px-4 py-2 rounded-xl text-sm font-medium shadow-lg"
+          >
+            {t('back')}
+          </button>
+        </div>
+      );
+    }
+
+    // ---- MODE NORMAL ----
     return (
       <div className="min-h-screen bg-slate-900 text-white p-4">
 
@@ -585,56 +603,33 @@
               <button onClick={function() { setActiveTab('shops'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium mt-4">{t('back')}</button>
             </div>
           ) : (
+            // ---- LISTE DES BOUTIQUES (mode normal) ----
             <div>
-              {selectedShop ? (
-                <div>
-                  <div className="flex items-center gap-3 mb-4 flex-wrap">
-                    <button onClick={closeShop} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('back')}</button>
-                    <span className="text-xl font-semibold text-white">{decodeEntities(selectedShop.name)}</span>
-                    <div className="flex items-center gap-2 ml-2">
-                      <span className="text-yellow-400">⭐</span>
-                      <span className="text-white">{getAverageRating(selectedShop.vendor)}</span>
-                      <span className="text-gray-400 text-sm">({getRatingCount(selectedShop.vendor)} {t('ratingCount')})</span>
+              <h2 className="text-2xl font-bold text-white mb-6">{t('shopsTitle')}</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {shops.map(function(shop) {
+                  var avgRating = getAverageRating(shop.vendor);
+                  var ratingCount = getRatingCount(shop.vendor);
+                  return (
+                    <div key={shop.vendor} className="glass-card p-6 rounded-2xl cursor-pointer hover:scale-[1.02] transition-all" onClick={function() { selectShop(shop); }}>
+                      <h3 className="text-xl font-semibold text-white">{decodeEntities(shop.name)}</h3>
+                      <p className="text-sm text-gray-400 mt-1">{t('vendor')} : {decodeEntities(shop.vendor)}</p>
+                      <div className="flex items-center gap-2 mt-2">
+                        <span className="text-yellow-400">⭐</span>
+                        <span className="text-white">{avgRating || "—"}</span>
+                        <span className="text-gray-400 text-sm">({ratingCount} {t('ratingCount')})</span>
+                      </div>
+                      <button className="glass-btn w-full mt-4 py-2 rounded-xl text-sm font-medium">{t('visit')}</button>
                     </div>
-                    <button onClick={function() { setRatingForm({ vendor: selectedShop.vendor, rating: 5, comment: "" }); setShowRatingModal(true); }} className="glass-btn px-4 py-2 rounded-xl text-sm font-medium">⭐ {t('rating')}</button>
-                    {!user && <span className="text-sm text-yellow-400 ml-2">{t('connectToOrder')}</span>}
-                    {user && <span className="text-sm text-emerald-400 ml-2">✅ {t('connectedAs')} {decodeEntities(user.name)}</span>}
-                  </div>
-                  <div className="iframe-container">
-                    <iframe ref={iframeRef} key={selectedShop.vendor} src={selectedShop.url} title={selectedShop.name} sandbox="allow-scripts allow-same-origin allow-forms allow-popups" loading="lazy" onLoad={handleIframeLoad} />
-                  </div>
-                </div>
-              ) : (
-                <div>
-                  <h2 className="text-2xl font-bold text-white mb-6">{t('shopsTitle')}</h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {shops.map(function(shop) {
-                      var avgRating = getAverageRating(shop.vendor);
-                      var ratingCount = getRatingCount(shop.vendor);
-                      return (
-                        <div key={shop.vendor} className="glass-card p-6 rounded-2xl cursor-pointer hover:scale-[1.02] transition-all" onClick={function() { selectShop(shop); }}>
-                          <h3 className="text-xl font-semibold text-white">{decodeEntities(shop.name)}</h3>
-                          <p className="text-sm text-gray-400 mt-1">{t('vendor')} : {decodeEntities(shop.vendor)}</p>
-                          <div className="flex items-center gap-2 mt-2">
-                            <span className="text-yellow-400">⭐</span>
-                            <span className="text-white">{avgRating || "—"}</span>
-                            <span className="text-gray-400 text-sm">({ratingCount} {t('ratingCount')})</span>
-                          </div>
-                          <button className="glass-btn w-full mt-4 py-2 rounded-xl text-sm font-medium">{t('visit')}</button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                  <div className="mt-8 text-center text-gray-400 text-sm">{!user ? t('welcomeDesc') : ""}</div>
-                </div>
-              )}
+                  );
+                })}
+              </div>
+              <div className="mt-8 text-center text-gray-400 text-sm">{!user ? t('welcomeDesc') : ""}</div>
             </div>
           )}
         </div>
 
-        {/* ---- MODALS (LOGIN, REGISTER, RATING) ---- */}
-        {/* (le contenu est identique à la version précédente, mais avec decodeEntities sur les textes) */}
-
+        {/* ---- MODALS ---- */}
         {showLogin && (
           <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4 modal-animate" onClick={function() { setShowLogin(false); }}>
             <div className="glass-modal max-w-md w-full p-6 rounded-2xl shadow-2xl" onClick={function(e) { e.stopPropagation(); }}>
@@ -702,15 +697,5 @@
     });
   }
 </script>
-
-
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js')
-        .then(reg => console.log('Service Worker enregistré !'))
-        .catch(err => console.error('Erreur SW :', err));
-    });
-  }
-</script>
-</body></html>
+</body>
+</html>
