@@ -1,6 +1,6 @@
 {
-  "name": "SOG",
-  "short_name": "SOG",
+  "name": "sog",
+  "short_name": "sog",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#1a1c20",
