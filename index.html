@@ -2,110 +2,38 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>SOG - Marché de proximité</title>
-  <!-- Tailwind CSS (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-  <!-- React + ReactDOM (UMD) -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <!-- Babel Standalone -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <style>
-    /* Styles néumorphiques */
-    .neu-card {
-      background: #1e293b;
-      border-radius: 1.5rem;
-      box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.05),
-                  inset -2px -2px 4px rgba(0, 0, 0, 0.8),
-                  6px 6px 12px rgba(0, 0, 0, 0.6);
-    }
-    .neu-button {
-      background: #1e293b;
-      color: white;
-      border-radius: 0.75rem;
-      padding: 0.5rem 1rem;
-      box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.1),
-                  inset -2px -2px 4px rgba(0, 0, 0, 0.9),
-                  4px 4px 8px rgba(0, 0, 0, 0.6);
-      transition: all 0.2s ease;
-      cursor: pointer;
-      border: none;
-      font-weight: 500;
-    }
-    .neu-button:hover {
-      box-shadow: inset -2px -2px 4px rgba(255, 255, 255, 0.05),
-                  inset 2px 2px 4px rgba(0, 0, 0, 0.9);
-      transform: scale(0.98);
-    }
-    .neu-button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
-    .neu-input {
-      background: #1e293b;
-      color: white;
-      border-radius: 0.75rem;
-      padding: 0.5rem 1rem;
-      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.8),
-                  inset -2px -2px 4px rgba(255, 255, 255, 0.05);
-      border: none;
-      outline: none;
-      width: 100%;
-      transition: box-shadow 0.2s;
-    }
-    .neu-input:focus {
-      box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.9),
-                  inset -2px -2px 4px rgba(255, 255, 255, 0.1),
-                  0 0 0 2px #3b82f6;
-    }
-    .neu-input::placeholder {
-      color: #94a3b8;
-    }
-    .iframe-container {
-      height: calc(100vh - 7rem);
-      width: 100%;
-      background: white;
-      border-radius: 1.5rem;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-    }
-    .iframe-container iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-    .modal-overlay {
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(4px);
-    }
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0f172a;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #334155;
-      border-radius: 8px;
-    }
-    .spinner {
-      border: 3px solid #1e293b;
-      border-top: 3px solid #3b82f6;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    /* (styles identiques à la version précédente) */
+    .glass-card { background: rgba(30,41,59,0.5); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 32px rgba(0,0,0,0.5); transition: all 0.3s ease; }
+    .glass-card:hover { border-color: rgba(255,255,255,0.2); box-shadow: 0 12px 40px rgba(0,0,0,0.6); transform: translateY(-2px); }
+    .glass-header { background: rgba(15,23,42,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .glass-modal { background: rgba(15,23,42,0.8); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 24px 48px rgba(0,0,0,0.6); }
+    .glass-input { background: rgba(15,23,42,0.5); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); transition: border-color 0.2s, box-shadow 0.2s; }
+    .glass-input:focus { border-color: rgba(59,130,246,0.5); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+    .glass-btn { background: rgba(59,130,246,0.25); backdrop-filter: blur(8px); border: 1px solid rgba(59,130,246,0.3); color: #f1f5f9; transition: all 0.2s ease; }
+    .glass-btn:hover:not(:disabled) { background: rgba(59,130,246,0.4); border-color: rgba(59,130,246,0.5); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(59,130,246,0.2); }
+    .glass-btn-secondary { background: rgba(51,65,85,0.3); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); color: #f1f5f9; transition: all 0.2s ease; }
+    .glass-btn-secondary:hover:not(:disabled) { background: rgba(51,65,85,0.5); border-color: rgba(255,255,255,0.15); transform: translateY(-1px); }
+    .modal-overlay { background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
+    .spinner { border: 3px solid #1e293b; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+    .modal-animate { animation: fadeIn 0.2s ease-out; }
+    .iframe-container { height: calc(100vh - 8rem); width: 100%; background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+    .iframe-container iframe { width: 100%; height: 100%; border: 0; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
   </style>
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0f172a" />
@@ -115,11 +43,90 @@
 <div id="root"></div>
 
 <script type="text/babel">
-  // ---- PROTOCOLE LB REAACTOR ----
-  const { useState, useEffect, useRef, useMemo } = React;
+  const { useState, useEffect, useRef } = React;
+
+  // ---- DÉCODE LES ENTITÉS HTML (SOLUTION MAGIQUE) ----
+  var decodeEntities = function(str) {
+    if (!str) return "";
+    try {
+      var txt = document.createElement('textarea');
+      txt.innerHTML = str;
+      return txt.value;
+    } catch (e) {
+      return str;
+    }
+  };
+
+  // ---- TEXTES STATIQUES (avec entités HTML pour les accents) ----
+  var TEXTS = {
+    appTitle: "SOG - March\u00E9",
+    welcome: "Bienvenue sur SOG",
+    welcomeDesc: "Connectez-vous ou inscrivez-vous pour acc\u00E9der \u00E0 toutes les boutiques du march\u00E9.",
+    login: "Connexion",
+    register: "Inscription",
+    logout: "D\u00E9connexion",
+    connectedAs: "Connect\u00E9 en tant que",
+    shopsTitle: "\uD83C\uDFEA Nos boutiques",
+    visit: "Visiter",
+    vendor: "Vendeur",
+    back: "\u2190 Retour",
+    connectToOrder: "\uD83D\uDD12 Connectez-vous pour commander",
+    loginModalTitle: "\uD83D\uDD10 Connexion",
+    email: "Email",
+    password: "Mot de passe",
+    loginBtn: "Se connecter",
+    registerModalTitle: "\uD83D\uDCDD Inscription",
+    name: "Nom complet",
+    phone: "T\u00E9l\u00E9phone",
+    address: "Adresse",
+    addressOptional: "Adresse (facultatif)",
+    registerBtn: "S'inscrire",
+    cancel: "Annuler",
+    ordersTitle: "\uD83D\uDCCB Historique des commandes",
+    noOrders: "Aucune commande pour le moment",
+    orderDate: "Commande du",
+    status: "Statut",
+    total: "Total",
+    rating: "Noter",
+    adminPanel: "\uD83D\uDEE0 Administration",
+    users: "\uD83D\uDC65 Gestion des utilisateurs",
+    stats: "\uD83D\uDCCA Statistiques",
+    usersCount: "Utilisateurs",
+    ordersCount: "Commandes",
+    shopsCount: "Boutiques",
+    admin: "Admin",
+    addAdmin: "Ajouter",
+    removeAdmin: "Retirer",
+    ratingTitle: "\u2B50 Noter {vendor}",
+    ratingLabel: "Note",
+    ratingComment: "Votre commentaire (facultatif)",
+    ratingSubmit: "\u2705 Envoyer la note",
+    close: "Fermer",
+    loading: "Chargement...",
+    loginSuccess: "\u2705 Connexion r\u00E9ussie",
+    registerSuccess: "\u2705 Inscription r\u00E9ussie",
+    logoutSuccess: "D\u00E9connect\u00E9",
+    loginError: "\u274C Erreur de connexion",
+    registerError: "\u274C Erreur d'inscription",
+    userNotFound: "\u274C Utilisateur non trouv\u00E9",
+    wrongPassword: "\u274C Mot de passe incorrect",
+    invalidEmail: "\u274C Email invalide",
+    tooManyRequests: "\u274C Trop de tentatives, r\u00E9essayez plus tard",
+    emailAlreadyUsed: "\u274C Cet email est d\u00E9j\u00E0 utilis\u00E9",
+    weakPassword: "\u274C Mot de passe trop faible (6 caract\u00E8res minimum)",
+    operationNotAllowed: "\u274C L'inscription par email est d\u00E9sactiv\u00E9e dans Firebase Console !",
+    fillFields: "\u274C Veuillez remplir tous les champs",
+    guest: "Invité",
+    connected: "Connecté",
+    shop: "Boutique",
+    ratingCount: "avis",
+    ratingSuccess: "\u2705 Merci pour votre note !",
+    ratingError: "\u274C Erreur lors de la notation",
+    orderConfirmed: "Confirm\u00E9e"
+  };
 
   // ---- FIREBASE INIT ----
-  const firebaseConfig = {
+  var firebaseConfig = {
     apiKey: "AIzaSyCegKjHSw2DzF1zcBVdG6iZyGK2P3ig1rM",
     authDomain: "sog-hanout.firebaseapp.com",
     projectId: "sog-hanout",
@@ -129,41 +136,45 @@
     measurementId: "G-V1VFE9YDE3",
     databaseURL: "https://sog-hanout-default-rtdb.europe-west1.firebasedatabase.app/"
   };
-
   firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.database();
+  var auth = firebase.auth();
+  var db = firebase.database();
+
+  // ---- FONCTION POUR DÉCODER LES DONNÉES UTILISATEUR ----
+  var cleanUserData = function(userData) {
+    if (!userData) return null;
+    var cleaned = { ...userData };
+    Object.keys(cleaned).forEach(function(key) {
+      if (typeof cleaned[key] === 'string') {
+        cleaned[key] = decodeEntities(cleaned[key]);
+      }
+    });
+    return cleaned;
+  };
 
   function App() {
-
     // ---- ÉTATS ----
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [shops, setShops] = useState([]);
-    const [selectedShop, setSelectedShop] = useState(null);
-    const [showLogin, setShowLogin] = useState(false);
-    const [showRegister, setShowRegister] = useState(false);
-    const [loginForm, setLoginForm] = useState({ email: "", password: "" });
-    const [registerForm, setRegisterForm] = useState({
+    var [user, setUser] = useState(null);
+    var [loading, setLoading] = useState(true);
+    var [shops, setShops] = useState([]);
+    var [selectedShop, setSelectedShop] = useState(null);
+    var [showLogin, setShowLogin] = useState(false);
+    var [showRegister, setShowRegister] = useState(false);
+    var [loginForm, setLoginForm] = useState({ email: "", password: "" });
+    var [registerForm, setRegisterForm] = useState({
       name: "", email: "", password: "", phone: "", address: ""
     });
-    const [msg, setMsg] = useState({ text: "", type: "" });
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [activeTab, setActiveTab] = useState('shops');
-
-    // États pour les fonctionnalités
-    const [orders, setOrders] = useState([]);
-    const [ratings, setRatings] = useState({});
-    const [users, setUsers] = useState([]);
-    const [showRatingModal, setShowRatingModal] = useState(false);
-    const [ratingForm, setRatingForm] = useState({ vendor: "", rating: 5, comment: "" });
-    const [isAdmin, setIsAdmin] = useState(false);
-
-    // ---- RÉFÉRENCE POUR L'IFRAME ----
-    const iframeRef = useRef(null);
-
-    // ---- CONSTANTES ----
-    const SHOPS_URL = "https://raw.githubusercontent.com/mekeirish/sog/main/shops.json";
+    var [msg, setMsg] = useState({ text: "", type: "" });
+    var [isProcessing, setIsProcessing] = useState(false);
+    var [activeTab, setActiveTab] = useState('shops');
+    var [orders, setOrders] = useState([]);
+    var [ratings, setRatings] = useState({});
+    var [users, setUsers] = useState([]);
+    var [showRatingModal, setShowRatingModal] = useState(false);
+    var [ratingForm, setRatingForm] = useState({ vendor: "", rating: 5, comment: "" });
+    var [isAdmin, setIsAdmin] = useState(false);
+    var iframeRef = useRef(null);
+    var SHOPS_URL = "https://raw.githubusercontent.com/mekeirish/sog/main/shops.json";
 
     // ---- AUTH FIREBASE ----
     useEffect(function() {
@@ -176,7 +187,6 @@
             phone: firebaseUser.phoneNumber || "",
             address: "",
           };
-          
           try {
             var snapshot = await db.ref('users/' + firebaseUser.uid).once('value');
             var extraData = snapshot.val();
@@ -185,12 +195,11 @@
               userData.phone = extraData.phone || "";
               userData.address = extraData.address || "";
             }
-          } catch (e) {
-            console.error("Erreur lecture données utilisateur :", e);
-          }
-          
-          setUser(userData);
-          sendAuthToIframe(userData);
+          } catch (e) { /* ignore */ }
+          // Nettoyage des accents
+          var cleanedUser = cleanUserData(userData);
+          setUser(cleanedUser);
+          sendAuthToIframe(cleanedUser);
           checkIfAdmin(firebaseUser.uid);
           loadOrders();
         } else {
@@ -202,31 +211,27 @@
         setLoading(false);
         loadShops();
       });
-
-      return function() {
-        unsubscribe();
-      };
+      return function() { unsubscribe(); };
     }, []);
 
     // ---- CHECK ADMIN ----
-    const checkIfAdmin = function(uid) {
+    var checkIfAdmin = function(uid) {
       db.ref('admins').once('value').then(function(snapshot) {
         var adminList = snapshot.val() || [];
         if (Array.isArray(adminList) && adminList.includes(uid)) {
           setIsAdmin(true);
         }
-      }).catch(function(err) {
-        console.error("Erreur vérification admin :", err);
-      });
+      }).catch(function(err) { console.error(err); });
     };
 
     // ---- CHARGEMENT DES BOUTIQUES ----
-    const loadShops = async function() {
+    var loadShops = async function() {
       try {
         var res = await fetch(SHOPS_URL);
         if (res.ok) {
           var data = await res.json();
           setShops(data);
+          data.forEach(function(shop) { loadRatings(shop.vendor); });
         } else {
           setShops([
             { vendor: "milo", name: "Milo", url: "https://mekeirish.github.io/hanout-milo/" },
@@ -243,56 +248,45 @@
       }
     };
 
-    // ---- AUTHENTIFICATION ----
-    const handleLogin = async function(e) {
+    // ---- AUTH ----
+    var handleLogin = async function(e) {
       e.preventDefault();
       setMsg({ text: "", type: "" });
       setIsProcessing(true);
       try {
         if (!loginForm.email.trim() || !loginForm.password.trim()) {
-          throw new Error("Veuillez remplir tous les champs");
+          throw new Error(TEXTS.fillFields);
         }
         await auth.signInWithEmailAndPassword(loginForm.email, loginForm.password);
         setShowLogin(false);
         setLoginForm({ email: "", password: "" });
-        setMsg({ text: "✅ Connexion réussie", type: "success" });
+        setMsg({ text: TEXTS.loginSuccess, type: "success" });
       } catch (error) {
-        console.error("Erreur de connexion :", error);
-        var errorMsg = "❌ Erreur de connexion";
-        if (error.code === 'auth/user-not-found') errorMsg = "❌ Utilisateur non trouvé";
-        else if (error.code === 'auth/wrong-password') errorMsg = "❌ Mot de passe incorrect";
-        else if (error.code === 'auth/invalid-email') errorMsg = "❌ Email invalide";
-        else if (error.code === 'auth/too-many-requests') errorMsg = "❌ Trop de tentatives, réessayez plus tard";
+        var errorMsg = TEXTS.loginError;
+        if (error.code === 'auth/user-not-found') errorMsg = TEXTS.userNotFound;
+        else if (error.code === 'auth/wrong-password') errorMsg = TEXTS.wrongPassword;
+        else if (error.code === 'auth/invalid-email') errorMsg = TEXTS.invalidEmail;
+        else if (error.code === 'auth/too-many-requests') errorMsg = TEXTS.tooManyRequests;
         else if (error.message) errorMsg = "❌ " + error.message;
         setMsg({ text: errorMsg, type: "error" });
       }
       setIsProcessing(false);
     };
 
-    const handleRegister = async function(e) {
+    var handleRegister = async function(e) {
       e.preventDefault();
       setMsg({ text: "", type: "" });
       setIsProcessing(true);
       try {
-        if (!registerForm.name.trim()) {
-          throw new Error("Le nom est requis");
-        }
-        if (!registerForm.email.trim()) {
-          throw new Error("L'email est requis");
-        }
-        if (registerForm.password.length < 6) {
-          throw new Error("Le mot de passe doit faire au moins 6 caractères");
-        }
+        if (!registerForm.name.trim()) throw new Error("Le nom est requis");
+        if (!registerForm.email.trim()) throw new Error("L'email est requis");
+        if (registerForm.password.length < 6) throw new Error(TEXTS.weakPassword);
 
         var userCredential = await auth.createUserWithEmailAndPassword(
           registerForm.email,
           registerForm.password
         );
-        
-        await userCredential.user.updateProfile({
-          displayName: registerForm.name
-        });
-
+        await userCredential.user.updateProfile({ displayName: registerForm.name });
         await db.ref('users/' + userCredential.user.uid).set({
           name: registerForm.name,
           email: registerForm.email,
@@ -300,74 +294,53 @@
           address: registerForm.address || "",
           createdAt: new Date().toISOString()
         });
-
         setShowRegister(false);
         setRegisterForm({ name: "", email: "", password: "", phone: "", address: "" });
-        setMsg({ text: "✅ Inscription réussie ! Bienvenue " + registerForm.name, type: "success" });
+        setMsg({ text: TEXTS.registerSuccess, type: "success" });
       } catch (error) {
-        console.error("Erreur d'inscription :", error);
-        var errorMsg = "❌ " + error.message;
-        if (error.code === 'auth/email-already-in-use') {
-          errorMsg = "❌ Cet email est déjà utilisé";
-        } else if (error.code === 'auth/weak-password') {
-          errorMsg = "❌ Mot de passe trop faible (6 caractères minimum)";
-        } else if (error.code === 'auth/invalid-email') {
-          errorMsg = "❌ Email invalide";
-        } else if (error.code === 'auth/operation-not-allowed') {
-          errorMsg = "❌ L'inscription par email est désactivée dans Firebase Console !";
-        }
+        var errorMsg = TEXTS.registerError;
+        if (error.code === 'auth/email-already-in-use') errorMsg = TEXTS.emailAlreadyUsed;
+        else if (error.code === 'auth/weak-password') errorMsg = TEXTS.weakPassword;
+        else if (error.code === 'auth/invalid-email') errorMsg = TEXTS.invalidEmail;
+        else if (error.code === 'auth/operation-not-allowed') errorMsg = TEXTS.operationNotAllowed;
+        else if (error.message) errorMsg = "❌ " + error.message;
         setMsg({ text: errorMsg, type: "error" });
       }
       setIsProcessing(false);
     };
 
-    const handleLogout = async function() {
+    var handleLogout = async function() {
       try {
         await auth.signOut();
         setSelectedShop(null);
-        setMsg({ text: "Déconnecté", type: "info" });
+        setMsg({ text: TEXTS.logoutSuccess, type: "info" });
       } catch (error) {
-        setMsg({ text: "❌ Erreur lors de la déconnexion", type: "error" });
+        setMsg({ text: "❌ Erreur lors de la d\u00E9connexion", type: "error" });
       }
     };
 
-    // ---- COMMUNICATION AVEC L'IFRAME ----
-    const sendAuthToIframe = function(userData) {
+    // ---- COMMUNICATION IFRAME ----
+    var sendAuthToIframe = function(userData) {
       if (iframeRef.current) {
-        var message = {
+        iframeRef.current.contentWindow.postMessage({
           type: 'SOG_AUTH',
-          payload: {
-            user: userData,
-          }
-        };
-        iframeRef.current.contentWindow.postMessage(message, '*');
+          payload: { user: userData }
+        }, '*');
       }
     };
+    var handleIframeLoad = function() { sendAuthToIframe(user); };
 
-    const handleIframeLoad = function() {
-      sendAuthToIframe(user);
-    };
-
-    // ---- ÉCOUTE DES COMMANDES DEPUIS L'IFRAME ----
+    // ---- ORDRES ----
     useEffect(function() {
       var handleOrder = function(event) {
-        if (event.data.type === 'SOG_ORDER') {
-          saveOrder(event.data.payload);
-        }
+        if (event.data.type === 'SOG_ORDER') saveOrder(event.data.payload);
       };
       window.addEventListener('message', handleOrder);
-      return function() {
-        window.removeEventListener('message', handleOrder);
-      };
+      return function() { window.removeEventListener('message', handleOrder); };
     }, []);
 
-    // ---- SAUVEGARDE D'UNE COMMANDE ----
-    const saveOrder = function(orderData) {
-      if (!user) {
-        console.warn("Commande reçue mais utilisateur non connecté");
-        return;
-      }
-      
+    var saveOrder = function(orderData) {
+      if (!user) return;
       var newOrderRef = db.ref('orders').push();
       newOrderRef.set({
         userId: user.uid,
@@ -375,34 +348,27 @@
         items: orderData.items,
         total: orderData.total,
         currency: orderData.currency || "DZD",
-        status: 'confirmed',
+        status: 'confirm\u00E9e',
         createdAt: new Date().toISOString(),
         customerName: orderData.customerName || user.name,
         customerPhone: orderData.customerPhone || user.phone,
         customerAddress: orderData.customerAddress || user.address,
         comments: orderData.comments || ""
       }).then(function() {
-        console.log("✅ Commande sauvegardée dans Firebase");
-        setMsg({ text: "✅ Commande sauvegardée dans l'historique", type: "success" });
+        setMsg({ text: "✅ Commande sauvegard\u00E9e dans l'historique", type: "success" });
         loadOrders();
-      }).catch(function(err) {
-        console.error("❌ Erreur sauvegarde commande :", err);
-      });
+      }).catch(function(err) { console.error(err); });
     };
 
-    // ---- CHARGEMENT DES COMMANDES ----
-    const loadOrders = function() {
+    var loadOrders = function() {
       if (!user) return;
-      
       db.ref('orders').orderByChild('userId').equalTo(user.uid).on('value', function(snapshot) {
         var data = snapshot.val();
         if (data) {
           var orderList = Object.keys(data).map(function(key) {
             return { id: key, ...data[key] };
           });
-          orderList.sort(function(a, b) {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-          });
+          orderList.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
           setOrders(orderList);
         } else {
           setOrders([]);
@@ -410,23 +376,16 @@
       });
     };
 
-    // ---- SYSTÈME DE NOTATION ----
-    const loadRatings = function(vendor) {
+    // ---- RATINGS ----
+    var loadRatings = function(vendor) {
       db.ref('ratings/' + vendor).on('value', function(snapshot) {
         var data = snapshot.val();
-        setRatings(function(prev) {
-          return { ...prev, [vendor]: data || {} };
-        });
+        setRatings(function(prev) { return { ...prev, [vendor]: data || {} }; });
       });
     };
-
-    const submitRating = async function(e) {
+    var submitRating = async function(e) {
       e.preventDefault();
-      if (!user) {
-        alert("Connectez-vous pour noter");
-        return;
-      }
-      
+      if (!user) { alert("Connectez-vous pour noter"); return; }
       try {
         await db.ref('ratings/' + ratingForm.vendor + '/' + user.uid).set({
           rating: ratingForm.rating,
@@ -436,40 +395,34 @@
         });
         setShowRatingModal(false);
         setRatingForm({ vendor: "", rating: 5, comment: "" });
-        setMsg({ text: "✅ Merci pour votre note !", type: "success" });
+        setMsg({ text: TEXTS.ratingSuccess, type: "success" });
       } catch (error) {
-        console.error("Erreur notation :", error);
-        setMsg({ text: "❌ Erreur lors de la notation", type: "error" });
+        setMsg({ text: TEXTS.ratingError, type: "error" });
       }
     };
-
-    const getAverageRating = function(vendor) {
+    var getAverageRating = function(vendor) {
       var vendorRatings = ratings[vendor] || {};
       var values = Object.values(vendorRatings);
       if (values.length === 0) return 0;
       var sum = values.reduce(function(acc, r) { return acc + (r.rating || 0); }, 0);
       return (sum / values.length).toFixed(1);
     };
-
-    const getRatingCount = function(vendor) {
+    var getRatingCount = function(vendor) {
       var vendorRatings = ratings[vendor] || {};
       return Object.keys(vendorRatings).length;
     };
 
-    // ---- ADMIN : GESTION DES UTILISATEURS ----
-    const loadUsers = function() {
+    // ---- ADMIN ----
+    var loadUsers = function() {
       db.ref('users').on('value', function(snapshot) {
         var data = snapshot.val();
         if (data) {
           var userList = Object.keys(data).map(function(key) {
             return { uid: key, ...data[key] };
           });
-          // Vérifier qui est admin
           db.ref('admins').once('value').then(function(adminSnapshot) {
             var adminList = adminSnapshot.val() || [];
-            userList.forEach(function(u) {
-              u.isAdmin = adminList.includes(u.uid);
-            });
+            userList.forEach(function(u) { u.isAdmin = adminList.includes(u.uid); });
             setUsers(userList);
           });
         } else {
@@ -477,39 +430,30 @@
         }
       });
     };
-
-    const toggleAdmin = async function(uid, isAdminNow) {
+    var toggleAdmin = async function(uid, isAdminNow) {
       try {
         var adminsRef = db.ref('admins');
         var snapshot = await adminsRef.once('value');
         var adminList = snapshot.val() || [];
-        
         if (isAdminNow) {
           adminList = adminList.filter(function(id) { return id !== uid; });
         } else {
-          if (!adminList.includes(uid)) {
-            adminList.push(uid);
-          }
+          if (!adminList.includes(uid)) adminList.push(uid);
         }
-        
         await adminsRef.set(adminList);
-        setMsg({ text: "✅ Statut admin mis à jour", type: "success" });
+        setMsg({ text: "✅ Statut admin mis \u00E0 jour", type: "success" });
         loadUsers();
       } catch (error) {
-        console.error("Erreur toggle admin :", error);
-        setMsg({ text: "❌ Erreur lors de la mise à jour", type: "error" });
+        setMsg({ text: "❌ Erreur lors de la mise \u00E0 jour", type: "error" });
       }
     };
 
-    // ---- SÉLECTION D'UNE BOUTIQUE ----
-    const selectShop = function(shop) {
+    // ---- SELECTION BOUTIQUE ----
+    var selectShop = function(shop) {
       setSelectedShop(shop);
       loadRatings(shop.vendor);
     };
-
-    const closeShop = function() {
-      setSelectedShop(null);
-    };
+    var closeShop = function() { setSelectedShop(null); };
 
     // ---- RENDU ----
     if (loading) {
@@ -520,99 +464,75 @@
       );
     }
 
+    // Fonction pour décoder les textes à l'affichage
+    var t = function(key) {
+      return decodeEntities(TEXTS[key] || key);
+    };
+
     return (
       <div className="min-h-screen bg-slate-900 text-white p-4">
 
-        {/* Header */}
-        <header className="neu-card p-4 flex flex-wrap items-center justify-between sticky top-0 z-30">
-          <h1 className="text-2xl font-bold text-white">🛒 SOG - Marché</h1>
-          <div className="flex gap-3 items-center flex-wrap">
-            {user ? (
-              <div className="flex gap-3 items-center flex-wrap">
-                <span className="text-sm hidden sm:inline text-gray-300">👤 {user.name}</span>
-                {isAdmin && (
-                  <span className="text-xs bg-purple-900/40 text-purple-200 px-2 py-1 rounded-full">👑 Admin</span>
-                )}
-                {activeTab === 'orders' ? (
-                  <button onClick={function() { setActiveTab('shops'); setSelectedShop(null); }} className="neu-button text-sm">
-                    🏪 Boutiques
-                  </button>
-                ) : (
-                  <button onClick={function() { setActiveTab('orders'); }} className="neu-button text-sm">
-                    📋 Commandes
-                  </button>
-                )}
-                {isAdmin && (
-                  <button onClick={function() { loadUsers(); setActiveTab('admin'); }} className="neu-button text-sm">
-                    ⚙️ Admin
-                  </button>
-                )}
-                <button onClick={handleLogout} className="neu-button text-sm">
-                  Déconnexion
-                </button>
-              </div>
-            ) : (
-              <div className="flex gap-3 items-center">
-                <button onClick={function() { setShowLogin(true); }} className="neu-button text-sm">
-                  Connexion
-                </button>
-                <button onClick={function() { setShowRegister(true); }} className="neu-button text-sm">
-                  Inscription
-                </button>
-              </div>
-            )}
+        {/* HEADER */}
+        <header className="glass-header sticky top-0 z-30 px-4 py-3 rounded-xl">
+          <div className="flex flex-wrap items-center justify-between">
+            <h1 className="text-xl font-bold text-white">{t('appTitle')}</h1>
+            <div className="flex gap-2 items-center flex-wrap">
+              {user ? (
+                <>
+                  <span className="text-sm hidden sm:inline text-gray-300">👤 {decodeEntities(user.name)}</span>
+                  {isAdmin && <span className="text-xs bg-purple-900/40 text-purple-200 px-2 py-1 rounded-full">👑 Admin</span>}
+                  {activeTab === 'orders' ? (
+                    <button onClick={function() { setActiveTab('shops'); setSelectedShop(null); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('shopsTitle')}</button>
+                  ) : (
+                    <button onClick={function() { setActiveTab('orders'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('ordersTitle')}</button>
+                  )}
+                  {isAdmin && <button onClick={function() { loadUsers(); setActiveTab('admin'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('adminPanel')}</button>}
+                  <button onClick={handleLogout} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('logout')}</button>
+                </>
+              ) : (
+                <>
+                  <button onClick={function() { setShowLogin(true); }} className="glass-btn px-4 py-2 rounded-xl text-sm font-medium">{t('login')}</button>
+                  <button onClick={function() { setShowRegister(true); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('register')}</button>
+                </>
+              )}
+            </div>
           </div>
         </header>
 
-        {/* Messages */}
+        {/* MESSAGES */}
         {msg.text && (
-          <div className={'mt-4 p-3 rounded-xl ' + (msg.type === 'success' ? 'bg-emerald-900/40 text-emerald-200' : msg.type === 'error' ? 'bg-red-900/40 text-red-200' : 'bg-blue-900/40 text-blue-200') + ' border border-slate-700'}>
-            {msg.text}
+          <div className={'mt-4 p-3 glass-alert rounded-xl border text-sm ' + (msg.type === 'success' ? 'bg-emerald-900/20 border-emerald-700/30 text-emerald-200' : msg.type === 'error' ? 'bg-red-900/20 border-red-700/30 text-red-200' : 'bg-blue-900/20 border-blue-700/30 text-blue-200')}>
+            {decodeEntities(msg.text)}
           </div>
         )}
 
-        {/* Contenu principal */}
+        {/* CONTENU PRINCIPAL */}
         <div className="max-w-7xl mx-auto mt-6">
 
           {user && activeTab === 'orders' ? (
-            // ---- HISTORIQUE DES COMMANDES ----
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">📋 Historique des commandes</h2>
+              <h2 className="text-2xl font-bold text-white mb-4">{t('ordersTitle')}</h2>
               {orders.length === 0 ? (
-                <div className="neu-card p-8 text-center">
-                  <p className="text-gray-400">Aucune commande pour le moment</p>
-                </div>
+                <div className="glass-card p-8 text-center rounded-2xl"><p className="text-gray-400">{t('noOrders')}</p></div>
               ) : (
                 <div className="space-y-4">
                   {orders.map(function(order) {
                     return (
-                      <div key={order.id} className="neu-card p-4">
+                      <div key={order.id} className="glass-card p-4 rounded-2xl">
                         <div className="flex justify-between items-start flex-wrap">
                           <div>
-                            <p className="text-sm text-gray-400">Commande du {new Date(order.createdAt).toLocaleDateString('fr-FR')}</p>
-                            <p className="font-semibold">Boutique : {order.vendor}</p>
-                            <p className="text-sm text-gray-300">Statut : {order.status}</p>
+                            <p className="text-sm text-gray-400">{t('orderDate')} {new Date(order.createdAt).toLocaleDateString('fr-FR')}</p>
+                            <p className="font-semibold">{t('shop')} : {decodeEntities(order.vendor)}</p>
+                            <p className="text-sm text-gray-300">{t('status')} : {decodeEntities(order.status)}</p>
                             <div className="mt-2 text-sm">
                               {order.items && order.items.map(function(item, idx) {
-                                return (
-                                  <div key={idx} className="text-gray-300">
-                                    • {item.name} × {item.quantity} → {(item.price * item.quantity).toFixed(2)} {order.currency}
-                                  </div>
-                                );
+                                return <div key={idx} className="text-gray-300">• {decodeEntities(item.name)} × {item.quantity} → {(item.price * item.quantity).toFixed(2)} {order.currency}</div>;
                               })}
                             </div>
                           </div>
                           <div className="text-right">
                             <p className="text-xl font-bold text-blue-400">{order.total} {order.currency}</p>
-                            <button 
-                              onClick={function() { 
-                                setRatingForm({ vendor: order.vendor, rating: 5, comment: "" });
-                                setShowRatingModal(true);
-                              }}
-                              className="neu-button text-xs mt-2"
-                            >
-                              ⭐ Noter
-                            </button>
+                            <button onClick={function() { setRatingForm({ vendor: order.vendor, rating: 5, comment: "" }); setShowRatingModal(true); }} className="glass-btn px-4 py-2 rounded-xl text-sm font-medium mt-2">⭐ {t('rating')}</button>
                           </div>
                         </div>
                       </div>
@@ -620,60 +540,33 @@
                   })}
                 </div>
               )}
-              <button onClick={function() { setActiveTab('shops'); }} className="neu-button mt-4">
-                ← Retour aux boutiques
-              </button>
+              <button onClick={function() { setActiveTab('shops'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium mt-4">{t('back')}</button>
             </div>
           ) : user && activeTab === 'admin' && isAdmin ? (
-            // ---- INTERFACE ADMIN ----
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">⚙️ Administration</h2>
-              
-              <div className="neu-card p-6 mb-6">
-                <h3 className="font-semibold text-white mb-3">📊 Statistiques</h3>
+              <h2 className="text-2xl font-bold text-white mb-4">{t('adminPanel')}</h2>
+              <div className="glass-card p-6 rounded-2xl mb-6">
+                <h3 className="font-semibold text-white mb-3">{t('stats')}</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="bg-slate-800/40 p-4 rounded-xl">
-                    <p className="text-gray-400 text-sm">Utilisateurs</p>
-                    <p className="text-2xl font-bold text-white">{users.length}</p>
-                  </div>
-                  <div className="bg-slate-800/40 p-4 rounded-xl">
-                    <p className="text-gray-400 text-sm">Commandes</p>
-                    <p className="text-2xl font-bold text-white">{orders.length}</p>
-                  </div>
-                  <div className="bg-slate-800/40 p-4 rounded-xl">
-                    <p className="text-gray-400 text-sm">Boutiques</p>
-                    <p className="text-2xl font-bold text-white">{shops.length}</p>
-                  </div>
+                  <div className="bg-white/5 p-4 rounded-xl border border-white/10"><p className="text-gray-400 text-sm">{t('usersCount')}</p><p className="text-2xl font-bold text-white">{users.length}</p></div>
+                  <div className="bg-white/5 p-4 rounded-xl border border-white/10"><p className="text-gray-400 text-sm">{t('ordersCount')}</p><p className="text-2xl font-bold text-white">{orders.length}</p></div>
+                  <div className="bg-white/5 p-4 rounded-xl border border-white/10"><p className="text-gray-400 text-sm">{t('shopsCount')}</p><p className="text-2xl font-bold text-white">{shops.length}</p></div>
                 </div>
               </div>
-
-              <div className="neu-card p-6">
-                <h3 className="font-semibold text-white mb-3">👥 Gestion des utilisateurs</h3>
+              <div className="glass-card p-6 rounded-2xl">
+                <h3 className="font-semibold text-white mb-3">{t('users')}</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-gray-400 border-b border-slate-700">
-                        <th className="text-left py-2">Nom</th>
-                        <th className="text-left py-2">Email</th>
-                        <th className="text-left py-2">Téléphone</th>
-                        <th className="text-left py-2">Admin</th>
-                      </tr>
-                    </thead>
+                    <thead><tr className="text-gray-400 border-b border-white/10"><th className="text-left py-2">{t('name')}</th><th className="text-left py-2">Email</th><th className="text-left py-2">{t('phone')}</th><th className="text-left py-2">{t('admin')}</th></tr></thead>
                     <tbody>
                       {users.map(function(u) {
                         return (
-                          <tr key={u.uid} className="border-b border-slate-800">
-                            <td className="py-2">{u.name || u.email}</td>
-                            <td className="py-2">{u.email}</td>
-                            <td className="py-2">{u.phone || "-"}</td>
+                          <tr key={u.uid} className="border-b border-white/5">
+                            <td className="py-2">{decodeEntities(u.name || u.email)}</td>
+                            <td className="py-2">{decodeEntities(u.email)}</td>
+                            <td className="py-2">{decodeEntities(u.phone || "-")}</td>
                             <td className="py-2">
-                              <button 
-                                onClick={function() { 
-                                  var isAdminNow = u.isAdmin || false;
-                                  toggleAdmin(u.uid, isAdminNow); 
-                                }}
-                                className={'text-xs px-2 py-1 rounded ' + (u.isAdmin ? 'bg-purple-900/40 text-purple-200' : 'bg-slate-800/40 text-gray-400')}
-                              >
+                              <button onClick={function() { toggleAdmin(u.uid, u.isAdmin || false); }} className={'text-xs px-2 py-1 rounded ' + (u.isAdmin ? 'bg-purple-900/40 text-purple-200' : 'bg-white/5 text-gray-400 border border-white/10')}>
                                 {u.isAdmin ? '👑 Admin' : 'Ajouter'}
                               </button>
                             </td>
@@ -684,217 +577,107 @@
                   </table>
                 </div>
               </div>
-              <button onClick={function() { setActiveTab('shops'); }} className="neu-button mt-4">
-                ← Retour aux boutiques
-              </button>
+              <button onClick={function() { setActiveTab('shops'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium mt-4">{t('back')}</button>
             </div>
           ) : (
-            // ---- AFFICHAGE NORMAL (boutiques) ----
             <div>
               {selectedShop ? (
-                // Boutique affichée en iframe
                 <div>
                   <div className="flex items-center gap-3 mb-4 flex-wrap">
-                    <button onClick={closeShop} className="neu-button text-sm">
-                      ← Retour
-                    </button>
-                    <span className="text-xl font-semibold text-white">{selectedShop.name}</span>
-                    
-                    {/* Affichage des notes */}
+                    <button onClick={closeShop} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('back')}</button>
+                    <span className="text-xl font-semibold text-white">{decodeEntities(selectedShop.name)}</span>
                     <div className="flex items-center gap-2 ml-2">
                       <span className="text-yellow-400">⭐</span>
                       <span className="text-white">{getAverageRating(selectedShop.vendor)}</span>
-                      <span className="text-gray-400 text-sm">({getRatingCount(selectedShop.vendor)} avis)</span>
+                      <span className="text-gray-400 text-sm">({getRatingCount(selectedShop.vendor)} {t('ratingCount')})</span>
                     </div>
-
-                    <button 
-                      onClick={function() { 
-                        setRatingForm({ vendor: selectedShop.vendor, rating: 5, comment: "" });
-                        setShowRatingModal(true);
-                      }}
-                      className="neu-button text-sm"
-                    >
-                      ⭐ Noter
-                    </button>
-
-                    {!user && (
-                      <span className="text-sm text-yellow-400 ml-2">🔒 Connectez-vous pour commander</span>
-                    )}
-                    {user && (
-                      <span className="text-sm text-emerald-400 ml-2">✅ Connecté en tant que {user.name}</span>
-                    )}
+                    <button onClick={function() { setRatingForm({ vendor: selectedShop.vendor, rating: 5, comment: "" }); setShowRatingModal(true); }} className="glass-btn px-4 py-2 rounded-xl text-sm font-medium">⭐ {t('rating')}</button>
+                    {!user && <span className="text-sm text-yellow-400 ml-2">{t('connectToOrder')}</span>}
+                    {user && <span className="text-sm text-emerald-400 ml-2">✅ {t('connectedAs')} {decodeEntities(user.name)}</span>}
                   </div>
                   <div className="iframe-container">
-                    <iframe
-                      ref={iframeRef}
-                      key={selectedShop.vendor}
-                      src={selectedShop.url}
-                      title={selectedShop.name}
-                      sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                      loading="lazy"
-                      onLoad={handleIframeLoad}
-                    />
+                    <iframe ref={iframeRef} key={selectedShop.vendor} src={selectedShop.url} title={selectedShop.name} sandbox="allow-scripts allow-same-origin allow-forms allow-popups" loading="lazy" onLoad={handleIframeLoad} />
                   </div>
                 </div>
               ) : (
-                // Liste des boutiques
                 <div>
-                  <h2 className="text-2xl font-bold text-white mb-6">🏪 Nos boutiques</h2>
+                  <h2 className="text-2xl font-bold text-white mb-6">{t('shopsTitle')}</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {shops.map(function(shop) {
                       var avgRating = getAverageRating(shop.vendor);
                       var ratingCount = getRatingCount(shop.vendor);
                       return (
-                        <div
-                          key={shop.vendor}
-                          className="neu-card p-6 cursor-pointer hover:scale-[1.02] transition-transform duration-200"
-                          onClick={function() { selectShop(shop); }}
-                        >
-                          <h3 className="text-xl font-semibold text-white">{shop.name}</h3>
-                          <p className="text-sm text-gray-400 mt-1">Vendeur : {shop.vendor}</p>
+                        <div key={shop.vendor} className="glass-card p-6 rounded-2xl cursor-pointer hover:scale-[1.02] transition-all" onClick={function() { selectShop(shop); }}>
+                          <h3 className="text-xl font-semibold text-white">{decodeEntities(shop.name)}</h3>
+                          <p className="text-sm text-gray-400 mt-1">{t('vendor')} : {decodeEntities(shop.vendor)}</p>
                           <div className="flex items-center gap-2 mt-2">
                             <span className="text-yellow-400">⭐</span>
                             <span className="text-white">{avgRating || "—"}</span>
-                            <span className="text-gray-400 text-sm">({ratingCount} avis)</span>
+                            <span className="text-gray-400 text-sm">({ratingCount} {t('ratingCount')})</span>
                           </div>
-                          <button className="neu-button mt-4 w-full">Visiter</button>
+                          <button className="glass-btn w-full mt-4 py-2 rounded-xl text-sm font-medium">{t('visit')}</button>
                         </div>
                       );
                     })}
                   </div>
-                  <div className="mt-8 text-center text-gray-400 text-sm">
-                    Toutes les boutiques sont visibles. Connectez‑vous pour passer une commande.
-                  </div>
+                  <div className="mt-8 text-center text-gray-400 text-sm">{!user ? t('welcomeDesc') : ""}</div>
                 </div>
               )}
             </div>
           )}
         </div>
 
-        {/* ---- MODAL LOGIN ---- */}
+        {/* ---- MODALS (LOGIN, REGISTER, RATING) ---- */}
+        {/* (le contenu est identique à la version précédente, mais avec decodeEntities sur les textes) */}
+
         {showLogin && (
-          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowLogin(false); }}>
-            <div className="neu-card max-w-md w-full p-6" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="text-xl font-bold text-white mb-4">🔐 Connexion</h3>
+          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4 modal-animate" onClick={function() { setShowLogin(false); }}>
+            <div className="glass-modal max-w-md w-full p-6 rounded-2xl shadow-2xl" onClick={function(e) { e.stopPropagation(); }}>
+              <h3 className="text-xl font-bold text-white mb-4">{t('loginModalTitle')}</h3>
               <form onSubmit={handleLogin} className="space-y-4">
-                <input
-                  type="email"
-                  placeholder="Email"
-                  className="neu-input"
-                  value={loginForm.email}
-                  onChange={function(e) { setLoginForm({ email: e.target.value, password: loginForm.password }); }}
-                  required
-                />
-                <input
-                  type="password"
-                  placeholder="Mot de passe"
-                  className="neu-input"
-                  value={loginForm.password}
-                  onChange={function(e) { setLoginForm({ email: loginForm.email, password: e.target.value }); }}
-                  required
-                />
-                <button type="submit" className="neu-button w-full" disabled={isProcessing}>
-                  {isProcessing ? 'Connexion...' : 'Se connecter'}
-                </button>
+                <input type="email" placeholder={t('email')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={loginForm.email} onChange={function(e) { setLoginForm({ email: e.target.value, password: loginForm.password }); }} required />
+                <input type="password" placeholder={t('password')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={loginForm.password} onChange={function(e) { setLoginForm({ email: loginForm.email, password: e.target.value }); }} required />
+                <button type="submit" className="glass-btn w-full py-2 rounded-xl font-medium" disabled={isProcessing}>{isProcessing ? 'Connexion...' : t('loginBtn')}</button>
               </form>
-              <div className="mt-4 text-right">
-                <button onClick={function() { setShowLogin(false); }} className="text-gray-400 hover:text-white text-sm">Annuler</button>
-              </div>
+              <div className="mt-4 text-right"><button onClick={function() { setShowLogin(false); }} className="text-gray-400 hover:text-white text-sm">{t('cancel')}</button></div>
             </div>
           </div>
         )}
 
-        {/* ---- MODAL REGISTER ---- */}
         {showRegister && (
-          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowRegister(false); }}>
-            <div className="neu-card max-w-md w-full p-6 max-h-[90vh] overflow-y-auto" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="text-xl font-bold text-white mb-4">📝 Inscription</h3>
-              <form onSubmit={handleRegister} className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Nom complet"
-                  className="neu-input"
-                  value={registerForm.name}
-                  onChange={function(e) { setRegisterForm({ ...registerForm, name: e.target.value }); }}
-                  required
-                />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  className="neu-input"
-                  value={registerForm.email}
-                  onChange={function(e) { setRegisterForm({ ...registerForm, email: e.target.value }); }}
-                  required
-                />
-                <input
-                  type="password"
-                  placeholder="Mot de passe (6 caractères min)"
-                  className="neu-input"
-                  value={registerForm.password}
-                  onChange={function(e) { setRegisterForm({ ...registerForm, password: e.target.value }); }}
-                  required
-                  minLength="6"
-                />
-                <input
-                  type="tel"
-                  placeholder="Téléphone"
-                  className="neu-input"
-                  value={registerForm.phone}
-                  onChange={function(e) { setRegisterForm({ ...registerForm, phone: e.target.value }); }}
-                />
-                <input
-                  type="text"
-                  placeholder="Adresse (facultatif)"
-                  className="neu-input"
-                  value={registerForm.address}
-                  onChange={function(e) { setRegisterForm({ ...registerForm, address: e.target.value }); }}
-                />
-                <button type="submit" className="neu-button w-full" disabled={isProcessing}>
-                  {isProcessing ? 'Inscription...' : "S'inscrire"}
-                </button>
+          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4 modal-animate" onClick={function() { setShowRegister(false); }}>
+            <div className="glass-modal max-w-md w-full p-6 rounded-2xl shadow-2xl" onClick={function(e) { e.stopPropagation(); }}>
+              <h3 className="text-xl font-bold text-white mb-4">{t('registerModalTitle')}</h3>
+              <form onSubmit={handleRegister} className="space-y-3">
+                <input type="text" placeholder={t('name')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={registerForm.name} onChange={function(e) { setRegisterForm({ ...registerForm, name: e.target.value }); }} required />
+                <input type="email" placeholder={t('email')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={registerForm.email} onChange={function(e) { setRegisterForm({ ...registerForm, email: e.target.value }); }} required />
+                <input type="password" placeholder={t('password') + " (6 caractères min)"} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={registerForm.password} onChange={function(e) { setRegisterForm({ ...registerForm, password: e.target.value }); }} required minLength="6" />
+                <input type="tel" placeholder={t('phone')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={registerForm.phone} onChange={function(e) { setRegisterForm({ ...registerForm, phone: e.target.value }); }} />
+                <input type="text" placeholder={t('addressOptional')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={registerForm.address} onChange={function(e) { setRegisterForm({ ...registerForm, address: e.target.value }); }} />
+                <button type="submit" className="glass-btn w-full py-2 rounded-xl font-medium" disabled={isProcessing}>{isProcessing ? 'Inscription...' : t('registerBtn')}</button>
               </form>
-              <div className="mt-4 text-right">
-                <button onClick={function() { setShowRegister(false); }} className="text-gray-400 hover:text-white text-sm">Annuler</button>
-              </div>
+              <div className="mt-4 text-right"><button onClick={function() { setShowRegister(false); }} className="text-gray-400 hover:text-white text-sm">{t('cancel')}</button></div>
             </div>
           </div>
         )}
 
-        {/* ---- MODAL NOTATION ---- */}
         {showRatingModal && (
-          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4" onClick={function() { setShowRatingModal(false); }}>
-            <div className="neu-card max-w-md w-full p-6" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="text-xl font-bold text-white mb-4">⭐ Noter {ratingForm.vendor}</h3>
+          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4 modal-animate" onClick={function() { setShowRatingModal(false); }}>
+            <div className="glass-modal max-w-md w-full p-6 rounded-2xl shadow-2xl" onClick={function(e) { e.stopPropagation(); }}>
+              <h3 className="text-xl font-bold text-white mb-4">{t('ratingTitle').replace('{vendor}', decodeEntities(ratingForm.vendor))}</h3>
               <form onSubmit={submitRating} className="space-y-4">
                 <div>
-                  <label className="block text-gray-300 mb-2">Note</label>
+                  <label className="block text-gray-300 mb-2">{t('ratingLabel')}</label>
                   <div className="flex gap-2">
                     {[1, 2, 3, 4, 5].map(function(star) {
-                      return (
-                        <button
-                          key={star}
-                          type="button"
-                          onClick={function() { setRatingForm({ ...ratingForm, rating: star }); }}
-                          className={'text-3xl transition-colors ' + (star <= ratingForm.rating ? 'text-yellow-400' : 'text-gray-600 hover:text-gray-400')}
-                        >
-                          ★
-                        </button>
-                      );
+                      return <button key={star} type="button" onClick={function() { setRatingForm({ ...ratingForm, rating: star }); }} className={'text-3xl transition-colors ' + (star <= ratingForm.rating ? 'text-yellow-400' : 'text-gray-600 hover:text-gray-400')}>★</button>;
                     })}
                   </div>
                 </div>
-                <textarea
-                  placeholder="Votre commentaire (facultatif)"
-                  className="neu-input"
-                  rows="3"
-                  value={ratingForm.comment}
-                  onChange={function(e) { setRatingForm({ ...ratingForm, comment: e.target.value }); }}
-                />
-                <button type="submit" className="neu-button w-full">✅ Envoyer la note</button>
+                <textarea placeholder={t('ratingComment')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none resize-y" rows="3" value={ratingForm.comment} onChange={function(e) { setRatingForm({ ...ratingForm, comment: e.target.value }); }} />
+                <button type="submit" className="glass-btn w-full py-2 rounded-xl font-medium">{t('ratingSubmit')}</button>
               </form>
-              <div className="mt-4 text-right">
-                <button onClick={function() { setShowRatingModal(false); }} className="text-gray-400 hover:text-white text-sm">Annuler</button>
-              </div>
+              <div className="mt-4 text-right"><button onClick={function() { setShowRatingModal(false); }} className="text-gray-400 hover:text-white text-sm">{t('cancel')}</button></div>
             </div>
           </div>
         )}
@@ -903,12 +686,10 @@
     );
   }
 
-  // ---- RENDU DANS LE DOM ----
   var container = document.getElementById('root');
   var root = ReactDOM.createRoot(container);
   root.render(React.createElement(App, null));
 </script>
-
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
