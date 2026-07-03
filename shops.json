@@ -88,5 +88,10 @@
     "vendor": "badrokhan",
     "name": "Badrokhan",
     "url": "https://mekeirish.github.io/hanout-badrokhan/"
+  },
+  {
+    "vendor": "yossamhalaoui",
+    "name": "Yossamhalaoui",
+    "url": "https://mekeirish.github.io/hanout-yossamhalaoui/"
   }
 ]
