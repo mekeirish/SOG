@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
   <title>SOG - Marché de proximité</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -61,72 +61,103 @@
     }
   };
 
-  // ---- TEXTES STATIQUES ----
+  // ---- TEXTES STATIQUES (tous en entités HTML) ----
   var TEXTS = {
-    appTitle: "SOG - March\u00E9",
+    appTitle: "SOG - March&eacute;",
     welcome: "Bienvenue sur SOG",
-    welcomeDesc: "Connectez-vous ou inscrivez-vous pour acc\u00E9der \u00E0 toutes les boutiques du march\u00E9.",
+    welcomeDesc: "Connectez-vous ou inscrivez-vous pour acc&eacute;der &agrave; toutes les boutiques du march&eacute;.",
     login: "Connexion",
     register: "Inscription",
-    logout: "D\u00E9connexion",
-    connectedAs: "Connect\u00E9 en tant que",
-    shopsTitle: "\uD83C\uDFEA Nos boutiques",
+    logout: "D&eacute;connexion",
+    connectedAs: "Connect&eacute; en tant que",
+    shopsTitle: "Nos boutiques",
     visit: "Visiter",
     vendor: "Vendeur",
-    back: "\u2190 Retour",
-    connectToOrder: "\uD83D\uDD12 Connectez-vous pour commander",
-    loginModalTitle: "\uD83D\uDD10 Connexion",
+    back: "← Retour",
+    connectToOrder: "Connectez-vous pour commander",
+    loginModalTitle: "Connexion",
     email: "Email",
     password: "Mot de passe",
     loginBtn: "Se connecter",
-    registerModalTitle: "\uD83D\uDCDD Inscription",
+    registerModalTitle: "Inscription",
     name: "Nom complet",
-    phone: "T\u00E9l\u00E9phone",
+    phone: "T&eacute;l&eacute;phone",
     address: "Adresse",
     addressOptional: "Adresse (facultatif)",
     registerBtn: "S'inscrire",
     cancel: "Annuler",
-    ordersTitle: "\uD83D\uDCCB Historique des commandes",
+    ordersTitle: "Historique des commandes",
     noOrders: "Aucune commande pour le moment",
     orderDate: "Commande du",
     status: "Statut",
     total: "Total",
     rating: "Noter",
-    adminPanel: "\uD83D\uDEE0 Administration",
-    users: "\uD83D\uDC65 Gestion des utilisateurs",
-    stats: "\uD83D\uDCCA Statistiques",
+    adminPanel: "Administration",
+    users: "Gestion des utilisateurs",
+    stats: "Statistiques",
     usersCount: "Utilisateurs",
     ordersCount: "Commandes",
     shopsCount: "Boutiques",
     admin: "Admin",
     addAdmin: "Ajouter",
     removeAdmin: "Retirer",
-    ratingTitle: "\u2B50 Noter {vendor}",
+    ratingTitle: "Noter {vendor}",
     ratingLabel: "Note",
     ratingComment: "Votre commentaire (facultatif)",
-    ratingSubmit: "\u2705 Envoyer la note",
+    ratingSubmit: "Envoyer la note",
     close: "Fermer",
     loading: "Chargement...",
-    loginSuccess: "\u2705 Connexion r\u00E9ussie",
-    registerSuccess: "\u2705 Inscription r\u00E9ussie",
-    logoutSuccess: "D\u00E9connect\u00E9",
-    loginError: "\u274C Erreur de connexion",
-    registerError: "\u274C Erreur d'inscription",
-    userNotFound: "\u274C Utilisateur non trouv\u00E9",
-    wrongPassword: "\u274C Mot de passe incorrect",
-    invalidEmail: "\u274C Email invalide",
-    tooManyRequests: "\u274C Trop de tentatives, r\u00E9essayez plus tard",
-    emailAlreadyUsed: "\u274C Cet email est d\u00E9j\u00E0 utilis\u00E9",
-    weakPassword: "\u274C Mot de passe trop faible (6 caract\u00E8res minimum)",
-    operationNotAllowed: "\u274C L'inscription par email est d\u00E9sactiv\u00E9e dans Firebase Console !",
-    fillFields: "\u274C Veuillez remplir tous les champs",
+    loginSuccess: "Connexion r&eacute;ussie",
+    registerSuccess: "Inscription r&eacute;ussie",
+    logoutSuccess: "D&eacute;connect&eacute;",
+    loginError: "Erreur de connexion",
+    registerError: "Erreur d'inscription",
+    userNotFound: "Utilisateur non trouv&eacute;",
+    wrongPassword: "Mot de passe incorrect",
+    invalidEmail: "Email invalide",
+    tooManyRequests: "Trop de tentatives, r&eacute;essayez plus tard",
+    emailAlreadyUsed: "Cet email est d&eacute;j&agrave; utilis&eacute;",
+    weakPassword: "Mot de passe trop faible (6 caract&egrave;res minimum)",
+    operationNotAllowed: "L'inscription par email est d&eacute;sactiv&eacute;e dans Firebase Console !",
+    fillFields: "Veuillez remplir tous les champs",
     guest: "Invité",
     connected: "Connecté",
     shop: "Boutique",
     ratingCount: "avis",
-    ratingSuccess: "\u2705 Merci pour votre note !",
-    ratingError: "\u274C Erreur lors de la notation",
-    orderConfirmed: "Confirm\u00E9e"
+    ratingSuccess: "Merci pour votre note !",
+    ratingError: "Erreur lors de la notation",
+    orderConfirmed: "Confirm&eacute;e",
+    vendorOrdersTitle: "Mes commandes",
+    pending: "En attente",
+    preparing: "En pr&eacute;paration",
+    ready: "Pr&ecirc;te",
+    picked: "Retir&eacute;e",
+    allStatus: "Toutes",
+    filterPending: "En attente",
+    filterPreparing: "En pr&eacute;paration",
+    filterReady: "Pr&ecirc;tes",
+    filterPicked: "Retir&eacute;es",
+    noVendorOrders: "Aucune commande pour le moment.",
+    orderFrom: "Commande du",
+    customer: "Client",
+    comments: "Remarque",
+    btnPrepare: "Pr&eacute;parer",
+    btnReady: "Pr&ecirc;te",
+    btnPicked: "Retir&eacute;e",
+    notificationReady: "Votre commande chez {vendor} est pr&ecirc;te !",
+    vendorPanel: "Mes commandes",
+    vendorManagement: "Gestion des vendeurs",
+    addVendor: "Ajouter un vendeur",
+    vendorName: "Nom du vendeur",
+    vendorEmail: "Email du vendeur",
+    addVendorBtn: "Ajouter le vendeur",
+    vendorEmailHint: "L'email doit correspondre à un compte Firebase existant.",
+    noVendors: "Aucun vendeur enregistr&eacute;.",
+    deleteVendor: "Supprimer",
+    vendorAdded: "Vendeur ajouté avec succès !",
+    vendorDeleted: "Vendeur supprimé",
+    vendorNotFound: "Cet email n'existe pas dans Firebase. Le vendeur doit d'abord se connecter à SOG.",
+    fillAllFields: "Veuillez remplir tous les champs"
   };
 
   // ---- FIREBASE INIT ----
@@ -156,6 +187,7 @@
   };
 
   function App() {
+    // ---- ÉTATS EXISTANTS ----
     var [user, setUser] = useState(null);
     var [loading, setLoading] = useState(true);
     var [shops, setShops] = useState([]);
@@ -178,7 +210,19 @@
     var iframeRef = useRef(null);
     var SHOPS_URL = "https://raw.githubusercontent.com/mekeirish/sog/main/shops.json";
 
-    // ---- AUTH ----
+    // ---- ÉTATS VENDEUR ----
+    var [isVendor, setIsVendor] = useState(false);
+    var [vendorName, setVendorName] = useState(null);
+    var [vendorOrders, setVendorOrders] = useState([]);
+    var [filterStatus, setFilterStatus] = useState('all');
+
+    // ---- ÉTATS GESTION DES VENDEURS (admin) ----
+    var [vendors, setVendors] = useState([]);
+    var [newVendorName, setNewVendorName] = useState('');
+    var [newVendorEmail, setNewVendorEmail] = useState('');
+    var [isAddingVendor, setIsAddingVendor] = useState(false);
+
+    // ---- AUTH FIREBASE ----
     useEffect(function() {
       var unsubscribe = auth.onAuthStateChanged(async function(firebaseUser) {
         if (firebaseUser) {
@@ -202,11 +246,15 @@
           setUser(cleanedUser);
           sendAuthToIframe(cleanedUser);
           checkIfAdmin(firebaseUser.uid);
+          checkVendor(firebaseUser.uid);
           loadOrders();
         } else {
           setUser(null);
           sendAuthToIframe(null);
           setIsAdmin(false);
+          setIsVendor(false);
+          setVendorName(null);
+          setVendorOrders([]);
           setOrders([]);
         }
         setLoading(false);
@@ -215,15 +263,33 @@
       return function() { unsubscribe(); };
     }, []);
 
+    // ---- CHECK ADMIN ----
     var checkIfAdmin = function(uid) {
       db.ref('admins').once('value').then(function(snapshot) {
         var adminList = snapshot.val() || [];
         if (Array.isArray(adminList) && adminList.includes(uid)) {
           setIsAdmin(true);
+          loadVendors(); // Charger les vendeurs si admin
         }
       }).catch(function(err) { console.error(err); });
     };
 
+    // ---- CHECK VENDEUR ----
+    var checkVendor = function(uid) {
+      db.ref('vendors').once('value').then(function(snapshot) {
+        var vendors = snapshot.val() || {};
+        for (var key in vendors) {
+          if (vendors[key].uid === uid) {
+            setVendorName(key);
+            setIsVendor(true);
+            loadVendorOrders(key);
+            break;
+          }
+        }
+      }).catch(function(err) { console.error(err); });
+    };
+
+    // ---- CHARGEMENT DES BOUTIQUES ----
     var loadShops = async function() {
       try {
         var res = await fetch(SHOPS_URL);
@@ -314,7 +380,7 @@
         setSelectedShop(null);
         setMsg({ text: TEXTS.logoutSuccess, type: "info" });
       } catch (error) {
-        setMsg({ text: "❌ Erreur lors de la d\u00E9connexion", type: "error" });
+        setMsg({ text: "❌ Erreur lors de la d&eacute;connexion", type: "error" });
       }
     };
 
@@ -329,7 +395,7 @@
     };
     var handleIframeLoad = function() { sendAuthToIframe(user); };
 
-    // ---- ORDRES ----
+    // ---- ORDRES (CLIENT) ----
     useEffect(function() {
       var handleOrder = function(event) {
         if (event.data.type === 'SOG_ORDER') saveOrder(event.data.payload);
@@ -347,15 +413,16 @@
         items: orderData.items,
         total: orderData.total,
         currency: orderData.currency || "DZD",
-        status: 'confirm\u00E9e',
+        status: 'pending',
         createdAt: new Date().toISOString(),
         customerName: orderData.customerName || user.name,
         customerPhone: orderData.customerPhone || user.phone,
         customerAddress: orderData.customerAddress || user.address,
         comments: orderData.comments || ""
       }).then(function() {
-        setMsg({ text: "✅ Commande sauvegard\u00E9e dans l'historique", type: "success" });
+        setMsg({ text: "✅ Commande sauvegard&eacute;e dans l'historique", type: "success" });
         loadOrders();
+        if (isVendor && vendorName) loadVendorOrders(vendorName);
       }).catch(function(err) { console.error(err); });
     };
 
@@ -373,6 +440,49 @@
           setOrders([]);
         }
       });
+    };
+
+    // ---- ORDRES (VENDEUR) ----
+    var loadVendorOrders = function(vendor) {
+      db.ref('orders').orderByChild('vendor').equalTo(vendor).on('value', function(snapshot) {
+        var data = snapshot.val();
+        if (data) {
+          var list = Object.keys(data).map(function(key) {
+            return { id: key, ...data[key] };
+          });
+          list.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+          setVendorOrders(list);
+        } else {
+          setVendorOrders([]);
+        }
+      });
+    };
+
+    var updateOrderStatus = function(orderId, newStatus) {
+      db.ref('orders/' + orderId).update({ status: newStatus }).then(function() {
+        if (vendorName) loadVendorOrders(vendorName);
+        var order = vendorOrders.find(function(o) { return o.id === orderId; });
+        if (newStatus === 'ready' && order) {
+          sendNotificationToCustomer(order);
+        }
+        setMsg({ text: "Statut mis à jour", type: "success" });
+      });
+    };
+
+    var sendNotificationToCustomer = function(order) {
+      var message = decodeEntities(TEXTS.notificationReady).replace('{vendor}', order.vendor);
+      var topic = order.vendor + '_orders';
+      fetch('https://ntfy.sh/' + topic, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          topic: topic,
+          title: 'Commande prête',
+          message: message,
+          priority: 5,
+          click: window.location.href
+        })
+      }).catch(console.error);
     };
 
     // ---- RATINGS ----
@@ -411,7 +521,7 @@
       return Object.keys(vendorRatings).length;
     };
 
-    // ---- ADMIN ----
+    // ---- ADMIN (utilisateurs) ----
     var loadUsers = function() {
       db.ref('users').on('value', function(snapshot) {
         var data = snapshot.val();
@@ -440,11 +550,83 @@
           if (!adminList.includes(uid)) adminList.push(uid);
         }
         await adminsRef.set(adminList);
-        setMsg({ text: "✅ Statut admin mis \u00E0 jour", type: "success" });
+        setMsg({ text: "✅ Statut admin mis &agrave; jour", type: "success" });
         loadUsers();
       } catch (error) {
-        setMsg({ text: "❌ Erreur lors de la mise \u00E0 jour", type: "error" });
+        setMsg({ text: "❌ Erreur lors de la mise &agrave; jour", type: "error" });
       }
+    };
+
+    // ---- GESTION DES VENDEURS (admin) ----
+    var loadVendors = function() {
+      db.ref('vendors').on('value', function(snapshot) {
+        var data = snapshot.val();
+        if (data) {
+          var vendorList = Object.keys(data).map(function(key) {
+            return { name: key, ...data[key] };
+          });
+          setVendors(vendorList);
+        } else {
+          setVendors([]);
+        }
+      });
+    };
+
+    var addVendor = async function() {
+      if (!newVendorName.trim() || !newVendorEmail.trim()) {
+        setMsg({ text: decodeEntities(TEXTS.fillAllFields), type: "error" });
+        return;
+      }
+
+      setIsAddingVendor(true);
+      try {
+        // Chercher l'uid de l'utilisateur dans la base users
+        var usersRef = db.ref('users');
+        var snapshot = await usersRef.once('value');
+        var users = snapshot.val() || {};
+        
+        var foundUid = null;
+        for (var uid in users) {
+          if (users[uid].email === newVendorEmail.trim()) {
+            foundUid = uid;
+            break;
+          }
+        }
+
+        if (!foundUid) {
+          setMsg({ 
+            text: decodeEntities(TEXTS.vendorNotFound), 
+            type: "error" 
+          });
+          setIsAddingVendor(false);
+          return;
+        }
+
+        var vendorRef = db.ref('vendors/' + newVendorName.trim().toLowerCase());
+        await vendorRef.set({
+          uid: foundUid,
+          name: newVendorName.trim(),
+          email: newVendorEmail.trim(),
+          createdAt: new Date().toISOString()
+        });
+
+        setMsg({ text: decodeEntities(TEXTS.vendorAdded), type: "success" });
+        setNewVendorName('');
+        setNewVendorEmail('');
+        loadVendors();
+
+      } catch (error) {
+        setMsg({ text: "❌ Erreur: " + error.message, type: "error" });
+      }
+      setIsAddingVendor(false);
+    };
+
+    var deleteVendor = function(vendorName) {
+      if (!confirm("Supprimer le vendeur " + vendorName + " ?")) return;
+      db.ref('vendors/' + vendorName).remove().then(function() {
+        setMsg({ text: decodeEntities(TEXTS.vendorDeleted), type: "success" });
+        loadVendors();
+      });
     };
 
     // ---- SELECTION BOUTIQUE ----
@@ -467,7 +649,7 @@
       return decodeEntities(TEXTS[key] || key);
     };
 
-    // ---- MODE IMMERSIF (plein écran) ----
+    // ---- MODE IMMERSIF ----
     if (selectedShop) {
       return (
         <div className="fixed inset-0 z-50 h-screen w-screen overflow-hidden bg-black iframe-immersive">
@@ -495,7 +677,6 @@
     return (
       <div className="min-h-screen bg-slate-900 text-white p-4">
 
-        {/* HEADER */}
         <header className="glass-header sticky top-0 z-30 px-4 py-3 rounded-xl">
           <div className="flex flex-wrap items-center justify-between">
             <h1 className="text-xl font-bold text-white">{t('appTitle')}</h1>
@@ -504,12 +685,23 @@
                 <>
                   <span className="text-sm hidden sm:inline text-gray-300">👤 {decodeEntities(user.name)}</span>
                   {isAdmin && <span className="text-xs bg-purple-900/40 text-purple-200 px-2 py-1 rounded-full">👑 Admin</span>}
+                  {isVendor && <span className="text-xs bg-emerald-900/40 text-emerald-200 px-2 py-1 rounded-full">🏪 {vendorName}</span>}
                   {activeTab === 'orders' ? (
                     <button onClick={function() { setActiveTab('shops'); setSelectedShop(null); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('shopsTitle')}</button>
                   ) : (
                     <button onClick={function() { setActiveTab('orders'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('ordersTitle')}</button>
                   )}
-                  {isAdmin && <button onClick={function() { loadUsers(); setActiveTab('admin'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('adminPanel')}</button>}
+                  {isAdmin && (
+                    <>
+                      <button onClick={function() { loadUsers(); setActiveTab('admin'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('adminPanel')}</button>
+                      <button onClick={function() { loadVendors(); setActiveTab('vendor-management'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">👥 Vendeurs</button>
+                    </>
+                  )}
+                  {isVendor && (
+                    <button onClick={function() { setActiveTab('vendor-orders'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">
+                      📦 {t('vendorPanel')}
+                    </button>
+                  )}
                   <button onClick={handleLogout} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('logout')}</button>
                 </>
               ) : (
@@ -522,17 +714,16 @@
           </div>
         </header>
 
-        {/* MESSAGES */}
         {msg.text && (
           <div className={'mt-4 p-3 glass-alert rounded-xl border text-sm ' + (msg.type === 'success' ? 'bg-emerald-900/20 border-emerald-700/30 text-emerald-200' : msg.type === 'error' ? 'bg-red-900/20 border-red-700/30 text-red-200' : 'bg-blue-900/20 border-blue-700/30 text-blue-200')}>
             {decodeEntities(msg.text)}
           </div>
         )}
 
-        {/* CONTENU PRINCIPAL */}
         <div className="max-w-7xl mx-auto mt-6">
 
-          {user && activeTab === 'orders' ? (
+          {/* ---- ONGLET HISTORIQUE CLIENT ---- */}
+          {user && activeTab === 'orders' && (
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">{t('ordersTitle')}</h2>
               {orders.length === 0 ? (
@@ -540,13 +731,25 @@
               ) : (
                 <div className="space-y-4">
                   {orders.map(function(order) {
+                    var statusLabels = {
+                      pending: 'En attente',
+                      preparing: 'En pr&eacute;paration',
+                      ready: 'Pr&ecirc;te',
+                      picked: 'Retir&eacute;e'
+                    };
+                    var statusColors = {
+                      pending: 'bg-yellow-900/40 text-yellow-200',
+                      preparing: 'bg-blue-900/40 text-blue-200',
+                      ready: 'bg-emerald-900/40 text-emerald-200',
+                      picked: 'bg-gray-700/40 text-gray-400'
+                    };
                     return (
                       <div key={order.id} className="glass-card p-4 rounded-2xl">
                         <div className="flex justify-between items-start flex-wrap">
                           <div>
                             <p className="text-sm text-gray-400">{t('orderDate')} {new Date(order.createdAt).toLocaleDateString('fr-FR')}</p>
                             <p className="font-semibold">{t('shop')} : {decodeEntities(order.vendor)}</p>
-                            <p className="text-sm text-gray-300">{t('status')} : {decodeEntities(order.status)}</p>
+                            <p className="text-sm text-gray-300">{t('status')} : <span className={'inline-block px-2 py-0.5 rounded-full text-xs ' + statusColors[order.status]}>{decodeEntities(statusLabels[order.status])}</span></p>
                             <div className="mt-2 text-sm">
                               {order.items && order.items.map(function(item, idx) {
                                 return <div key={idx} className="text-gray-300">• {decodeEntities(item.name)} × {item.quantity} → {(item.price * item.quantity).toFixed(2)} {order.currency}</div>;
@@ -565,7 +768,10 @@
               )}
               <button onClick={function() { setActiveTab('shops'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium mt-4">{t('back')}</button>
             </div>
-          ) : user && activeTab === 'admin' && isAdmin ? (
+          )}
+
+          {/* ---- ONGLET ADMIN (utilisateurs) ---- */}
+          {user && activeTab === 'admin' && isAdmin && (
             <div>
               <h2 className="text-2xl font-bold text-white mb-4">{t('adminPanel')}</h2>
               <div className="glass-card p-6 rounded-2xl mb-6">
@@ -602,8 +808,150 @@
               </div>
               <button onClick={function() { setActiveTab('shops'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium mt-4">{t('back')}</button>
             </div>
-          ) : (
-            // ---- LISTE DES BOUTIQUES (mode normal) ----
+          )}
+
+          {/* ---- ONGLET GESTION DES VENDEURS (admin) ---- */}
+          {user && activeTab === 'vendor-management' && isAdmin && (
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-4">👥 {t('vendorManagement')}</h2>
+              
+              <div className="glass-card p-6 rounded-2xl mb-6">
+                <h3 className="font-semibold text-white mb-3">{t('addVendor')}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <input
+                    type="text"
+                    value={newVendorName}
+                    onChange={(e) => setNewVendorName(e.target.value)}
+                    placeholder={t('vendorName') + " (ex: milo)"}
+                    className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none"
+                  />
+                  <input
+                    type="email"
+                    value={newVendorEmail}
+                    onChange={(e) => setNewVendorEmail(e.target.value)}
+                    placeholder={t('vendorEmail')}
+                    className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none"
+                  />
+                  <button
+                    onClick={addVendor}
+                    disabled={isAddingVendor}
+                    className="glass-btn px-4 py-2 rounded-xl text-sm font-medium"
+                  >
+                    {isAddingVendor ? '⏳ Ajout...' : '✅ ' + t('addVendorBtn')}
+                  </button>
+                </div>
+                <p className="text-xs text-gray-400 mt-2">{t('vendorEmailHint')}</p>
+              </div>
+
+              <div className="glass-card p-6 rounded-2xl">
+                <h3 className="font-semibold text-white mb-3">Vendeurs enregistrés</h3>
+                {vendors.length === 0 ? (
+                  <p className="text-gray-400 text-sm text-center py-4">{t('noVendors')}</p>
+                ) : (
+                  <div className="space-y-2">
+                    {vendors.map(function(v) {
+                      return (
+                        <div key={v.name} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+                          <div>
+                            <span className="text-white font-medium">{decodeEntities(v.name)}</span>
+                            <span className="text-gray-400 text-sm ml-3">{decodeEntities(v.email)}</span>
+                            <span className="text-gray-500 text-xs ml-3">UID: {v.uid?.substring(0, 8)}...</span>
+                          </div>
+                          <button
+                            onClick={() => deleteVendor(v.name)}
+                            className="text-red-400 hover:text-red-300 text-sm px-2 py-1 rounded bg-white/5"
+                          >
+                            {t('deleteVendor')}
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              <button onClick={function() { setActiveTab('shops'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium mt-4">{t('back')}</button>
+            </div>
+          )}
+
+          {/* ---- ONGLET MES COMMANDES (VENDEUR) ---- */}
+          {user && activeTab === 'vendor-orders' && isVendor && (
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-4">📦 {t('vendorOrdersTitle')}</h2>
+              <div className="flex flex-wrap gap-2 mb-4">
+                <button onClick={() => setFilterStatus('all')} className={'glass-btn-secondary px-4 py-2 rounded-xl text-sm ' + (filterStatus === 'all' ? 'bg-blue-900/40 border-blue-500' : '')}>{t('allStatus')}</button>
+                <button onClick={() => setFilterStatus('pending')} className={'glass-btn-secondary px-4 py-2 rounded-xl text-sm ' + (filterStatus === 'pending' ? 'bg-yellow-900/40 border-yellow-500' : '')}>{t('filterPending')}</button>
+                <button onClick={() => setFilterStatus('preparing')} className={'glass-btn-secondary px-4 py-2 rounded-xl text-sm ' + (filterStatus === 'preparing' ? 'bg-blue-900/40 border-blue-500' : '')}>{t('filterPreparing')}</button>
+                <button onClick={() => setFilterStatus('ready')} className={'glass-btn-secondary px-4 py-2 rounded-xl text-sm ' + (filterStatus === 'ready' ? 'bg-emerald-900/40 border-emerald-500' : '')}>{t('filterReady')}</button>
+                <button onClick={() => setFilterStatus('picked')} className={'glass-btn-secondary px-4 py-2 rounded-xl text-sm ' + (filterStatus === 'picked' ? 'bg-gray-700/40 border-gray-500' : '')}>{t('filterPicked')}</button>
+              </div>
+
+              {vendorOrders.length === 0 ? (
+                <div className="glass-card p-8 text-center rounded-2xl"><p className="text-gray-400">{t('noVendorOrders')}</p></div>
+              ) : (
+                <div className="space-y-4">
+                  {vendorOrders.filter(function(order) {
+                    if (filterStatus === 'all') return true;
+                    return order.status === filterStatus;
+                  }).map(function(order) {
+                    var statusColors = {
+                      pending: 'bg-yellow-900/40 text-yellow-200',
+                      preparing: 'bg-blue-900/40 text-blue-200',
+                      ready: 'bg-emerald-900/40 text-emerald-200',
+                      picked: 'bg-gray-700/40 text-gray-400'
+                    };
+                    var statusLabels = {
+                      pending: t('pending'),
+                      preparing: t('preparing'),
+                      ready: t('ready'),
+                      picked: t('picked')
+                    };
+                    return (
+                      <div key={order.id} className="glass-card p-4 rounded-2xl">
+                        <div className="flex flex-wrap justify-between items-start gap-2">
+                          <div>
+                            <p className="text-sm text-gray-400">{t('orderFrom')} {new Date(order.createdAt).toLocaleDateString('fr-FR')} à {new Date(order.createdAt).toLocaleTimeString('fr-FR')}</p>
+                            <p className="font-semibold text-white">{decodeEntities(order.customerName)}</p>
+                            <p className="text-sm text-gray-300">📞 {decodeEntities(order.customerPhone)}</p>
+                            <p className="text-sm text-gray-300">📍 {decodeEntities(order.customerAddress)}</p>
+                            <div className="mt-2 text-sm">
+                              {order.items && order.items.map(function(item, idx) {
+                                return <div key={idx} className="text-gray-300">• {decodeEntities(item.name)} × {item.quantity} → {(item.price * item.quantity).toFixed(2)} {order.currency}</div>;
+                              })}
+                            </div>
+                            {order.comments && (
+                              <p className="text-sm text-gray-400 mt-1">💬 {decodeEntities(order.comments)}</p>
+                            )}
+                          </div>
+                          <div className="text-right">
+                            <p className="text-xl font-bold text-blue-400">{order.total} {order.currency}</p>
+                            <span className={'inline-block px-3 py-1 rounded-full text-xs font-medium mt-1 ' + statusColors[order.status]}>
+                              {statusLabels[order.status]}
+                            </span>
+                            <div className="flex flex-col gap-1 mt-2">
+                              {order.status === 'pending' && (
+                                <button onClick={() => updateOrderStatus(order.id, 'preparing')} className="glass-btn px-3 py-1 rounded text-sm">⚡ {t('btnPrepare')}</button>
+                              )}
+                              {order.status === 'preparing' && (
+                                <button onClick={() => updateOrderStatus(order.id, 'ready')} className="glass-btn px-3 py-1 rounded text-sm">✅ {t('btnReady')}</button>
+                              )}
+                              {order.status === 'ready' && (
+                                <button onClick={() => updateOrderStatus(order.id, 'picked')} className="glass-btn-secondary px-3 py-1 rounded text-sm">📦 {t('btnPicked')}</button>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+              <button onClick={function() { setActiveTab('shops'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium mt-4">{t('back')}</button>
+            </div>
+          )}
+
+          {/* ---- LISTE DES BOUTIQUES (par défaut) ---- */}
+          {activeTab === 'shops' && (
             <div>
               <h2 className="text-2xl font-bold text-white mb-6">{t('shopsTitle')}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -627,6 +975,7 @@
               <div className="mt-8 text-center text-gray-400 text-sm">{!user ? t('welcomeDesc') : ""}</div>
             </div>
           )}
+
         </div>
 
         {/* ---- MODALS ---- */}
@@ -690,6 +1039,7 @@
   var root = ReactDOM.createRoot(container);
   root.render(React.createElement(App, null));
 </script>
+
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
