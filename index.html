@@ -398,7 +398,14 @@
     // ---- ORDRES (CLIENT) ----
     useEffect(function() {
       var handleOrder = function(event) {
-        if (event.data.type === 'SOG_ORDER') saveOrder(event.data.payload);
+        if (event.data.type === 'SOG_ORDER') {
+          saveOrder(event.data.payload);
+        }
+        // ---- NOUVEAU : Recharger l'historique client ----
+        if (event.data.type === 'SOG_ORDER_SAVED') {
+          console.log('🔄 Rechargement des commandes client');
+          loadOrders();
+        }
       };
       window.addEventListener('message', handleOrder);
       return function() { window.removeEventListener('message', handleOrder); };
@@ -580,7 +587,6 @@
 
       setIsAddingVendor(true);
       try {
-        // Chercher l'uid de l'utilisateur dans la base users
         var usersRef = db.ref('users');
         var snapshot = await usersRef.once('value');
         var users = snapshot.val() || {};
