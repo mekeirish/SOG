@@ -61,7 +61,7 @@
     }
   };
 
-  // ---- TEXTES STATIQUES (tous en entités HTML) ----
+  // ---- TEXTES STATIQUES ----
   var TEXTS = {
     appTitle: "SOG - March&eacute;",
     welcome: "Bienvenue sur SOG",
@@ -244,13 +244,18 @@
           } catch (e) { /* ignore */ }
           var cleanedUser = cleanUserData(userData);
           setUser(cleanedUser);
-          sendAuthToIframe(cleanedUser);
+          // Envoyer l'auth à toutes les iframes déjà chargées
+          if (iframeRef.current) {
+            sendAuthToIframe(cleanedUser);
+          }
           checkIfAdmin(firebaseUser.uid);
           checkVendor(firebaseUser.uid);
           loadOrders();
         } else {
           setUser(null);
-          sendAuthToIframe(null);
+          if (iframeRef.current) {
+            sendAuthToIframe(null);
+          }
           setIsAdmin(false);
           setIsVendor(false);
           setVendorName(null);
@@ -269,7 +274,7 @@
         var adminList = snapshot.val() || [];
         if (Array.isArray(adminList) && adminList.includes(uid)) {
           setIsAdmin(true);
-          loadVendors(); // Charger les vendeurs si admin
+          loadVendors();
         }
       }).catch(function(err) { console.error(err); });
     };
@@ -289,10 +294,10 @@
       }).catch(function(err) { console.error(err); });
     };
 
-    // ---- CHARGEMENT DES BOUTIQUES (avec anti-cache) ----
+    // ---- CHARGEMENT DES BOUTIQUES (anti-cache) ----
     var loadShops = async function() {
       try {
-        var res = await fetch(SHOPS_URL + '?t=' + Date.now()); // ← anti-cache
+        var res = await fetch(SHOPS_URL + '?t=' + Date.now());
         if (res.ok) {
           var data = await res.json();
           setShops(data);
@@ -387,13 +392,22 @@
     // ---- IFRAME COMMUNICATION ----
     var sendAuthToIframe = function(userData) {
       if (iframeRef.current) {
-        iframeRef.current.contentWindow.postMessage({
-          type: 'SOG_AUTH',
-          payload: { user: userData }
-        }, '*');
+        try {
+          iframeRef.current.contentWindow.postMessage({
+            type: 'SOG_AUTH',
+            payload: { user: userData }
+          }, '*');
+          console.log('📤 SOG_AUTH envoyé à l\'iframe:', userData ? userData.email : 'null');
+        } catch (e) {
+          console.warn('⚠️ Impossible d\'envoyer l\'auth à l\'iframe (peut-être pas encore chargée)');
+        }
       }
     };
-    var handleIframeLoad = function() { sendAuthToIframe(user); };
+
+    var handleIframeLoad = function() {
+      console.log('🔄 Iframe chargée, envoi de l\'auth...');
+      sendAuthToIframe(user);
+    };
 
     // ---- ORDRES (CLIENT) ----
     useEffect(function() {
@@ -405,13 +419,21 @@
           console.log('🔄 Rechargement des commandes client');
           loadOrders();
         }
+        // Si l'iframe demande l'auth, on la renvoie
+        if (event.data.type === 'SOG_READY') {
+          console.log('🔄 Iframe demande SOG_READY, envoi de l\'auth...');
+          sendAuthToIframe(user);
+        }
       };
       window.addEventListener('message', handleOrder);
       return function() { window.removeEventListener('message', handleOrder); };
-    }, []);
+    }, [user]);
 
     var saveOrder = function(orderData) {
-      if (!user) return;
+      if (!user) {
+        console.error('❌ Aucun utilisateur connecté, commande ignorée');
+        return;
+      }
       var newOrderRef = db.ref('orders').push();
       newOrderRef.set({
         userId: user.uid,
@@ -433,12 +455,18 @@
       }).catch(function(err) { console.error(err); });
     };
 
+    // ---- CHARGEMENT DES COMMANDES (client) avec double filtrage ----
     var loadOrders = function() {
-      if (!user) return;
+      if (!user) {
+        console.log('❌ Aucun utilisateur connecté, impossible de charger les commandes');
+        return;
+      }
+
       console.log('🔍 Chargement commandes pour userId:', user.uid);
       console.log('🔍 Email du client:', user.email);
 
-      db.ref('orders').orderByChild('userId').equalTo(user.uid).once('value', function(snapshot) {
+      // 1ère tentative : filtrer par userId
+      db.ref('orders').orderByChild('userId').equalTo(user.uid).on('value', function(snapshot) {
         var data = snapshot.val();
         if (data) {
           var orderList = Object.keys(data).map(function(key) {
@@ -448,7 +476,9 @@
           console.log('✅ Commandes trouvées avec userId:', orderList.length);
           setOrders(orderList);
         } else {
-          db.ref('orders').orderByChild('customerEmail').equalTo(user.email).once('value', function(snap) {
+          // 2ème tentative : filtrer par customerEmail
+          console.log('ℹ️ Aucune commande avec userId, essai avec customerEmail...');
+          db.ref('orders').orderByChild('customerEmail').equalTo(user.email).on('value', function(snap) {
             var emailData = snap.val();
             if (emailData) {
               var emailList = Object.keys(emailData).map(function(key) {
@@ -490,6 +520,8 @@
           sendNotificationToCustomer(order);
         }
         setMsg({ text: "Statut mis à jour", type: "success" });
+        // Recharger les commandes client (si le client est le vendeur)
+        loadOrders();
       });
     };
 
