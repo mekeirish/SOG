@@ -118,5 +118,10 @@
     "vendor": "madrid",
     "name": "Madrid",
     "url": "https://mekeirish.github.io/hanout-madrid/"
+  },
+  {
+    "vendor": "mamia",
+    "name": "Mamia",
+    "url": "https://mekeirish.github.io/hanout-mamia/"
   }
 ]
