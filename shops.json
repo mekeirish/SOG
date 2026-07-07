@@ -103,5 +103,10 @@
     "vendor": "test123",
     "name": "Test123",
     "url": "https://mekeirish.github.io/hanout-test123/"
+  },
+  {
+    "vendor": "testclean",
+    "name": "Testclean",
+    "url": "https://mekeirish.github.io/hanout-testclean/"
   }
 ]
