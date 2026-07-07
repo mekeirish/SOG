@@ -113,5 +113,10 @@
     "vendor": "testclean2",
     "name": "Testclean2",
     "url": "https://mekeirish.github.io/hanout-testclean2/"
+  },
+  {
+    "vendor": "madrid",
+    "name": "Madrid",
+    "url": "https://mekeirish.github.io/hanout-madrid/"
   }
 ]
