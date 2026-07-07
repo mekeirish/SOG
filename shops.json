@@ -98,5 +98,10 @@
     "vendor": "zagai",
     "name": "Zagai",
     "url": "https://mekeirish.github.io/hanout-zagai/"
+  },
+  {
+    "vendor": "test123",
+    "name": "Test123",
+    "url": "https://mekeirish.github.io/hanout-test123/"
   }
 ]
