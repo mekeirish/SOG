@@ -289,10 +289,10 @@
       }).catch(function(err) { console.error(err); });
     };
 
-    // ---- CHARGEMENT DES BOUTIQUES ----
+    // ---- CHARGEMENT DES BOUTIQUES (avec anti-cache) ----
     var loadShops = async function() {
       try {
-        var res = await fetch(SHOPS_URL);
+        var res = await fetch(SHOPS_URL + '?t=' + Date.now()); // ← anti-cache
         if (res.ok) {
           var data = await res.json();
           setShops(data);
@@ -401,7 +401,6 @@
         if (event.data.type === 'SOG_ORDER') {
           saveOrder(event.data.payload);
         }
-        // ---- Recharger l'historique client ----
         if (event.data.type === 'SOG_ORDER_SAVED') {
           console.log('🔄 Rechargement des commandes client');
           loadOrders();
@@ -434,17 +433,11 @@
       }).catch(function(err) { console.error(err); });
     };
 
-    // ---- CHARGEMENT DES COMMANDES (client) AVEC DOUBLE FILTRE ----
     var loadOrders = function() {
-      if (!user) {
-        console.log('❌ Aucun utilisateur connecté, impossible de charger les commandes');
-        return;
-      }
-
+      if (!user) return;
       console.log('🔍 Chargement commandes pour userId:', user.uid);
       console.log('🔍 Email du client:', user.email);
 
-      // 1ère tentative : filtrer par userId
       db.ref('orders').orderByChild('userId').equalTo(user.uid).once('value', function(snapshot) {
         var data = snapshot.val();
         if (data) {
@@ -455,8 +448,6 @@
           console.log('✅ Commandes trouvées avec userId:', orderList.length);
           setOrders(orderList);
         } else {
-          // 2ème tentative : filtrer par customerEmail
-          console.log('ℹ️ Aucune commande avec userId, essai avec customerEmail...');
           db.ref('orders').orderByChild('customerEmail').equalTo(user.email).once('value', function(snap) {
             var emailData = snap.val();
             if (emailData) {
@@ -467,7 +458,7 @@
               console.log('✅ Commandes trouvées avec customerEmail:', emailList.length);
               setOrders(emailList);
             } else {
-              console.log('❌ Aucune commande trouvée pour cet utilisateur (ni userId, ni customerEmail)');
+              console.log('❌ Aucune commande trouvée pour cet utilisateur');
               setOrders([]);
             }
           });
@@ -997,7 +988,12 @@
           {/* ---- LISTE DES BOUTIQUES (par défaut) ---- */}
           {activeTab === 'shops' && (
             <div>
-              <h2 className="text-2xl font-bold text-white mb-6">{t('shopsTitle')}</h2>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-white">{t('shopsTitle')}</h2>
+                <button onClick={loadShops} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">
+                  🔄 Actualiser
+                </button>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {shops.map(function(shop) {
                   var avgRating = getAverageRating(shop.vendor);
