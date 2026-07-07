@@ -401,7 +401,7 @@
         if (event.data.type === 'SOG_ORDER') {
           saveOrder(event.data.payload);
         }
-        // ---- NOUVEAU : Recharger l'historique client ----
+        // ---- Recharger l'historique client ----
         if (event.data.type === 'SOG_ORDER_SAVED') {
           console.log('🔄 Rechargement des commandes client');
           loadOrders();
@@ -416,6 +416,7 @@
       var newOrderRef = db.ref('orders').push();
       newOrderRef.set({
         userId: user.uid,
+        customerEmail: user.email,
         vendor: orderData.vendor,
         items: orderData.items,
         total: orderData.total,
@@ -433,18 +434,43 @@
       }).catch(function(err) { console.error(err); });
     };
 
+    // ---- CHARGEMENT DES COMMANDES (client) AVEC DOUBLE FILTRE ----
     var loadOrders = function() {
-      if (!user) return;
-      db.ref('orders').orderByChild('userId').equalTo(user.uid).on('value', function(snapshot) {
+      if (!user) {
+        console.log('❌ Aucun utilisateur connecté, impossible de charger les commandes');
+        return;
+      }
+
+      console.log('🔍 Chargement commandes pour userId:', user.uid);
+      console.log('🔍 Email du client:', user.email);
+
+      // 1ère tentative : filtrer par userId
+      db.ref('orders').orderByChild('userId').equalTo(user.uid).once('value', function(snapshot) {
         var data = snapshot.val();
         if (data) {
           var orderList = Object.keys(data).map(function(key) {
             return { id: key, ...data[key] };
           });
           orderList.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+          console.log('✅ Commandes trouvées avec userId:', orderList.length);
           setOrders(orderList);
         } else {
-          setOrders([]);
+          // 2ème tentative : filtrer par customerEmail
+          console.log('ℹ️ Aucune commande avec userId, essai avec customerEmail...');
+          db.ref('orders').orderByChild('customerEmail').equalTo(user.email).once('value', function(snap) {
+            var emailData = snap.val();
+            if (emailData) {
+              var emailList = Object.keys(emailData).map(function(key) {
+                return { id: key, ...emailData[key] };
+              });
+              emailList.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+              console.log('✅ Commandes trouvées avec customerEmail:', emailList.length);
+              setOrders(emailList);
+            } else {
+              console.log('❌ Aucune commande trouvée pour cet utilisateur (ni userId, ni customerEmail)');
+              setOrders([]);
+            }
+          });
         }
       });
     };
@@ -695,7 +721,14 @@
                   {activeTab === 'orders' ? (
                     <button onClick={function() { setActiveTab('shops'); setSelectedShop(null); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('shopsTitle')}</button>
                   ) : (
-                    <button onClick={function() { setActiveTab('orders'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('ordersTitle')}</button>
+                    <button onClick={function() { setActiveTab('orders'); }} className="glass-btn-secondary relative px-4 py-2 rounded-xl text-sm font-medium">
+                      {t('ordersTitle')}
+                      {orders.filter(o => o.status === 'pending' || o.status === 'preparing').length > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                          {orders.filter(o => o.status === 'pending' || o.status === 'preparing').length}
+                        </span>
+                      )}
+                    </button>
                   )}
                   {isAdmin && (
                     <>
@@ -728,10 +761,15 @@
 
         <div className="max-w-7xl mx-auto mt-6">
 
-          {/* ---- ONGLET HISTORIQUE CLIENT ---- */}
+          {/* ---- ONGLET HISTORIQUE CLIENT (avec bouton Actualiser) ---- */}
           {user && activeTab === 'orders' && (
             <div>
-              <h2 className="text-2xl font-bold text-white mb-4">{t('ordersTitle')}</h2>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-white">{t('ordersTitle')}</h2>
+                <button onClick={loadOrders} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">
+                  🔄 Actualiser
+                </button>
+              </div>
               {orders.length === 0 ? (
                 <div className="glass-card p-8 text-center rounded-2xl"><p className="text-gray-400">{t('noOrders')}</p></div>
               ) : (
