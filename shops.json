@@ -23,5 +23,10 @@
     "vendor": "magicano",
     "name": "Magicano",
     "url": "https://mekeirish.github.io/hanout-magicano/"
+  },
+  {
+    "vendor": "basi",
+    "name": "Basi",
+    "url": "https://mekeirish.github.io/hanout-basi/"
   }
 ]
