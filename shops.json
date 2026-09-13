@@ -13,5 +13,10 @@
     "vendor": "mamia",
     "name": "Mamia",
     "url": "https://mekeirish.github.io/hanout-mamia/"
+  },
+  {
+    "vendor": "toutou",
+    "name": "Toutou",
+    "url": "https://mekeirish.github.io/hanout-toutou/"
   }
 ]
