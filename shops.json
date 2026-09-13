@@ -18,5 +18,10 @@
     "vendor": "toutou",
     "name": "Toutou",
     "url": "https://mekeirish.github.io/hanout-toutou/"
+  },
+  {
+    "vendor": "magicano",
+    "name": "Magicano",
+    "url": "https://mekeirish.github.io/hanout-magicano/"
   }
 ]
