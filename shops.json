@@ -33,5 +33,10 @@
     "vendor": "badiga",
     "name": "Badiga",
     "url": "https://mekeirish.github.io/hanout-badiga/"
+  },
+  {
+    "vendor": "jojo",
+    "name": "Jojo",
+    "url": "https://mekeirish.github.io/hanout-jojo/"
   }
 ]
