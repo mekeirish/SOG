@@ -38,5 +38,10 @@
     "vendor": "jojo",
     "name": "Jojo",
     "url": "https://mekeirish.github.io/hanout-jojo/"
+  },
+  {
+    "vendor": "jola",
+    "name": "Jola",
+    "url": "https://mekeirish.github.io/hanout-jola/"
   }
 ]
