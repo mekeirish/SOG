@@ -352,9 +352,20 @@
   // =========================================================
   // UTILITAIRES
   // =========================================================
+  // Répare les textes déjà corrompus (« Ã© » au lieu de « é ») : UTF-8 lu comme Latin-1.
+  var fixMojibake = function (str) {
+    str = String(str);
+    if (!/[ÃÂâ][\u0080-\u00BF€‚ƒ„…†‡ˆ‰Š‹ŒŽ‘’“”•–—˜™š›œžŸ]/.test(str)) return str;
+    try { return decodeURIComponent(escape(str)); } catch (e) { return str; }
+  };
   var decodeEntities = function (str) {
     if (str === undefined || str === null) return "";
-    try { var t = document.createElement("textarea"); t.innerHTML = String(str); return t.value; } catch (e) { return String(str); }
+    try { var t = document.createElement("textarea"); t.innerHTML = String(str); return fixMojibake(t.value); } catch (e) { return fixMojibake(str); }
+  };
+  // Nom court d'une boutique : retire « Boutique de / du / des / d' ».
+  var shortName = function (str) {
+    var t = decodeEntities(str).trim().replace(/^boutique\s+(?:de\s+la\s+|de\s+l['’]\s*|des\s+|du\s+|de\s+|d['’]\s*)/i, "").trim();
+    return t ? t.charAt(0).toUpperCase() + t.slice(1) : decodeEntities(str);
   };
   var lsGet = function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } };
   var lsSet = function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} };
@@ -527,7 +538,7 @@
 
   function ShopTile(p) {
     var shop = p.shop, info = p.info || {};
-    var title = info.title || shop.name;
+    var title = shortName(info.title || shop.name);
     var img = info.cover || info.logo;
     return (
       <button type="button" className="tile" aria-label={"Ouvrir " + title} onClick={function () { p.onOpen(shop); }}>
