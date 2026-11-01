@@ -48,5 +48,10 @@
     "vendor": "hoha",
     "name": "Hoha",
     "url": "https://mekeirish.github.io/hanout-hoha/"
+  },
+  {
+    "vendor": "kilo",
+    "name": "Kilo",
+    "url": "https://mekeirish.github.io/hanout-kilo/"
   }
 ]
