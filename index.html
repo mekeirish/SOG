@@ -2,165 +2,364 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
   <title>SOG - Marché de proximité</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="description" content="SOG : le marché de proximité. Commandez chez vos commerçants et retirez votre commande." />
+  <meta name="theme-color" content="#2f5bea" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="SOG" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./icon.png" />
+  <link rel="apple-touch-icon" href="./icon.png" />
+
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
   <style>
-    .glass-card { background: rgba(30,41,59,0.5); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 32px rgba(0,0,0,0.5); transition: all 0.3s ease; }
-    .glass-card:hover { border-color: rgba(255,255,255,0.2); box-shadow: 0 12px 40px rgba(0,0,0,0.6); transform: translateY(-2px); }
-    .glass-header { background: rgba(15,23,42,0.6); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .glass-modal { background: rgba(15,23,42,0.8); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 24px 48px rgba(0,0,0,0.6); }
-    .glass-input { background: rgba(15,23,42,0.5); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); transition: border-color 0.2s, box-shadow 0.2s; }
-    .glass-input:focus { border-color: rgba(59,130,246,0.5); box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
-    .glass-btn { background: rgba(59,130,246,0.25); backdrop-filter: blur(8px); border: 1px solid rgba(59,130,246,0.3); color: #f1f5f9; transition: all 0.2s ease; }
-    .glass-btn:hover:not(:disabled) { background: rgba(59,130,246,0.4); border-color: rgba(59,130,246,0.5); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(59,130,246,0.2); }
-    .glass-btn-secondary { background: rgba(51,65,85,0.3); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.08); color: #f1f5f9; transition: all 0.2s ease; }
-    .glass-btn-secondary:hover:not(:disabled) { background: rgba(51,65,85,0.5); border-color: rgba(255,255,255,0.15); transform: translateY(-1px); }
-    .modal-overlay { background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); }
-    .spinner { border: 3px solid #1e293b; border-top: 3px solid #3b82f6; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+    /* =========================================================
+       THÈME
+       ========================================================= */
+    :root {
+      --accent: #2f5bea;
+      --accent-2: #1e3fb8;
+      --accent-ink: #ffffff;
+      --accent-soft: rgba(47, 91, 234, 0.11);
+
+      --bg: #f4f6fa;
+      --surface: #ffffff;
+      --surface-2: #eceff5;
+      --ink: #0f172a;
+      --ink-2: #475569;
+      --ink-3: #8592a8;
+      --line: #e2e6ee;
+
+      --ok: #059669;       --ok-soft: rgba(5, 150, 105, 0.12);
+      --warn: #d97706;     --warn-soft: rgba(217, 119, 6, 0.13);
+      --info: #2563eb;     --info-soft: rgba(37, 99, 235, 0.12);
+      --danger: #dc2626;   --danger-soft: rgba(220, 38, 38, 0.1);
+      --star: #f59e0b;
+      --shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 8px 24px rgba(15, 23, 42, 0.06);
+
+      --hdr: 56px;
+      --nav: 64px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --accent: #5b82ff;
+        --accent-2: #3a5fe0;
+        --accent-soft: rgba(91, 130, 255, 0.16);
+        --bg: #0b1120;
+        --surface: #131c2e;
+        --surface-2: #1b2740;
+        --ink: #f1f5f9;
+        --ink-2: #b4bfd0;
+        --ink-3: #7f8ba0;
+        --line: #243049;
+        --ok: #34d399;     --ok-soft: rgba(52, 211, 153, 0.15);
+        --warn: #fbbf24;   --warn-soft: rgba(251, 191, 36, 0.15);
+        --info: #60a5fa;   --info-soft: rgba(96, 165, 250, 0.16);
+        --danger: #f87171; --danger-soft: rgba(248, 113, 113, 0.14);
+        --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+      }
+    }
+
+    /* =========================================================
+       BASE
+       ========================================================= */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink);
+      font: 16px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input, select, textarea { font: inherit; color: inherit; }
+    button { cursor: pointer; border: 0; background: none; padding: 0; -webkit-tap-highlight-color: transparent; touch-action: manipulation; text-align: inherit; }
+    button[disabled] { cursor: not-allowed; }
+    img { display: block; max-width: 100%; }
+    h1, h2, h3, h4, p { margin: 0; }
+    a { color: var(--accent); }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .boot { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; }
+    .spinner { width: 36px; height: 36px; border: 3px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.9s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-    .modal-animate { animation: fadeIn 0.2s ease-out; }
-    .iframe-immersive { animation: fadeIn 0.3s ease-out; }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0f172a; }
-    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 8px; }
+    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+    @keyframes shimmer { to { background-position: -200% 0; } }
+    @media (prefers-reduced-motion: reduce) { * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
+
+    .container { width: 100%; max-width: 720px; margin: 0 auto; padding: 0 16px; }
+
+    /* =========================================================
+       BOUTONS
+       ========================================================= */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 46px; padding: 0 18px; border-radius: 13px; text-align: center;
+      font-weight: 600; font-size: 15px; white-space: nowrap; text-decoration: none;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+    .btn:active:not([disabled]) { transform: scale(0.98); }
+    .btn[disabled] { opacity: 0.5; }
+    .btn-primary { background: var(--accent); color: var(--accent-ink); }
+    .btn-soft { background: var(--accent-soft); color: var(--accent); }
+    .btn-ghost { background: var(--surface-2); color: var(--ink); }
+    .btn-danger { background: var(--danger-soft); color: var(--danger); }
+    .btn-white { background: #fff; color: #1e3fb8; }
+    .btn-outline-white { background: rgba(255, 255, 255, 0.16); color: #fff; }
+    .btn-block { width: 100%; }
+    .btn-sm { min-height: 40px; padding: 0 14px; font-size: 14px; border-radius: 11px; }
+    .link-btn { color: var(--accent); font-weight: 600; font-size: 14px; padding: 8px 0; min-height: 40px; }
+    .icon-btn { position: relative; flex: none; width: 44px; height: 44px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; color: var(--ink); }
+    .icon-btn:active { background: var(--surface-2); }
+    .icon-btn.sm { width: 40px; height: 40px; }
+    .icon-btn.spin svg { animation: spin 0.8s linear infinite; }
+
+    /* =========================================================
+       EN-TÊTE ET NAVIGATION
+       ========================================================= */
+    .topbar { position: sticky; top: 0; z-index: 30; background: var(--surface); border-bottom: 1px solid var(--line); padding-top: var(--safe-top); }
+    .topbar-in { height: var(--hdr); max-width: 720px; margin: 0 auto; display: flex; align-items: center; gap: 4px; padding: 0 8px 0 16px; }
+    .logo { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+    .logo-mark { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; letter-spacing: 0.02em; flex: none; }
+    .logo-text { font-weight: 800; font-size: 19px; letter-spacing: 0.01em; }
+    .logo-sub { font-size: 12px; color: var(--ink-3); line-height: 1.1; }
+    .page-title { flex: 1; min-width: 0; font-size: 18px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; flex: none; }
+    .avatar.lg { width: 64px; height: 64px; font-size: 26px; }
+
+    .nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: var(--surface); border-top: 1px solid var(--line); padding-bottom: var(--safe-bottom); }
+    .nav-in { height: var(--nav); max-width: 720px; margin: 0 auto; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; }
+    .nav-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; color: var(--ink-3); font-size: 11.5px; font-weight: 600; text-align: center; }
+    .nav-item.on { color: var(--accent); }
+    .nav-item .pill-bg { position: absolute; top: 6px; width: 52px; height: 30px; border-radius: 15px; background: transparent; transition: background 0.2s; }
+    .nav-item.on .pill-bg { background: var(--accent-soft); }
+    .nav-item svg, .nav-item span { position: relative; }
+    .badge { position: absolute; top: -5px; right: -9px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--danger); color: #fff; font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; }
+
+    .page { padding-top: 14px; padding-bottom: calc(var(--nav) + var(--safe-bottom) + 24px); min-height: 60vh; }
+
+    /* =========================================================
+       ACCUEIL
+       ========================================================= */
+    .hero { border-radius: 22px; padding: 22px 20px; color: #fff; background: radial-gradient(120% 140% at 100% 0%, #5b82ff 0%, transparent 55%), linear-gradient(135deg, #2f5bea, #1a2f93); }
+    .hero h1 { font-size: 24px; font-weight: 800; line-height: 1.2; }
+    .hero p { margin-top: 8px; font-size: 15px; opacity: 0.92; }
+    .hero-act { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .hero-act .btn { white-space: normal; line-height: 1.2; padding: 0 10px; }
+    @media (max-width: 359px) { .hero-act { grid-template-columns: 1fr; } }
+    .hero.small { padding: 18px 20px; }
+    .hero.small h1 { font-size: 21px; }
+
+    .steps { display: grid; gap: 10px; margin-top: 14px; }
+    .step { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; }
+    .step-n { width: 40px; height: 40px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 800; }
+    .step b { display: block; font-size: 15px; }
+    .step span { font-size: 13.5px; color: var(--ink-2); }
+
+    .search { position: relative; margin: 16px 0 4px; }
+    .search input { -webkit-appearance: none; appearance: none; width: 100%; height: 48px; padding: 0 44px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); font-size: 16px; }
+    .search input::-webkit-search-cancel-button, .search input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
+    .search .s-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--ink-3); pointer-events: none; display: flex; }
+    .search .s-clear { position: absolute; right: 2px; top: 2px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--ink-3); }
+
+    .section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 20px 0 10px; }
+    .section-head h2 { font-size: 18px; font-weight: 800; }
+    .section-head span { font-size: 13px; color: var(--ink-3); }
+
+    .active-order { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; width: 100%; margin-top: 14px; padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
+    .active-order .ao-ico { width: 44px; height: 44px; border-radius: 13px; display: flex; align-items: center; justify-content: center; }
+    .active-order b { display: block; font-size: 15px; }
+    .active-order span.sub { font-size: 13px; color: var(--ink-2); }
+
+    /* Carte boutique */
+    .shops { display: grid; gap: 14px; }
+    @media (min-width: 640px) { .shops { grid-template-columns: 1fr 1fr; } }
+    .shop { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); cursor: pointer; display: flex; flex-direction: column; min-width: 0; }
+    .shop:active { transform: scale(0.99); }
+    .shop-top { position: relative; padding: 16px 16px 14px; color: #fff; display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 12px; align-items: center; }
+    .shop-logo { width: 52px; height: 52px; border-radius: 16px; background: rgba(255, 255, 255, 0.22); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; overflow: hidden; }
+    .shop-logo img { width: 100%; height: 100%; object-fit: cover; }
+    .shop-name { font-size: 18px; font-weight: 800; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .shop-tag { font-size: 13px; opacity: 0.92; margin-top: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .shop-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+    .shop-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+    .chip { display: inline-flex; align-items: center; gap: 5px; min-height: 30px; padding: 0 11px; border-radius: 15px; background: var(--surface-2); font-size: 13px; font-weight: 600; color: var(--ink-2); }
+    .chip.rating { color: var(--ink); min-height: 40px; padding: 0 14px; }
+    .chip.rating svg { color: var(--star); }
+    .thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .thumbs img, .thumbs .ph { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; object-fit: cover; background: var(--surface-2); }
+    .shop-body .btn { margin-top: auto; }
+
+    .skel { background: linear-gradient(90deg, var(--surface-2) 25%, var(--line) 37%, var(--surface-2) 63%); background-size: 200% 100%; animation: shimmer 1.3s linear infinite; border-radius: 12px; }
+    .skel-shop { height: 230px; border-radius: 20px; }
+
+    .empty { text-align: center; padding: 44px 16px; color: var(--ink-2); }
+    .empty .e-ico { width: 68px; height: 68px; margin: 0 auto 14px; border-radius: 50%; background: var(--surface-2); color: var(--ink-3); display: flex; align-items: center; justify-content: center; }
+    .empty h3 { font-size: 17px; color: var(--ink); margin-bottom: 4px; }
+
+    /* =========================================================
+       COMMANDES
+       ========================================================= */
+    .tabs-scroll { position: sticky; top: calc(var(--hdr) + var(--safe-top)); z-index: 20; background: var(--bg); padding: 10px 0 8px; }
+    .tabs-in { max-width: 720px; margin: 0 auto; padding: 2px 16px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .tabs-in::-webkit-scrollbar { display: none; }
+    .tab { flex: none; height: 38px; padding: 0 14px; border-radius: 19px; background: var(--surface); border: 1px solid var(--line); font-size: 14px; font-weight: 600; color: var(--ink-2); white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
+    .tab.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+    .tab .n { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: rgba(127, 140, 160, 0.2); font-size: 12px; line-height: 20px; text-align: center; }
+    .tab.on .n { background: rgba(255, 255, 255, 0.25); }
+
+    .order { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px; margin-bottom: 12px; box-shadow: var(--shadow); }
+    .order-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .order-shop { font-weight: 800; font-size: 16px; min-width: 0; overflow-wrap: anywhere; }
+    .order-date { font-size: 12.5px; color: var(--ink-3); margin-top: 2px; }
+    .status { display: inline-flex; align-items: center; height: 26px; padding: 0 11px; border-radius: 13px; font-size: 12.5px; font-weight: 700; white-space: nowrap; flex: none; }
+    .st-pending { background: var(--warn-soft); color: var(--warn); }
+    .st-preparing { background: var(--info-soft); color: var(--info); }
+    .st-ready { background: var(--ok-soft); color: var(--ok); }
+    .st-picked { background: var(--surface-2); color: var(--ink-3); }
+    .progress { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 14px 0 6px; }
+    .progress i { height: 5px; border-radius: 3px; background: var(--surface-2); }
+    .progress i.on { background: var(--accent); }
+    .progress-l { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; font-size: 11px; color: var(--ink-3); text-align: center; }
+    .progress-l .on { color: var(--ink); font-weight: 700; }
+    .items { margin: 12px 0 0; padding: 10px 0 0; border-top: 1px dashed var(--line); display: grid; gap: 6px; }
+    .item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; font-size: 14px; }
+    .item .nm { overflow-wrap: anywhere; color: var(--ink-2); }
+    .item .nm b { color: var(--ink); }
+    .order-foot { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .total { font-size: 18px; font-weight: 800; }
+    .cust { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: var(--surface-2); display: grid; gap: 4px; font-size: 14px; }
+    .cust-row { display: grid; grid-template-columns: 20px minmax(0, 1fr); gap: 8px; align-items: start; overflow-wrap: anywhere; }
+    .cust-row svg { color: var(--ink-3); margin-top: 2px; }
+    .actions { margin-top: 12px; display: grid; grid-template-columns: 1fr; gap: 8px; }
+    .actions.two { grid-template-columns: auto minmax(0, 1fr); }
+    .actions .btn { white-space: normal; line-height: 1.2; padding-top: 8px; padding-bottom: 8px; }
+
+    /* =========================================================
+       COMPTE / ADMIN
+       ========================================================= */
+    .profile { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 16px; box-shadow: var(--shadow); }
+    .profile h2 { font-size: 20px; font-weight: 800; overflow-wrap: anywhere; }
+    .profile p { font-size: 14px; color: var(--ink-2); overflow-wrap: anywhere; }
+    .roles { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .role { display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px; border-radius: 12px; font-size: 12px; font-weight: 700; }
+    .role.admin { background: rgba(124, 58, 237, 0.13); color: #7c3aed; }
+    .role.vendor { background: var(--ok-soft); color: var(--ok); }
+    .role.client { background: var(--accent-soft); color: var(--accent); }
+    @media (prefers-color-scheme: dark) { .role.admin { color: #a78bfa; } }
+    .list { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; margin-top: 14px; }
+    .list-item { display: grid; grid-template-columns: 40px minmax(0, 1fr) 20px; gap: 12px; align-items: center; width: 100%; min-height: 60px; padding: 10px 14px; border-top: 1px solid var(--line); text-align: left; }
+    .list-item:first-child { border-top: 0; }
+    .list-item:active { background: var(--surface-2); }
+    .list-ico { width: 40px; height: 40px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; }
+    .list-ico.danger { background: var(--danger-soft); color: var(--danger); }
+    .list-item b { display: block; font-size: 15px; font-weight: 600; }
+    .list-item small { color: var(--ink-3); font-size: 13px; }
+    .list-item .chev { color: var(--ink-3); }
+    .info-row { display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 12px; padding: 12px 14px; border-top: 1px solid var(--line); align-items: start; overflow-wrap: anywhere; }
+    .info-row:first-child { border-top: 0; }
+    .info-row svg { color: var(--ink-3); margin-top: 1px; }
+    .info-row small { display: block; font-size: 12px; color: var(--ink-3); }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+    .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 12px; text-align: center; }
+    .stat b { display: block; font-size: 24px; font-weight: 800; }
+    .stat span { font-size: 12.5px; color: var(--ink-3); }
+    .row { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; margin-bottom: 10px; }
+    .row-name { font-weight: 700; font-size: 15px; overflow-wrap: anywhere; }
+    .row-meta { font-size: 13px; color: var(--ink-3); overflow-wrap: anywhere; }
+    .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 16px; margin-top: 14px; }
+    .panel h3 { font-size: 16px; margin-bottom: 12px; }
+    .install { margin-top: 14px; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: center; padding: 14px; border-radius: 18px; background: var(--accent-soft); }
+    .install .list-ico { background: var(--accent); color: var(--accent-ink); }
+    .install b { display: block; }
+    .install span { font-size: 13.5px; color: var(--ink-2); }
+    .install .btn { grid-column: 1 / -1; }
+
+    /* =========================================================
+       FEUILLES, FORMULAIRES
+       ========================================================= */
+    .overlay { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 90; background: rgba(15, 23, 42, 0.55); display: flex; align-items: flex-end; justify-content: center; animation: fade 0.2s; }
+    .overlay.center { align-items: center; padding: 20px; }
+    .sheet { width: 100%; max-width: 520px; max-height: 92vh; max-height: 92dvh; background: var(--surface); border-radius: 22px 22px 0 0; display: flex; flex-direction: column; overflow: hidden; animation: up 0.25s ease-out; }
+    .sheet-head { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px 6px 20px; border-bottom: 1px solid var(--line); min-height: 56px; }
+    .sheet-title { font-size: 18px; font-weight: 700; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sheet-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 16px 20px; }
+    .sheet-foot { flex: none; padding: 12px 20px calc(12px + var(--safe-bottom)); border-top: 1px solid var(--line); background: var(--surface); }
+    @media (min-width: 640px) { .overlay { align-items: center; padding: 24px; } .sheet { border-radius: 22px; } }
+    .dialog { width: 100%; max-width: 400px; background: var(--surface); border-radius: 20px; padding: 20px; animation: up 0.2s ease-out; }
+    .dialog h3 { font-size: 18px; margin-bottom: 8px; }
+    .dialog p { color: var(--ink-2); font-size: 15px; }
+    .dialog .d-act { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .label { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+    .input { width: 100%; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); font-size: 16px; }
+    textarea.input { padding: 12px 14px; min-height: 88px; resize: vertical; }
+    .input:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+    .hint { font-size: 12px; color: var(--ink-3); }
+    .note { padding: 10px 12px; border-radius: 12px; font-size: 14px; margin-bottom: 12px; }
+    .note.err { background: var(--danger-soft); color: var(--danger); }
+    .note.info { background: var(--accent-soft); color: var(--accent); }
+    .note.ok { background: var(--ok-soft); color: var(--ok); }
+    .note.warn { background: var(--warn-soft); color: var(--warn); }
+    .pw { position: relative; }
+    .pw .input { padding-right: 52px; }
+    .pw button { position: absolute; right: 2px; top: 2px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--ink-3); }
+    .row2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+    .switch-line { text-align: center; font-size: 14px; color: var(--ink-2); margin-top: 6px; }
+    .stars { display: flex; justify-content: center; gap: 4px; margin: 6px 0 16px; }
+    .stars button { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; color: var(--line); }
+    .stars button.on { color: var(--star); }
+    .review { padding: 12px 0; border-top: 1px solid var(--line); }
+    .review:first-child { border-top: 0; padding-top: 0; }
+    .review-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-weight: 600; font-size: 14px; }
+    .review p { margin-top: 4px; color: var(--ink-2); font-size: 14px; overflow-wrap: anywhere; }
+    .stars-sm { display: inline-flex; gap: 1px; color: var(--star); }
+    .stars-sm .off { color: var(--line); }
+
+    /* =========================================================
+       BOUTIQUE (plein écran)
+       ========================================================= */
+    .shop-view { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 60; background: var(--bg); animation: fade 0.25s ease-out; }
+    .shop-view iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; background: var(--bg); }
+    .shop-loading { position: absolute; top: 0; right: 0; bottom: 0; left: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: var(--bg); color: var(--ink-2); font-weight: 600; }
+    .back-btn {
+      position: fixed; z-index: 65; left: 8px; top: calc(8px + var(--safe-top));
+      height: 40px; padding: 0 14px 0 10px; border-radius: 12px;
+      display: inline-flex; align-items: center; gap: 4px; font-weight: 700; font-size: 14px;
+      background: var(--surface); color: var(--ink); border: 1px solid var(--line); box-shadow: var(--shadow);
+    }
+
+    .toasts { position: fixed; left: 0; right: 0; z-index: 100; display: flex; justify-content: center; padding: 0 12px; pointer-events: none; top: calc(var(--hdr) + var(--safe-top) + 8px); }
+    .toast { pointer-events: auto; max-width: 520px; padding: 12px 16px; border-radius: 14px; background: #0f172a; color: #fff; font-size: 14px; font-weight: 500; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); animation: up 0.2s ease-out; }
+    .toast.success { background: #065f46; }
+    .toast.error { background: #991b1b; }
+    .toast.order { background: #1e3fb8; }
   </style>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f172a">
-  <link rel="apple-touch-icon" href="icon.png">
-  <link rel="manifest" href="./manifest.json">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#4b6cb7">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-icon" href="icon.png">
 </head>
 <body>
-<div id="root"></div>
+<div id="root"><div class="boot"><div class="spinner"></div></div></div>
+<noscript><p style="padding:24px;font-family:sans-serif">SOG nécessite JavaScript.</p></noscript>
 
 <script type="text/babel">
   const { useState, useEffect, useRef } = React;
 
-  // ---- DÉCODE LES ENTITÉS HTML ----
-  var decodeEntities = function(str) {
-    if (!str) return "";
-    try {
-      var txt = document.createElement('textarea');
-      txt.innerHTML = str;
-      return txt.value;
-    } catch (e) {
-      return str;
-    }
-  };
+  // =========================================================
+  // CONFIGURATION
+  // =========================================================
+  var SHOPS_RAW_URL = "https://raw.githubusercontent.com/mekeirish/sog/main/shops.json";
+  var FALLBACK_SHOPS_URL = "./shops.json";
 
-  // ---- TEXTES STATIQUES ----
-  var TEXTS = {
-    appTitle: "SOG - March&eacute;",
-    welcome: "Bienvenue sur SOG",
-    welcomeDesc: "Connectez-vous ou inscrivez-vous pour acc&eacute;der &agrave; toutes les boutiques du march&eacute;.",
-    login: "Connexion",
-    register: "Inscription",
-    logout: "D&eacute;connexion",
-    connectedAs: "Connect&eacute; en tant que",
-    shopsTitle: "Nos boutiques",
-    visit: "Visiter",
-    vendor: "Vendeur",
-    back: "← Retour",
-    connectToOrder: "Connectez-vous pour commander",
-    loginModalTitle: "Connexion",
-    email: "Email",
-    password: "Mot de passe",
-    loginBtn: "Se connecter",
-    registerModalTitle: "Inscription",
-    name: "Nom complet",
-    phone: "T&eacute;l&eacute;phone",
-    address: "Adresse",
-    addressOptional: "Adresse (facultatif)",
-    registerBtn: "S'inscrire",
-    cancel: "Annuler",
-    ordersTitle: "Historique des commandes",
-    noOrders: "Aucune commande pour le moment",
-    orderDate: "Commande du",
-    status: "Statut",
-    total: "Total",
-    rating: "Noter",
-    adminPanel: "Administration",
-    users: "Gestion des utilisateurs",
-    stats: "Statistiques",
-    usersCount: "Utilisateurs",
-    ordersCount: "Commandes",
-    shopsCount: "Boutiques",
-    admin: "Admin",
-    addAdmin: "Ajouter",
-    removeAdmin: "Retirer",
-    ratingTitle: "Noter {vendor}",
-    ratingLabel: "Note",
-    ratingComment: "Votre commentaire (facultatif)",
-    ratingSubmit: "Envoyer la note",
-    close: "Fermer",
-    loading: "Chargement...",
-    loginSuccess: "Connexion r&eacute;ussie",
-    registerSuccess: "Inscription r&eacute;ussie",
-    logoutSuccess: "D&eacute;connect&eacute;",
-    loginError: "Erreur de connexion",
-    registerError: "Erreur d'inscription",
-    userNotFound: "Utilisateur non trouv&eacute;",
-    wrongPassword: "Mot de passe incorrect",
-    invalidEmail: "Email invalide",
-    tooManyRequests: "Trop de tentatives, r&eacute;essayez plus tard",
-    emailAlreadyUsed: "Cet email est d&eacute;j&agrave; utilis&eacute;",
-    weakPassword: "Mot de passe trop faible (6 caract&egrave;res minimum)",
-    operationNotAllowed: "L'inscription par email est d&eacute;sactiv&eacute;e dans Firebase Console !",
-    fillFields: "Veuillez remplir tous les champs",
-    guest: "Invité",
-    connected: "Connecté",
-    shop: "Boutique",
-    ratingCount: "avis",
-    ratingSuccess: "Merci pour votre note !",
-    ratingError: "Erreur lors de la notation",
-    orderConfirmed: "Confirm&eacute;e",
-    vendorOrdersTitle: "Mes commandes",
-    pending: "En attente",
-    preparing: "En pr&eacute;paration",
-    ready: "Pr&ecirc;te",
-    picked: "Retir&eacute;e",
-    allStatus: "Toutes",
-    filterPending: "En attente",
-    filterPreparing: "En pr&eacute;paration",
-    filterReady: "Pr&ecirc;tes",
-    filterPicked: "Retir&eacute;es",
-    noVendorOrders: "Aucune commande pour le moment.",
-    orderFrom: "Commande du",
-    customer: "Client",
-    comments: "Remarque",
-    btnPrepare: "Pr&eacute;parer",
-    btnReady: "Pr&ecirc;te",
-    btnPicked: "Retir&eacute;e",
-    notificationReady: "Votre commande chez {vendor} est pr&ecirc;te !",
-    vendorPanel: "Mes commandes",
-    vendorManagement: "Gestion des vendeurs",
-    addVendor: "Ajouter un vendeur",
-    vendorName: "Nom du vendeur",
-    vendorEmail: "Email du vendeur",
-    addVendorBtn: "Ajouter le vendeur",
-    vendorEmailHint: "L'email doit correspondre à un compte Firebase existant.",
-    noVendors: "Aucun vendeur enregistr&eacute;.",
-    deleteVendor: "Supprimer",
-    vendorAdded: "Vendeur ajouté avec succès !",
-    vendorDeleted: "Vendeur supprimé",
-    vendorNotFound: "Cet email n'existe pas dans Firebase. Le vendeur doit d'abord se connecter à SOG.",
-    fillAllFields: "Veuillez remplir tous les champs"
-  };
-
-  // ---- FIREBASE INIT ----
   var firebaseConfig = {
     apiKey: "AIzaSyCegKjHSw2DzF1zcBVdG6iZyGK2P3ig1rM",
     authDomain: "sog-hanout.firebaseapp.com",
@@ -175,947 +374,1240 @@
   var auth = firebase.auth();
   var db = firebase.database();
 
-  var cleanUserData = function(userData) {
-    if (!userData) return null;
-    var cleaned = { ...userData };
-    Object.keys(cleaned).forEach(function(key) {
-      if (typeof cleaned[key] === 'string') {
-        cleaned[key] = decodeEntities(cleaned[key]);
-      }
-    });
-    return cleaned;
+  var STATUSES = {
+    pending:   { label: "En attente",      short: "Reçue",     cls: "st-pending",   step: 1 },
+    preparing: { label: "En préparation",  short: "Préparée",  cls: "st-preparing", step: 2 },
+    ready:     { label: "Prête",           short: "Prête",     cls: "st-ready",     step: 3 },
+    picked:    { label: "Retirée",         short: "Retirée",   cls: "st-picked",    step: 4 }
   };
 
-  function App() {
-    // ---- ÉTATS EXISTANTS ----
-    var [user, setUser] = useState(null);
-    var [loading, setLoading] = useState(true);
-    var [shops, setShops] = useState([]);
-    var [selectedShop, setSelectedShop] = useState(null);
-    var [showLogin, setShowLogin] = useState(false);
-    var [showRegister, setShowRegister] = useState(false);
-    var [loginForm, setLoginForm] = useState({ email: "", password: "" });
-    var [registerForm, setRegisterForm] = useState({
-      name: "", email: "", password: "", phone: "", address: ""
-    });
-    var [msg, setMsg] = useState({ text: "", type: "" });
-    var [isProcessing, setIsProcessing] = useState(false);
-    var [activeTab, setActiveTab] = useState('shops');
-    var [orders, setOrders] = useState([]);
-    var [ratings, setRatings] = useState({});
-    var [users, setUsers] = useState([]);
-    var [showRatingModal, setShowRatingModal] = useState(false);
-    var [ratingForm, setRatingForm] = useState({ vendor: "", rating: 5, comment: "" });
-    var [isAdmin, setIsAdmin] = useState(false);
-    var iframeRef = useRef(null);
-    var SHOPS_URL = "https://raw.githubusercontent.com/mekeirish/sog/main/shops.json";
+  // =========================================================
+  // UTILITAIRES
+  // =========================================================
+  var decodeEntities = function (str) {
+    if (str === undefined || str === null) return "";
+    try { var t = document.createElement("textarea"); t.innerHTML = String(str); return t.value; } catch (e) { return String(str); }
+  };
+  var lsGet = function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } };
+  var lsSet = function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} };
+  var fold = function (s) { return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); };
+  var cleanObject = function (o) {
+    if (!o) return null;
+    var c = Object.assign({}, o);
+    Object.keys(c).forEach(function (k) { if (typeof c[k] === "string") c[k] = decodeEntities(c[k]); });
+    return c;
+  };
+  var safeUrl = function (u) {
+    u = String(u || "").trim();
+    return /^https?:\/\//i.test(u) ? u : "";
+  };
+  var formatMoney = function (n, cur) {
+    var v = Number(n) || 0;
+    return v.toLocaleString("fr-FR", { minimumFractionDigits: v % 1 === 0 ? 0 : 2, maximumFractionDigits: 2 }) + " " + (cur || "");
+  };
+  var formatDate = function (iso) {
+    var d = new Date(iso);
+    if (isNaN(d)) return "";
+    return d.toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) + " à " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  };
+  var initial = function (s) { return String(s || "?").trim().charAt(0).toUpperCase() || "?"; };
+  var optimizeImg = function (url, w) {
+    if (!w || url.indexOf("res.cloudinary.com") === -1) return url;
+    return url.replace(/\/upload\/(v\d+\/)/, "/upload/f_auto,q_auto,w_" + w + ",c_limit/$1");
+  };
+  var hexToRgb = function (hex) { var h = hex.replace("#", ""); return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]; };
+  var rgbToHex = function (c) { return "#" + c.map(function (v) { return ("0" + Math.max(0, Math.min(255, Math.round(v))).toString(16)).slice(-2); }).join(""); };
+  var shopGradient = function (accent) {
+    var a = /^#[0-9a-f]{6}$/i.test(accent || "") ? accent : "#2f5bea";
+    var d = rgbToHex(hexToRgb(a).map(function (v) { return v * 0.62; }));
+    return "linear-gradient(135deg, " + a + ", " + d + ")";
+  };
+  var byDateDesc = function (a, b) { return new Date(b.createdAt) - new Date(a.createdAt); };
 
-    // ---- ÉTATS VENDEUR ----
-    var [isVendor, setIsVendor] = useState(false);
-    var [vendorName, setVendorName] = useState(null);
-    var [vendorOrders, setVendorOrders] = useState([]);
-    var [filterStatus, setFilterStatus] = useState('all');
-
-    // ---- ÉTATS GESTION DES VENDEURS (admin) ----
-    var [vendors, setVendors] = useState([]);
-    var [newVendorName, setNewVendorName] = useState('');
-    var [newVendorEmail, setNewVendorEmail] = useState('');
-    var [isAddingVendor, setIsAddingVendor] = useState(false);
-
-    // ---- AUTH FIREBASE ----
-    useEffect(function() {
-      var unsubscribe = auth.onAuthStateChanged(async function(firebaseUser) {
-        if (firebaseUser) {
-          var userData = {
-            uid: firebaseUser.uid,
-            email: firebaseUser.email,
-            name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || "Client",
-            phone: firebaseUser.phoneNumber || "",
-            address: "",
-          };
-          try {
-            var snapshot = await db.ref('users/' + firebaseUser.uid).once('value');
-            var extraData = snapshot.val();
-            if (extraData) {
-              userData.name = extraData.name || userData.name;
-              userData.phone = extraData.phone || "";
-              userData.address = extraData.address || "";
-            }
-          } catch (e) { /* ignore */ }
-          var cleanedUser = cleanUserData(userData);
-          setUser(cleanedUser);
-          // Envoyer l'auth à toutes les iframes déjà chargées
-          if (iframeRef.current) {
-            sendAuthToIframe(cleanedUser);
-          }
-          checkIfAdmin(firebaseUser.uid);
-          checkVendor(firebaseUser.uid);
-          loadOrders();
-        } else {
-          setUser(null);
-          if (iframeRef.current) {
-            sendAuthToIframe(null);
-          }
-          setIsAdmin(false);
-          setIsVendor(false);
-          setVendorName(null);
-          setVendorOrders([]);
-          setOrders([]);
-        }
-        setLoading(false);
-        loadShops();
-      });
-      return function() { unsubscribe(); };
-    }, []);
-
-    // ---- CHECK ADMIN ----
-    var checkIfAdmin = function(uid) {
-      db.ref('admins').once('value').then(function(snapshot) {
-        var adminList = snapshot.val() || [];
-        if (Array.isArray(adminList) && adminList.includes(uid)) {
-          setIsAdmin(true);
-          loadVendors();
-        }
-      }).catch(function(err) { console.error(err); });
-    };
-
-    // ---- CHECK VENDEUR ----
-    var checkVendor = function(uid) {
-      db.ref('vendors').once('value').then(function(snapshot) {
-        var vendors = snapshot.val() || {};
-        for (var key in vendors) {
-          if (vendors[key].uid === uid) {
-            setVendorName(key);
-            setIsVendor(true);
-            loadVendorOrders(key);
-            break;
-          }
-        }
-      }).catch(function(err) { console.error(err); });
-    };
-
-    // ---- CHARGEMENT DES BOUTIQUES (anti-cache) ----
-    var loadShops = async function() {
-      try {
-        var res = await fetch(SHOPS_URL + '?t=' + Date.now());
-        if (res.ok) {
-          var data = await res.json();
-          setShops(data);
-          data.forEach(function(shop) { loadRatings(shop.vendor); });
-        } else {
-          setShops([
-            { vendor: "milo", name: "Milo", url: "https://mekeirish.github.io/hanout-milo/" },
-            { vendor: "tartiza", name: "Tartiza", url: "https://mekeirish.github.io/hanout-tartiza/" },
-            { vendor: "baginjaxy", name: "Baginjaxy", url: "https://mekeirish.github.io/hanout-baginjaxy/" }
-          ]);
-        }
-      } catch (e) {
-        setShops([
-          { vendor: "milo", name: "Milo", url: "https://mekeirish.github.io/hanout-milo/" },
-          { vendor: "tartiza", name: "Tartiza", url: "https://mekeirish.github.io/hanout-tartiza/" },
-          { vendor: "baginjaxy", name: "Baginjaxy", url: "https://mekeirish.github.io/hanout-baginjaxy/" }
-        ]);
-      }
-    };
-
-    // ---- AUTH HANDLERS ----
-    var handleLogin = async function(e) {
-      e.preventDefault();
-      setMsg({ text: "", type: "" });
-      setIsProcessing(true);
-      try {
-        if (!loginForm.email.trim() || !loginForm.password.trim()) {
-          throw new Error(TEXTS.fillFields);
-        }
-        await auth.signInWithEmailAndPassword(loginForm.email, loginForm.password);
-        setShowLogin(false);
-        setLoginForm({ email: "", password: "" });
-        setMsg({ text: TEXTS.loginSuccess, type: "success" });
-      } catch (error) {
-        var errorMsg = TEXTS.loginError;
-        if (error.code === 'auth/user-not-found') errorMsg = TEXTS.userNotFound;
-        else if (error.code === 'auth/wrong-password') errorMsg = TEXTS.wrongPassword;
-        else if (error.code === 'auth/invalid-email') errorMsg = TEXTS.invalidEmail;
-        else if (error.code === 'auth/too-many-requests') errorMsg = TEXTS.tooManyRequests;
-        else if (error.message) errorMsg = "❌ " + error.message;
-        setMsg({ text: errorMsg, type: "error" });
-      }
-      setIsProcessing(false);
-    };
-
-    var handleRegister = async function(e) {
-      e.preventDefault();
-      setMsg({ text: "", type: "" });
-      setIsProcessing(true);
-      try {
-        if (!registerForm.name.trim()) throw new Error("Le nom est requis");
-        if (!registerForm.email.trim()) throw new Error("L'email est requis");
-        if (registerForm.password.length < 6) throw new Error(TEXTS.weakPassword);
-
-        var userCredential = await auth.createUserWithEmailAndPassword(
-          registerForm.email,
-          registerForm.password
-        );
-        await userCredential.user.updateProfile({ displayName: registerForm.name });
-        await db.ref('users/' + userCredential.user.uid).set({
-          name: registerForm.name,
-          email: registerForm.email,
-          phone: registerForm.phone || "",
-          address: registerForm.address || "",
-          createdAt: new Date().toISOString()
-        });
-        setShowRegister(false);
-        setRegisterForm({ name: "", email: "", password: "", phone: "", address: "" });
-        setMsg({ text: TEXTS.registerSuccess, type: "success" });
-      } catch (error) {
-        var errorMsg = TEXTS.registerError;
-        if (error.code === 'auth/email-already-in-use') errorMsg = TEXTS.emailAlreadyUsed;
-        else if (error.code === 'auth/weak-password') errorMsg = TEXTS.weakPassword;
-        else if (error.code === 'auth/invalid-email') errorMsg = TEXTS.invalidEmail;
-        else if (error.code === 'auth/operation-not-allowed') errorMsg = TEXTS.operationNotAllowed;
-        else if (error.message) errorMsg = "❌ " + error.message;
-        setMsg({ text: errorMsg, type: "error" });
-      }
-      setIsProcessing(false);
-    };
-
-    var handleLogout = async function() {
-      try {
-        await auth.signOut();
-        setSelectedShop(null);
-        setMsg({ text: TEXTS.logoutSuccess, type: "info" });
-      } catch (error) {
-        setMsg({ text: "❌ Erreur lors de la d&eacute;connexion", type: "error" });
-      }
-    };
-
-    // ---- IFRAME COMMUNICATION ----
-    var sendAuthToIframe = function(userData) {
-      if (iframeRef.current) {
-        try {
-          iframeRef.current.contentWindow.postMessage({
-            type: 'SOG_AUTH',
-            payload: { user: userData }
-          }, '*');
-          console.log('📤 SOG_AUTH envoyé à l\'iframe:', userData ? userData.email : 'null');
-        } catch (e) {
-          console.warn('⚠️ Impossible d\'envoyer l\'auth à l\'iframe (peut-être pas encore chargée)');
-        }
-      }
-    };
-
-    var handleIframeLoad = function() {
-      console.log('🔄 Iframe chargée, envoi de l\'auth...');
-      sendAuthToIframe(user);
-    };
-
-    // ---- ORDRES (CLIENT) ----
-    useEffect(function() {
-      var handleOrder = function(event) {
-        if (event.data.type === 'SOG_ORDER') {
-          saveOrder(event.data.payload);
-        }
-        if (event.data.type === 'SOG_ORDER_SAVED') {
-          console.log('🔄 Rechargement des commandes client');
-          loadOrders();
-        }
-        // Si l'iframe demande l'auth, on la renvoie
-        if (event.data.type === 'SOG_READY') {
-          console.log('🔄 Iframe demande SOG_READY, envoi de l\'auth...');
-          sendAuthToIframe(user);
-        }
-      };
-      window.addEventListener('message', handleOrder);
-      return function() { window.removeEventListener('message', handleOrder); };
-    }, [user]);
-
-    var saveOrder = function(orderData) {
-      if (!user) {
-        console.error('❌ Aucun utilisateur connecté, commande ignorée');
-        return;
-      }
-      var newOrderRef = db.ref('orders').push();
-      newOrderRef.set({
-        userId: user.uid,
-        customerEmail: user.email,
-        vendor: orderData.vendor,
-        items: orderData.items,
-        total: orderData.total,
-        currency: orderData.currency || "DZD",
-        status: 'pending',
-        createdAt: new Date().toISOString(),
-        customerName: orderData.customerName || user.name,
-        customerPhone: orderData.customerPhone || user.phone,
-        customerAddress: orderData.customerAddress || user.address,
-        comments: orderData.comments || ""
-      }).then(function() {
-        setMsg({ text: "✅ Commande sauvegard&eacute;e dans l'historique", type: "success" });
-        loadOrders();
-        if (isVendor && vendorName) loadVendorOrders(vendorName);
-      }).catch(function(err) { console.error(err); });
-    };
-
-    // ---- CHARGEMENT DES COMMANDES (client) avec double filtrage ----
-    var loadOrders = function() {
-      if (!user) {
-        console.log('❌ Aucun utilisateur connecté, impossible de charger les commandes');
-        return;
-      }
-
-      console.log('🔍 Chargement commandes pour userId:', user.uid);
-      console.log('🔍 Email du client:', user.email);
-
-      // 1ère tentative : filtrer par userId
-      db.ref('orders').orderByChild('userId').equalTo(user.uid).on('value', function(snapshot) {
-        var data = snapshot.val();
-        if (data) {
-          var orderList = Object.keys(data).map(function(key) {
-            return { id: key, ...data[key] };
-          });
-          orderList.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
-          console.log('✅ Commandes trouvées avec userId:', orderList.length);
-          setOrders(orderList);
-        } else {
-          // 2ème tentative : filtrer par customerEmail
-          console.log('ℹ️ Aucune commande avec userId, essai avec customerEmail...');
-          db.ref('orders').orderByChild('customerEmail').equalTo(user.email).on('value', function(snap) {
-            var emailData = snap.val();
-            if (emailData) {
-              var emailList = Object.keys(emailData).map(function(key) {
-                return { id: key, ...emailData[key] };
-              });
-              emailList.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
-              console.log('✅ Commandes trouvées avec customerEmail:', emailList.length);
-              setOrders(emailList);
-            } else {
-              console.log('❌ Aucune commande trouvée pour cet utilisateur');
-              setOrders([]);
-            }
-          });
-        }
-      });
-    };
-
-    // ---- ORDRES (VENDEUR) ----
-    var loadVendorOrders = function(vendor) {
-      db.ref('orders').orderByChild('vendor').equalTo(vendor).on('value', function(snapshot) {
-        var data = snapshot.val();
-        if (data) {
-          var list = Object.keys(data).map(function(key) {
-            return { id: key, ...data[key] };
-          });
-          list.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
-          setVendorOrders(list);
-        } else {
-          setVendorOrders([]);
-        }
-      });
-    };
-
-    var updateOrderStatus = function(orderId, newStatus) {
-      db.ref('orders/' + orderId).update({ status: newStatus }).then(function() {
-        if (vendorName) loadVendorOrders(vendorName);
-        var order = vendorOrders.find(function(o) { return o.id === orderId; });
-        if (newStatus === 'ready' && order) {
-          sendNotificationToCustomer(order);
-        }
-        setMsg({ text: "Statut mis à jour", type: "success" });
-        // Recharger les commandes client (si le client est le vendeur)
-        loadOrders();
-      });
-    };
-
-    var sendNotificationToCustomer = function(order) {
-      var message = decodeEntities(TEXTS.notificationReady).replace('{vendor}', order.vendor);
-      var topic = order.vendor + '_orders';
-      fetch('https://ntfy.sh/' + topic, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          topic: topic,
-          title: 'Commande prête',
-          message: message,
-          priority: 5,
-          click: window.location.href
-        })
-      }).catch(console.error);
-    };
-
-    // ---- RATINGS ----
-    var loadRatings = function(vendor) {
-      db.ref('ratings/' + vendor).on('value', function(snapshot) {
-        var data = snapshot.val();
-        setRatings(function(prev) { return { ...prev, [vendor]: data || {} }; });
-      });
-    };
-    var submitRating = async function(e) {
-      e.preventDefault();
-      if (!user) { alert("Connectez-vous pour noter"); return; }
-      try {
-        await db.ref('ratings/' + ratingForm.vendor + '/' + user.uid).set({
-          rating: ratingForm.rating,
-          comment: ratingForm.comment || "",
-          createdAt: new Date().toISOString(),
-          userName: user.name
-        });
-        setShowRatingModal(false);
-        setRatingForm({ vendor: "", rating: 5, comment: "" });
-        setMsg({ text: TEXTS.ratingSuccess, type: "success" });
-      } catch (error) {
-        setMsg({ text: TEXTS.ratingError, type: "error" });
-      }
-    };
-    var getAverageRating = function(vendor) {
-      var vendorRatings = ratings[vendor] || {};
-      var values = Object.values(vendorRatings);
-      if (values.length === 0) return 0;
-      var sum = values.reduce(function(acc, r) { return acc + (r.rating || 0); }, 0);
-      return (sum / values.length).toFixed(1);
-    };
-    var getRatingCount = function(vendor) {
-      var vendorRatings = ratings[vendor] || {};
-      return Object.keys(vendorRatings).length;
-    };
-
-    // ---- ADMIN (utilisateurs) ----
-    var loadUsers = function() {
-      db.ref('users').on('value', function(snapshot) {
-        var data = snapshot.val();
-        if (data) {
-          var userList = Object.keys(data).map(function(key) {
-            return { uid: key, ...data[key] };
-          });
-          db.ref('admins').once('value').then(function(adminSnapshot) {
-            var adminList = adminSnapshot.val() || [];
-            userList.forEach(function(u) { u.isAdmin = adminList.includes(u.uid); });
-            setUsers(userList);
-          });
-        } else {
-          setUsers([]);
-        }
-      });
-    };
-    var toggleAdmin = async function(uid, isAdminNow) {
-      try {
-        var adminsRef = db.ref('admins');
-        var snapshot = await adminsRef.once('value');
-        var adminList = snapshot.val() || [];
-        if (isAdminNow) {
-          adminList = adminList.filter(function(id) { return id !== uid; });
-        } else {
-          if (!adminList.includes(uid)) adminList.push(uid);
-        }
-        await adminsRef.set(adminList);
-        setMsg({ text: "✅ Statut admin mis &agrave; jour", type: "success" });
-        loadUsers();
-      } catch (error) {
-        setMsg({ text: "❌ Erreur lors de la mise &agrave; jour", type: "error" });
-      }
-    };
-
-    // ---- GESTION DES VENDEURS (admin) ----
-    var loadVendors = function() {
-      db.ref('vendors').on('value', function(snapshot) {
-        var data = snapshot.val();
-        if (data) {
-          var vendorList = Object.keys(data).map(function(key) {
-            return { name: key, ...data[key] };
-          });
-          setVendors(vendorList);
-        } else {
-          setVendors([]);
-        }
-      });
-    };
-
-    var addVendor = async function() {
-      if (!newVendorName.trim() || !newVendorEmail.trim()) {
-        setMsg({ text: decodeEntities(TEXTS.fillAllFields), type: "error" });
-        return;
-      }
-
-      setIsAddingVendor(true);
-      try {
-        var usersRef = db.ref('users');
-        var snapshot = await usersRef.once('value');
-        var users = snapshot.val() || {};
-        
-        var foundUid = null;
-        for (var uid in users) {
-          if (users[uid].email === newVendorEmail.trim()) {
-            foundUid = uid;
-            break;
-          }
-        }
-
-        if (!foundUid) {
-          setMsg({ 
-            text: decodeEntities(TEXTS.vendorNotFound), 
-            type: "error" 
-          });
-          setIsAddingVendor(false);
-          return;
-        }
-
-        var vendorRef = db.ref('vendors/' + newVendorName.trim().toLowerCase());
-        await vendorRef.set({
-          uid: foundUid,
-          name: newVendorName.trim(),
-          email: newVendorEmail.trim(),
-          createdAt: new Date().toISOString()
-        });
-
-        setMsg({ text: decodeEntities(TEXTS.vendorAdded), type: "success" });
-        setNewVendorName('');
-        setNewVendorEmail('');
-        loadVendors();
-
-      } catch (error) {
-        setMsg({ text: "❌ Erreur: " + error.message, type: "error" });
-      }
-      setIsAddingVendor(false);
-    };
-
-    var deleteVendor = function(vendorName) {
-      if (!confirm("Supprimer le vendeur " + vendorName + " ?")) return;
-      db.ref('vendors/' + vendorName).remove().then(function() {
-        setMsg({ text: decodeEntities(TEXTS.vendorDeleted), type: "success" });
-        loadVendors();
-      });
-    };
-
-    // ---- SELECTION BOUTIQUE ----
-    var selectShop = function(shop) {
-      setSelectedShop(shop);
-      loadRatings(shop.vendor);
-    };
-    var closeShop = function() { setSelectedShop(null); };
-
-    // ---- RENDU ----
-    if (loading) {
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-slate-900">
-          <div className="spinner"></div>
-        </div>
-      );
+  var authMessage = function (code, fallback) {
+    switch (code) {
+      case "auth/invalid-credential":
+      case "auth/wrong-password":
+      case "auth/user-not-found": return "Email ou mot de passe incorrect.";
+      case "auth/invalid-email": return "Adresse email invalide.";
+      case "auth/too-many-requests": return "Trop de tentatives. Patientez quelques minutes.";
+      case "auth/network-request-failed": return "Pas de connexion internet.";
+      case "auth/email-already-in-use": return "Cet email est déjà utilisé. Essayez de vous connecter.";
+      case "auth/weak-password": return "Mot de passe trop faible (6 caractères minimum).";
+      case "auth/operation-not-allowed": return "L'inscription par email est désactivée dans Firebase.";
+      default: return fallback;
     }
+  };
 
-    var t = function(key) {
-      return decodeEntities(TEXTS[key] || key);
-    };
+  // Placeholder neutre pour les images de boutique manquantes
+  var PLACEHOLDER = "data:image/svg+xml;utf8," + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#e2e8f0"/>' +
+    '<g fill="none" stroke="#94a3b8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">' +
+    '<path d="M70 80l-12 16v52a8 8 0 008 8h68a8 8 0 008-8V96l-12-16z"/><path d="M58 96h84"/><path d="M122 114a22 22 0 01-44 0"/></g></svg>'
+  );
 
-    // ---- MODE IMMERSIF ----
-    if (selectedShop) {
-      return (
-        <div className="fixed inset-0 z-50 h-screen w-screen overflow-hidden bg-black iframe-immersive">
-          <iframe
-            ref={iframeRef}
-            key={selectedShop.vendor}
-            src={selectedShop.url}
-            title={selectedShop.name}
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-            loading="lazy"
-            onLoad={handleIframeLoad}
-            className="w-full h-full border-0"
-          />
-          <button
-            onClick={closeShop}
-            className="fixed top-4 left-4 z-[60] glass-btn px-4 py-2 rounded-xl text-sm font-medium shadow-lg"
-          >
-            {t('back')}
-          </button>
-        </div>
-      );
-    }
-
-    // ---- MODE NORMAL ----
+  // =========================================================
+  // ICÔNES
+  // =========================================================
+  var ICONS = {
+    home: "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10",
+    orders: "M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z M14 2v6h6 M16 13H8 M16 17H8 M10 9H8",
+    package: "M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z M3.27 6.96L12 12.01l8.73-5.05 M12 22.08V12",
+    user: "M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2 M12 11a4 4 0 100-8 4 4 0 000 8z",
+    users: "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2 M9 11a4 4 0 100-8 4 4 0 000 8z M23 21v-2a4 4 0 00-3-3.87 M16 3.13a4 4 0 010 7.75",
+    store: "M3 9l1-5h16l1 5 M3 9v11h18V9 M3 9a3 3 0 006 0 3 3 0 006 0 3 3 0 006 0 M9 20v-6h6v6",
+    search: "M11 19a8 8 0 100-16 8 8 0 000 16z M21 21l-4.35-4.35",
+    refresh: "M23 4v6h-6 M1 20v-6h6 M3.51 9a9 9 0 0114.85-3.36L23 10 M1 14l4.64 4.36A9 9 0 0020.49 15",
+    star: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z",
+    phone: "M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z",
+    pin: "M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z M12 13a3 3 0 100-6 3 3 0 000 6z",
+    message: "M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z",
+    shield: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
+    download: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4 M7 10l5 5 5-5 M12 15V3",
+    plus: "M12 5v14 M5 12h14",
+    x: "M18 6L6 18 M6 6l12 12",
+    trash: "M3 6h18 M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6 M10 11v6 M14 11v6 M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2",
+    edit: "M12 20h9 M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z",
+    eye: "M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z M12 15a3 3 0 100-6 3 3 0 000 6z",
+    eyeoff: "M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94 M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19 M1 1l22 22",
+    logout: "M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4 M16 17l5-5-5-5 M21 12H9",
+    back: "M19 12H5 M12 19l-7-7 7-7",
+    check: "M20 6L9 17l-5-5",
+    chevron: "M9 18l6-6-6-6",
+    bag: "M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z M3 6h18 M16 10a4 4 0 01-8 0",
+    clock: "M12 22a10 10 0 100-20 10 10 0 000 20z M12 6v6l4 2",
+    alert: "M12 9v4 M12 17h.01 M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z",
+    wifi: "M5 12.55a11 11 0 0114.08 0 M1.42 9a16 16 0 0121.16 0 M8.53 16.11a6 6 0 016.95 0 M12 20h.01"
+  };
+  function Icon(p) {
+    var s = p.size || 22;
     return (
-      <div className="min-h-screen bg-slate-900 text-white p-4">
+      <svg viewBox="0 0 24 24" width={s} height={s} fill={p.fill ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d={ICONS[p.name]} />
+      </svg>
+    );
+  }
 
-        <header className="glass-header sticky top-0 z-30 px-4 py-3 rounded-xl">
-          <div className="flex flex-wrap items-center justify-between">
-            <h1 className="text-xl font-bold text-white">{t('appTitle')}</h1>
-            <div className="flex gap-2 items-center flex-wrap">
-              {user ? (
-                <>
-                  <span className="text-sm hidden sm:inline text-gray-300">👤 {decodeEntities(user.name)}</span>
-                  {isAdmin && <span className="text-xs bg-purple-900/40 text-purple-200 px-2 py-1 rounded-full">👑 Admin</span>}
-                  {isVendor && <span className="text-xs bg-emerald-900/40 text-emerald-200 px-2 py-1 rounded-full">🏪 {vendorName}</span>}
-                  {activeTab === 'orders' ? (
-                    <button onClick={function() { setActiveTab('shops'); setSelectedShop(null); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('shopsTitle')}</button>
-                  ) : (
-                    <button onClick={function() { setActiveTab('orders'); }} className="glass-btn-secondary relative px-4 py-2 rounded-xl text-sm font-medium">
-                      {t('ordersTitle')}
-                      {orders.filter(o => o.status === 'pending' || o.status === 'preparing').length > 0 && (
-                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                          {orders.filter(o => o.status === 'pending' || o.status === 'preparing').length}
-                        </span>
-                      )}
-                    </button>
-                  )}
-                  {isAdmin && (
-                    <>
-                      <button onClick={function() { loadUsers(); setActiveTab('admin'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('adminPanel')}</button>
-                      <button onClick={function() { loadVendors(); setActiveTab('vendor-management'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">👥 Vendeurs</button>
-                    </>
-                  )}
-                  {isVendor && (
-                    <button onClick={function() { setActiveTab('vendor-orders'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">
-                      📦 {t('vendorPanel')}
-                    </button>
-                  )}
-                  <button onClick={handleLogout} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('logout')}</button>
-                </>
-              ) : (
-                <>
-                  <button onClick={function() { setShowLogin(true); }} className="glass-btn px-4 py-2 rounded-xl text-sm font-medium">{t('login')}</button>
-                  <button onClick={function() { setShowRegister(true); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">{t('register')}</button>
-                </>
-              )}
-            </div>
+  // =========================================================
+  // COMPOSANTS DE BASE
+  // =========================================================
+  function Sheet(p) {
+    useEffect(function () {
+      var onKey = function (e) { if (e.key === "Escape") p.onClose(); };
+      document.addEventListener("keydown", onKey);
+      return function () { document.removeEventListener("keydown", onKey); };
+    });
+    return (
+      <div className="overlay" onMouseDown={function (e) { if (e.target === e.currentTarget) p.onClose(); }}>
+        <div className="sheet" role="dialog" aria-modal="true" aria-label={p.title}>
+          <div className="sheet-head">
+            <h2 className="sheet-title">{p.title}</h2>
+            <button type="button" className="icon-btn" aria-label="Fermer" onClick={p.onClose}><Icon name="x" /></button>
           </div>
-        </header>
-
-        {msg.text && (
-          <div className={'mt-4 p-3 glass-alert rounded-xl border text-sm ' + (msg.type === 'success' ? 'bg-emerald-900/20 border-emerald-700/30 text-emerald-200' : msg.type === 'error' ? 'bg-red-900/20 border-red-700/30 text-red-200' : 'bg-blue-900/20 border-blue-700/30 text-blue-200')}>
-            {decodeEntities(msg.text)}
-          </div>
-        )}
-
-        <div className="max-w-7xl mx-auto mt-6">
-
-          {/* ---- ONGLET HISTORIQUE CLIENT (avec bouton Actualiser) ---- */}
-          {user && activeTab === 'orders' && (
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-white">{t('ordersTitle')}</h2>
-                <button onClick={loadOrders} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">
-                  🔄 Actualiser
-                </button>
-              </div>
-              {orders.length === 0 ? (
-                <div className="glass-card p-8 text-center rounded-2xl"><p className="text-gray-400">{t('noOrders')}</p></div>
-              ) : (
-                <div className="space-y-4">
-                  {orders.map(function(order) {
-                    var statusLabels = {
-                      pending: 'En attente',
-                      preparing: 'En pr&eacute;paration',
-                      ready: 'Pr&ecirc;te',
-                      picked: 'Retir&eacute;e'
-                    };
-                    var statusColors = {
-                      pending: 'bg-yellow-900/40 text-yellow-200',
-                      preparing: 'bg-blue-900/40 text-blue-200',
-                      ready: 'bg-emerald-900/40 text-emerald-200',
-                      picked: 'bg-gray-700/40 text-gray-400'
-                    };
-                    return (
-                      <div key={order.id} className="glass-card p-4 rounded-2xl">
-                        <div className="flex justify-between items-start flex-wrap">
-                          <div>
-                            <p className="text-sm text-gray-400">{t('orderDate')} {new Date(order.createdAt).toLocaleDateString('fr-FR')}</p>
-                            <p className="font-semibold">{t('shop')} : {decodeEntities(order.vendor)}</p>
-                            <p className="text-sm text-gray-300">{t('status')} : <span className={'inline-block px-2 py-0.5 rounded-full text-xs ' + statusColors[order.status]}>{decodeEntities(statusLabels[order.status])}</span></p>
-                            <div className="mt-2 text-sm">
-                              {order.items && order.items.map(function(item, idx) {
-                                return <div key={idx} className="text-gray-300">• {decodeEntities(item.name)} × {item.quantity} → {(item.price * item.quantity).toFixed(2)} {order.currency}</div>;
-                              })}
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-xl font-bold text-blue-400">{order.total} {order.currency}</p>
-                            <button onClick={function() { setRatingForm({ vendor: order.vendor, rating: 5, comment: "" }); setShowRatingModal(true); }} className="glass-btn px-4 py-2 rounded-xl text-sm font-medium mt-2">⭐ {t('rating')}</button>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-              <button onClick={function() { setActiveTab('shops'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium mt-4">{t('back')}</button>
-            </div>
-          )}
-
-          {/* ---- ONGLET ADMIN (utilisateurs) ---- */}
-          {user && activeTab === 'admin' && isAdmin && (
-            <div>
-              <h2 className="text-2xl font-bold text-white mb-4">{t('adminPanel')}</h2>
-              <div className="glass-card p-6 rounded-2xl mb-6">
-                <h3 className="font-semibold text-white mb-3">{t('stats')}</h3>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="bg-white/5 p-4 rounded-xl border border-white/10"><p className="text-gray-400 text-sm">{t('usersCount')}</p><p className="text-2xl font-bold text-white">{users.length}</p></div>
-                  <div className="bg-white/5 p-4 rounded-xl border border-white/10"><p className="text-gray-400 text-sm">{t('ordersCount')}</p><p className="text-2xl font-bold text-white">{orders.length}</p></div>
-                  <div className="bg-white/5 p-4 rounded-xl border border-white/10"><p className="text-gray-400 text-sm">{t('shopsCount')}</p><p className="text-2xl font-bold text-white">{shops.length}</p></div>
-                </div>
-              </div>
-              <div className="glass-card p-6 rounded-2xl">
-                <h3 className="font-semibold text-white mb-3">{t('users')}</h3>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead><tr className="text-gray-400 border-b border-white/10"><th className="text-left py-2">{t('name')}</th><th className="text-left py-2">Email</th><th className="text-left py-2">{t('phone')}</th><th className="text-left py-2">{t('admin')}</th></tr></thead>
-                    <tbody>
-                      {users.map(function(u) {
-                        return (
-                          <tr key={u.uid} className="border-b border-white/5">
-                            <td className="py-2">{decodeEntities(u.name || u.email)}</td>
-                            <td className="py-2">{decodeEntities(u.email)}</td>
-                            <td className="py-2">{decodeEntities(u.phone || "-")}</td>
-                            <td className="py-2">
-                              <button onClick={function() { toggleAdmin(u.uid, u.isAdmin || false); }} className={'text-xs px-2 py-1 rounded ' + (u.isAdmin ? 'bg-purple-900/40 text-purple-200' : 'bg-white/5 text-gray-400 border border-white/10')}>
-                                {u.isAdmin ? '👑 Admin' : 'Ajouter'}
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <button onClick={function() { setActiveTab('shops'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium mt-4">{t('back')}</button>
-            </div>
-          )}
-
-          {/* ---- ONGLET GESTION DES VENDEURS (admin) ---- */}
-          {user && activeTab === 'vendor-management' && isAdmin && (
-            <div>
-              <h2 className="text-2xl font-bold text-white mb-4">👥 {t('vendorManagement')}</h2>
-              
-              <div className="glass-card p-6 rounded-2xl mb-6">
-                <h3 className="font-semibold text-white mb-3">{t('addVendor')}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  <input
-                    type="text"
-                    value={newVendorName}
-                    onChange={(e) => setNewVendorName(e.target.value)}
-                    placeholder={t('vendorName') + " (ex: milo)"}
-                    className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none"
-                  />
-                  <input
-                    type="email"
-                    value={newVendorEmail}
-                    onChange={(e) => setNewVendorEmail(e.target.value)}
-                    placeholder={t('vendorEmail')}
-                    className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none"
-                  />
-                  <button
-                    onClick={addVendor}
-                    disabled={isAddingVendor}
-                    className="glass-btn px-4 py-2 rounded-xl text-sm font-medium"
-                  >
-                    {isAddingVendor ? '⏳ Ajout...' : '✅ ' + t('addVendorBtn')}
-                  </button>
-                </div>
-                <p className="text-xs text-gray-400 mt-2">{t('vendorEmailHint')}</p>
-              </div>
-
-              <div className="glass-card p-6 rounded-2xl">
-                <h3 className="font-semibold text-white mb-3">Vendeurs enregistrés</h3>
-                {vendors.length === 0 ? (
-                  <p className="text-gray-400 text-sm text-center py-4">{t('noVendors')}</p>
-                ) : (
-                  <div className="space-y-2">
-                    {vendors.map(function(v) {
-                      return (
-                        <div key={v.name} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
-                          <div>
-                            <span className="text-white font-medium">{decodeEntities(v.name)}</span>
-                            <span className="text-gray-400 text-sm ml-3">{decodeEntities(v.email)}</span>
-                            <span className="text-gray-500 text-xs ml-3">UID: {v.uid?.substring(0, 8)}...</span>
-                          </div>
-                          <button
-                            onClick={() => deleteVendor(v.name)}
-                            className="text-red-400 hover:text-red-300 text-sm px-2 py-1 rounded bg-white/5"
-                          >
-                            {t('deleteVendor')}
-                          </button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-
-              <button onClick={function() { setActiveTab('shops'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium mt-4">{t('back')}</button>
-            </div>
-          )}
-
-          {/* ---- ONGLET MES COMMANDES (VENDEUR) ---- */}
-          {user && activeTab === 'vendor-orders' && isVendor && (
-            <div>
-              <h2 className="text-2xl font-bold text-white mb-4">📦 {t('vendorOrdersTitle')}</h2>
-              <div className="flex flex-wrap gap-2 mb-4">
-                <button onClick={() => setFilterStatus('all')} className={'glass-btn-secondary px-4 py-2 rounded-xl text-sm ' + (filterStatus === 'all' ? 'bg-blue-900/40 border-blue-500' : '')}>{t('allStatus')}</button>
-                <button onClick={() => setFilterStatus('pending')} className={'glass-btn-secondary px-4 py-2 rounded-xl text-sm ' + (filterStatus === 'pending' ? 'bg-yellow-900/40 border-yellow-500' : '')}>{t('filterPending')}</button>
-                <button onClick={() => setFilterStatus('preparing')} className={'glass-btn-secondary px-4 py-2 rounded-xl text-sm ' + (filterStatus === 'preparing' ? 'bg-blue-900/40 border-blue-500' : '')}>{t('filterPreparing')}</button>
-                <button onClick={() => setFilterStatus('ready')} className={'glass-btn-secondary px-4 py-2 rounded-xl text-sm ' + (filterStatus === 'ready' ? 'bg-emerald-900/40 border-emerald-500' : '')}>{t('filterReady')}</button>
-                <button onClick={() => setFilterStatus('picked')} className={'glass-btn-secondary px-4 py-2 rounded-xl text-sm ' + (filterStatus === 'picked' ? 'bg-gray-700/40 border-gray-500' : '')}>{t('filterPicked')}</button>
-              </div>
-
-              {vendorOrders.length === 0 ? (
-                <div className="glass-card p-8 text-center rounded-2xl"><p className="text-gray-400">{t('noVendorOrders')}</p></div>
-              ) : (
-                <div className="space-y-4">
-                  {vendorOrders.filter(function(order) {
-                    if (filterStatus === 'all') return true;
-                    return order.status === filterStatus;
-                  }).map(function(order) {
-                    var statusColors = {
-                      pending: 'bg-yellow-900/40 text-yellow-200',
-                      preparing: 'bg-blue-900/40 text-blue-200',
-                      ready: 'bg-emerald-900/40 text-emerald-200',
-                      picked: 'bg-gray-700/40 text-gray-400'
-                    };
-                    var statusLabels = {
-                      pending: t('pending'),
-                      preparing: t('preparing'),
-                      ready: t('ready'),
-                      picked: t('picked')
-                    };
-                    return (
-                      <div key={order.id} className="glass-card p-4 rounded-2xl">
-                        <div className="flex flex-wrap justify-between items-start gap-2">
-                          <div>
-                            <p className="text-sm text-gray-400">{t('orderFrom')} {new Date(order.createdAt).toLocaleDateString('fr-FR')} à {new Date(order.createdAt).toLocaleTimeString('fr-FR')}</p>
-                            <p className="font-semibold text-white">{decodeEntities(order.customerName)}</p>
-                            <p className="text-sm text-gray-300">📞 {decodeEntities(order.customerPhone)}</p>
-                            <p className="text-sm text-gray-300">📍 {decodeEntities(order.customerAddress)}</p>
-                            <div className="mt-2 text-sm">
-                              {order.items && order.items.map(function(item, idx) {
-                                return <div key={idx} className="text-gray-300">• {decodeEntities(item.name)} × {item.quantity} → {(item.price * item.quantity).toFixed(2)} {order.currency}</div>;
-                              })}
-                            </div>
-                            {order.comments && (
-                              <p className="text-sm text-gray-400 mt-1">💬 {decodeEntities(order.comments)}</p>
-                            )}
-                          </div>
-                          <div className="text-right">
-                            <p className="text-xl font-bold text-blue-400">{order.total} {order.currency}</p>
-                            <span className={'inline-block px-3 py-1 rounded-full text-xs font-medium mt-1 ' + statusColors[order.status]}>
-                              {statusLabels[order.status]}
-                            </span>
-                            <div className="flex flex-col gap-1 mt-2">
-                              {order.status === 'pending' && (
-                                <button onClick={() => updateOrderStatus(order.id, 'preparing')} className="glass-btn px-3 py-1 rounded text-sm">⚡ {t('btnPrepare')}</button>
-                              )}
-                              {order.status === 'preparing' && (
-                                <button onClick={() => updateOrderStatus(order.id, 'ready')} className="glass-btn px-3 py-1 rounded text-sm">✅ {t('btnReady')}</button>
-                              )}
-                              {order.status === 'ready' && (
-                                <button onClick={() => updateOrderStatus(order.id, 'picked')} className="glass-btn-secondary px-3 py-1 rounded text-sm">📦 {t('btnPicked')}</button>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-              <button onClick={function() { setActiveTab('shops'); }} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium mt-4">{t('back')}</button>
-            </div>
-          )}
-
-          {/* ---- LISTE DES BOUTIQUES (par défaut) ---- */}
-          {activeTab === 'shops' && (
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-white">{t('shopsTitle')}</h2>
-                <button onClick={loadShops} className="glass-btn-secondary px-4 py-2 rounded-xl text-sm font-medium">
-                  🔄 Actualiser
-                </button>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {shops.map(function(shop) {
-                  var avgRating = getAverageRating(shop.vendor);
-                  var ratingCount = getRatingCount(shop.vendor);
-                  return (
-                    <div key={shop.vendor} className="glass-card p-6 rounded-2xl cursor-pointer hover:scale-[1.02] transition-all" onClick={function() { selectShop(shop); }}>
-                      <h3 className="text-xl font-semibold text-white">{decodeEntities(shop.name)}</h3>
-                      <p className="text-sm text-gray-400 mt-1">{t('vendor')} : {decodeEntities(shop.vendor)}</p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <span className="text-yellow-400">⭐</span>
-                        <span className="text-white">{avgRating || "—"}</span>
-                        <span className="text-gray-400 text-sm">({ratingCount} {t('ratingCount')})</span>
-                      </div>
-                      <button className="glass-btn w-full mt-4 py-2 rounded-xl text-sm font-medium">{t('visit')}</button>
-                    </div>
-                  );
-                })}
-              </div>
-              <div className="mt-8 text-center text-gray-400 text-sm">{!user ? t('welcomeDesc') : ""}</div>
-            </div>
-          )}
-
+          <div className="sheet-body">{p.children}</div>
+          {p.footer ? <div className="sheet-foot">{p.footer}</div> : null}
         </div>
-
-        {/* ---- MODALS ---- */}
-        {showLogin && (
-          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4 modal-animate" onClick={function() { setShowLogin(false); }}>
-            <div className="glass-modal max-w-md w-full p-6 rounded-2xl shadow-2xl" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="text-xl font-bold text-white mb-4">{t('loginModalTitle')}</h3>
-              <form onSubmit={handleLogin} className="space-y-4">
-                <input type="email" placeholder={t('email')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={loginForm.email} onChange={function(e) { setLoginForm({ email: e.target.value, password: loginForm.password }); }} required />
-                <input type="password" placeholder={t('password')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={loginForm.password} onChange={function(e) { setLoginForm({ email: loginForm.email, password: e.target.value }); }} required />
-                <button type="submit" className="glass-btn w-full py-2 rounded-xl font-medium" disabled={isProcessing}>{isProcessing ? 'Connexion...' : t('loginBtn')}</button>
-              </form>
-              <div className="mt-4 text-right"><button onClick={function() { setShowLogin(false); }} className="text-gray-400 hover:text-white text-sm">{t('cancel')}</button></div>
-            </div>
-          </div>
-        )}
-
-        {showRegister && (
-          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4 modal-animate" onClick={function() { setShowRegister(false); }}>
-            <div className="glass-modal max-w-md w-full p-6 rounded-2xl shadow-2xl" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="text-xl font-bold text-white mb-4">{t('registerModalTitle')}</h3>
-              <form onSubmit={handleRegister} className="space-y-3">
-                <input type="text" placeholder={t('name')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={registerForm.name} onChange={function(e) { setRegisterForm({ ...registerForm, name: e.target.value }); }} required />
-                <input type="email" placeholder={t('email')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={registerForm.email} onChange={function(e) { setRegisterForm({ ...registerForm, email: e.target.value }); }} required />
-                <input type="password" placeholder={t('password') + " (6 caractères min)"} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={registerForm.password} onChange={function(e) { setRegisterForm({ ...registerForm, password: e.target.value }); }} required minLength="6" />
-                <input type="tel" placeholder={t('phone')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={registerForm.phone} onChange={function(e) { setRegisterForm({ ...registerForm, phone: e.target.value }); }} />
-                <input type="text" placeholder={t('addressOptional')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none" value={registerForm.address} onChange={function(e) { setRegisterForm({ ...registerForm, address: e.target.value }); }} />
-                <button type="submit" className="glass-btn w-full py-2 rounded-xl font-medium" disabled={isProcessing}>{isProcessing ? 'Inscription...' : t('registerBtn')}</button>
-              </form>
-              <div className="mt-4 text-right"><button onClick={function() { setShowRegister(false); }} className="text-gray-400 hover:text-white text-sm">{t('cancel')}</button></div>
-            </div>
-          </div>
-        )}
-
-        {showRatingModal && (
-          <div className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4 modal-animate" onClick={function() { setShowRatingModal(false); }}>
-            <div className="glass-modal max-w-md w-full p-6 rounded-2xl shadow-2xl" onClick={function(e) { e.stopPropagation(); }}>
-              <h3 className="text-xl font-bold text-white mb-4">{t('ratingTitle').replace('{vendor}', decodeEntities(ratingForm.vendor))}</h3>
-              <form onSubmit={submitRating} className="space-y-4">
-                <div>
-                  <label className="block text-gray-300 mb-2">{t('ratingLabel')}</label>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5].map(function(star) {
-                      return <button key={star} type="button" onClick={function() { setRatingForm({ ...ratingForm, rating: star }); }} className={'text-3xl transition-colors ' + (star <= ratingForm.rating ? 'text-yellow-400' : 'text-gray-600 hover:text-gray-400')}>★</button>;
-                    })}
-                  </div>
-                </div>
-                <textarea placeholder={t('ratingComment')} className="glass-input w-full px-4 py-2 rounded-xl text-white focus:ring-2 focus:ring-blue-500/50 outline-none resize-y" rows="3" value={ratingForm.comment} onChange={function(e) { setRatingForm({ ...ratingForm, comment: e.target.value }); }} />
-                <button type="submit" className="glass-btn w-full py-2 rounded-xl font-medium">{t('ratingSubmit')}</button>
-              </form>
-              <div className="mt-4 text-right"><button onClick={function() { setShowRatingModal(false); }} className="text-gray-400 hover:text-white text-sm">{t('cancel')}</button></div>
-            </div>
-          </div>
-        )}
-
       </div>
     );
   }
 
-  var container = document.getElementById('root');
-  var root = ReactDOM.createRoot(container);
-  root.render(React.createElement(App, null));
+  function Confirm(p) {
+    return (
+      <div className="overlay center" onMouseDown={function (e) { if (e.target === e.currentTarget) p.onNo(); }}>
+        <div className="dialog" role="alertdialog" aria-modal="true">
+          <h3>{p.title}</h3>
+          <p>{p.text}</p>
+          <div className="d-act">
+            <button type="button" className="btn btn-ghost" onClick={p.onNo}>Annuler</button>
+            <button type="button" className={"btn " + (p.danger ? "btn-danger" : "btn-primary")} onClick={p.onYes}>{p.yesLabel || "Confirmer"}</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  function Field(p) {
+    return (
+      <div className="field">
+        <label className="label" htmlFor={p.id}>{p.label}</label>
+        {p.children}
+        {p.hint ? <div className="hint">{p.hint}</div> : null}
+      </div>
+    );
+  }
+
+  function PasswordInput(p) {
+    var [show, setShow] = useState(false);
+    return (
+      <div className="pw">
+        <input id={p.id} className="input" type={show ? "text" : "password"} autoComplete={p.autoComplete} required={p.required} minLength={p.minLength} value={p.value} onChange={p.onChange} />
+        <button type="button" aria-label={show ? "Masquer le mot de passe" : "Afficher le mot de passe"} onClick={function () { setShow(!show); }}><Icon name={show ? "eyeoff" : "eye"} size={20} /></button>
+      </div>
+    );
+  }
+
+  function Empty(p) {
+    return (
+      <div className="empty">
+        <div className="e-ico"><Icon name={p.icon || "bag"} size={30} /></div>
+        <h3>{p.title}</h3>
+        {p.text ? <p>{p.text}</p> : null}
+        {p.action ? <div style={{ marginTop: 16 }}>{p.action}</div> : null}
+      </div>
+    );
+  }
+
+  function Stars(p) {
+    var n = Math.round(Number(p.value) || 0);
+    return (
+      <span className="stars-sm" aria-label={n + " sur 5"}>
+        {[1, 2, 3, 4, 5].map(function (i) { return <span key={i} className={i <= n ? "" : "off"}><Icon name="star" size={p.size || 14} fill /></span>; })}
+      </span>
+    );
+  }
+
+  // =========================================================
+  // BOUTIQUES
+  // =========================================================
+  function ShopCard(p) {
+    var shop = p.shop, info = p.info || {};
+    var title = info.title || shop.name;
+    var images = info.images || [];
+    return (
+      <article className="shop" onClick={function () { p.onOpen(shop); }}>
+        <div className="shop-top" style={{ background: shopGradient(info.accent) }}>
+          <div className="shop-logo">
+            {info.logo ? <img src={optimizeImg(info.logo, 120)} alt="" loading="lazy" onError={function (e) { e.target.style.display = "none"; }} /> : initial(title)}
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div className="shop-name">{title}</div>
+            <div className="shop-tag">{info.tagline || "Boutique du marché"}</div>
+          </div>
+        </div>
+        <div className="shop-body">
+          <div className="shop-meta">
+            <button type="button" className="chip rating" onClick={function (e) { e.stopPropagation(); p.onReviews(shop); }} aria-label={"Avis sur " + title}>
+              <Icon name="star" size={14} fill /> {p.count ? p.avg : "Nouveau"}{p.count ? <span style={{ color: "var(--ink-3)", fontWeight: 500 }}>({p.count})</span> : null}
+            </button>
+            {info.count !== undefined ? <span className="chip"><Icon name="bag" size={14} /> {info.count} produit{info.count > 1 ? "s" : ""}</span> : null}
+          </div>
+          {images.length ? (
+            <div className="thumbs">
+              {images.slice(0, 3).map(function (src, i) {
+                return <img key={i} src={optimizeImg(src, 220)} alt="" loading="lazy" decoding="async" onError={function (e) { e.target.src = PLACEHOLDER; }} />;
+              })}
+            </div>
+          ) : null}
+          <button type="button" className="btn btn-primary btn-block">Ouvrir la boutique</button>
+        </div>
+      </article>
+    );
+  }
+
+  // =========================================================
+  // COMMANDES
+  // =========================================================
+  function OrderProgress(p) {
+    var step = (STATUSES[p.status] || STATUSES.pending).step;
+    var keys = ["pending", "preparing", "ready", "picked"];
+    return (
+      <div>
+        <div className="progress" aria-hidden="true">{keys.map(function (k, i) { return <i key={k} className={i < step ? "on" : ""}></i>; })}</div>
+        <div className="progress-l" aria-hidden="true">{keys.map(function (k, i) { return <span key={k} className={i + 1 === step ? "on" : ""}>{STATUSES[k].short}</span>; })}</div>
+      </div>
+    );
+  }
+
+  function OrderItems(p) {
+    var o = p.order;
+    return (
+      <div className="items">
+        {(o.items || []).map(function (it, i) {
+          return (
+            <div className="item" key={i}>
+              <span className="nm"><b>{it.quantity} ×</b> {decodeEntities(it.name)}</span>
+              <span>{formatMoney((Number(it.price) || 0) * (Number(it.quantity) || 0), o.currency)}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  function ClientOrder(p) {
+    var o = p.order;
+    var st = STATUSES[o.status] || STATUSES.pending;
+    return (
+      <article className="order">
+        <div className="order-top">
+          <div style={{ minWidth: 0 }}>
+            <div className="order-shop">{p.shopName || decodeEntities(o.vendor)}</div>
+            <div className="order-date">{formatDate(o.createdAt)}</div>
+          </div>
+          <span className={"status " + st.cls}>{st.label}</span>
+        </div>
+        <OrderProgress status={o.status} />
+        <OrderItems order={o} />
+        <div className="order-foot">
+          <div className="total">{formatMoney(o.total, o.currency)}</div>
+          <button type="button" className="btn btn-soft btn-sm" onClick={function () { p.onRate(o.vendor); }}><Icon name="star" size={16} /> Noter</button>
+        </div>
+      </article>
+    );
+  }
+
+  function VendorOrder(p) {
+    var o = p.order;
+    var st = STATUSES[o.status] || STATUSES.pending;
+    var phone = decodeEntities(o.customerPhone);
+    var next = o.status === "pending" ? ["preparing", "Commencer la préparation"] : o.status === "preparing" ? ["ready", "Marquer comme prête"] : o.status === "ready" ? ["picked", "Commande retirée"] : null;
+    return (
+      <article className="order">
+        <div className="order-top">
+          <div style={{ minWidth: 0 }}>
+            <div className="order-shop">{decodeEntities(o.customerName) || "Client"}</div>
+            <div className="order-date">{formatDate(o.createdAt)}</div>
+          </div>
+          <span className={"status " + st.cls}>{st.label}</span>
+        </div>
+        <div className="cust">
+          {phone ? <div className="cust-row"><Icon name="phone" size={16} /><a href={"tel:" + phone.replace(/[^\d+]/g, "")}>{phone}</a></div> : null}
+          {o.customerAddress ? <div className="cust-row"><Icon name="pin" size={16} /><span>{decodeEntities(o.customerAddress)}</span></div> : null}
+          {o.comments ? <div className="cust-row"><Icon name="message" size={16} /><span>{decodeEntities(o.comments)}</span></div> : null}
+        </div>
+        <OrderItems order={o} />
+        <div className="order-foot"><div className="total">{formatMoney(o.total, o.currency)}</div></div>
+        {next ? (
+          <div className={"actions" + (phone ? " two" : "")}>
+            {phone ? <a className="btn btn-ghost" href={"tel:" + phone.replace(/[^\d+]/g, "")}><Icon name="phone" size={18} /> Appeler</a> : null}
+            <button type="button" className="btn btn-primary" onClick={function () { p.onStatus(o, next[0]); }}>{next[1]}</button>
+          </div>
+        ) : null}
+      </article>
+    );
+  }
+
+  // =========================================================
+  // FEUILLES (connexion, inscription, profil, notes, avis)
+  // =========================================================
+  function LoginSheet(p) {
+    var [email, setEmail] = useState("");
+    var [password, setPassword] = useState("");
+    return (
+      <Sheet title="Connexion" onClose={p.onClose}
+        footer={<div>
+          <button type="submit" form="login-form" className="btn btn-primary btn-block" disabled={p.busy}>{p.busy ? "Connexion…" : "Se connecter"}</button>
+          <div className="switch-line">Pas encore de compte ? <button type="button" className="link-btn" onClick={p.onSwitch}>Créer un compte</button></div>
+        </div>}>
+        <form id="login-form" onSubmit={function (e) { e.preventDefault(); p.onSubmit(email.trim(), password); }}>
+          {p.error ? <div className="note err" role="alert">{p.error}</div> : null}
+          {p.info ? <div className="note ok" role="status">{p.info}</div> : null}
+          <Field id="l-email" label="Email"><input id="l-email" className="input" type="email" inputMode="email" autoComplete="username" required value={email} onChange={function (e) { setEmail(e.target.value); }} /></Field>
+          <Field id="l-pass" label="Mot de passe"><PasswordInput id="l-pass" autoComplete="current-password" required value={password} onChange={function (e) { setPassword(e.target.value); }} /></Field>
+          <button type="button" className="link-btn" onClick={function () { p.onReset(email.trim()); }}>Mot de passe oublié ?</button>
+        </form>
+      </Sheet>
+    );
+  }
+
+  function RegisterSheet(p) {
+    var [f, setF] = useState({ name: "", email: "", password: "", phone: "", address: "" });
+    var set = function (k, v) { var n = Object.assign({}, f); n[k] = v; setF(n); };
+    return (
+      <Sheet title="Créer un compte" onClose={p.onClose}
+        footer={<div>
+          <button type="submit" form="register-form" className="btn btn-primary btn-block" disabled={p.busy}>{p.busy ? "Création…" : "Créer mon compte"}</button>
+          <div className="switch-line">Déjà inscrit ? <button type="button" className="link-btn" onClick={p.onSwitch}>Se connecter</button></div>
+        </div>}>
+        <form id="register-form" onSubmit={function (e) { e.preventDefault(); p.onSubmit(f); }}>
+          {p.error ? <div className="note err" role="alert">{p.error}</div> : null}
+          <Field id="r-name" label="Nom complet *"><input id="r-name" className="input" autoComplete="name" required value={f.name} onChange={function (e) { set("name", e.target.value); }} /></Field>
+          <Field id="r-email" label="Email *"><input id="r-email" className="input" type="email" inputMode="email" autoComplete="email" required value={f.email} onChange={function (e) { set("email", e.target.value); }} /></Field>
+          <Field id="r-pass" label="Mot de passe *" hint="6 caractères minimum."><PasswordInput id="r-pass" autoComplete="new-password" required minLength={6} value={f.password} onChange={function (e) { set("password", e.target.value); }} /></Field>
+          <Field id="r-phone" label="Téléphone" hint="Utile pour que le vendeur vous joigne."><input id="r-phone" className="input" type="tel" inputMode="tel" autoComplete="tel" value={f.phone} onChange={function (e) { set("phone", e.target.value); }} /></Field>
+          <Field id="r-address" label="Adresse (facultatif)"><input id="r-address" className="input" autoComplete="street-address" value={f.address} onChange={function (e) { set("address", e.target.value); }} /></Field>
+        </form>
+      </Sheet>
+    );
+  }
+
+  function ProfileSheet(p) {
+    var [f, setF] = useState({ name: p.user.name || "", phone: p.user.phone || "", address: p.user.address || "" });
+    var set = function (k, v) { var n = Object.assign({}, f); n[k] = v; setF(n); };
+    return (
+      <Sheet title="Mon profil" onClose={p.onClose}
+        footer={<button type="submit" form="profile-form" className="btn btn-primary btn-block" disabled={p.busy}>{p.busy ? "Enregistrement…" : "Enregistrer"}</button>}>
+        <form id="profile-form" onSubmit={function (e) { e.preventDefault(); p.onSubmit(f); }}>
+          {p.error ? <div className="note err" role="alert">{p.error}</div> : null}
+          <div className="note info">Ces informations préremplissent vos commandes.</div>
+          <Field id="pf-name" label="Nom complet *"><input id="pf-name" className="input" autoComplete="name" required value={f.name} onChange={function (e) { set("name", e.target.value); }} /></Field>
+          <Field id="pf-phone" label="Téléphone"><input id="pf-phone" className="input" type="tel" inputMode="tel" autoComplete="tel" value={f.phone} onChange={function (e) { set("phone", e.target.value); }} /></Field>
+          <Field id="pf-address" label="Adresse"><input id="pf-address" className="input" autoComplete="street-address" value={f.address} onChange={function (e) { set("address", e.target.value); }} /></Field>
+          <Field id="pf-email" label="Email"><input id="pf-email" className="input" value={p.user.email || ""} disabled /></Field>
+        </form>
+      </Sheet>
+    );
+  }
+
+  function RatingSheet(p) {
+    var [rating, setRating] = useState(p.initial ? p.initial.rating : 5);
+    var [comment, setComment] = useState(p.initial ? p.initial.comment || "" : "");
+    var labels = ["", "Décevant", "Moyen", "Bien", "Très bien", "Excellent"];
+    return (
+      <Sheet title={"Noter " + decodeEntities(p.vendor)} onClose={p.onClose}
+        footer={<button type="submit" form="rating-form" className="btn btn-primary btn-block" disabled={p.busy}>{p.busy ? "Envoi…" : "Envoyer ma note"}</button>}>
+        <form id="rating-form" onSubmit={function (e) { e.preventDefault(); p.onSubmit(rating, comment); }}>
+          <div className="stars" role="radiogroup" aria-label="Note">
+            {[1, 2, 3, 4, 5].map(function (i) {
+              return <button key={i} type="button" role="radio" aria-checked={i === rating} aria-label={i + " étoile" + (i > 1 ? "s" : "")} className={i <= rating ? "on" : ""} onClick={function () { setRating(i); }}><Icon name="star" size={36} fill /></button>;
+            })}
+          </div>
+          <p style={{ textAlign: "center", marginTop: -8, marginBottom: 16, fontWeight: 700 }}>{labels[rating]}</p>
+          <Field id="rt-comment" label="Votre commentaire (facultatif)"><textarea id="rt-comment" className="input" rows="3" value={comment} onChange={function (e) { setComment(e.target.value); }} /></Field>
+        </form>
+      </Sheet>
+    );
+  }
+
+  function ReviewsSheet(p) {
+    var list = Object.keys(p.ratings || {}).map(function (k) { return p.ratings[k]; }).sort(byDateDesc);
+    return (
+      <Sheet title={"Avis · " + p.name} onClose={p.onClose}
+        footer={<button type="button" className="btn btn-soft btn-block" onClick={p.onRate}><Icon name="star" size={18} /> Donner mon avis</button>}>
+        {list.length === 0 ? <Empty icon="star" title="Pas encore d'avis" text="Soyez le premier à noter cette boutique." /> : (
+          <div>
+            {list.map(function (r, i) {
+              return (
+                <div className="review" key={i}>
+                  <div className="review-top"><span>{decodeEntities(r.userName) || "Client"}</span><Stars value={r.rating} /></div>
+                  {r.comment ? <p>{decodeEntities(r.comment)}</p> : null}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </Sheet>
+    );
+  }
+
+  // =========================================================
+  // APPLICATION
+  // =========================================================
+  function App() {
+    // ---- états ----
+    var [user, setUser] = useState(null);
+    var [authReady, setAuthReady] = useState(false);
+    var [route, setRoute] = useState("home");
+
+    var [shops, setShops] = useState(function () { try { return JSON.parse(lsGet("sog_shops") || "[]"); } catch (e) { return []; } });
+    var [shopsState, setShopsState] = useState("loading");
+    var [shopInfo, setShopInfo] = useState({});
+    var [ratings, setRatings] = useState({});
+    var [search, setSearch] = useState("");
+    var [refreshing, setRefreshing] = useState(false);
+
+    var [selectedShop, setSelectedShop] = useState(null);
+    var [frameLoaded, setFrameLoaded] = useState(false);
+
+    var [orders, setOrders] = useState([]);
+    var [isVendor, setIsVendor] = useState(false);
+    var [vendorName, setVendorName] = useState(null);
+    var [vendorOrders, setVendorOrders] = useState([]);
+    var [vendorFilter, setVendorFilter] = useState("all");
+    var [isAdmin, setIsAdmin] = useState(false);
+    var [users, setUsers] = useState([]);
+    var [vendors, setVendors] = useState([]);
+    var [userSearch, setUserSearch] = useState("");
+    var [newVendor, setNewVendor] = useState({ name: "", email: "" });
+    var [busy, setBusy] = useState("");
+
+    var [sheet, setSheet] = useState(null);       // { type, ... }
+    var [sheetError, setSheetError] = useState("");
+    var [sheetInfo, setSheetInfo] = useState("");
+    var [confirm, setConfirm] = useState(null);
+    var [toast, setToast] = useState(null);
+    var [installEvt, setInstallEvt] = useState(null);
+    var [online, setOnline] = useState(navigator.onLine !== false);
+
+    var toastTimer = useRef(null);
+    var iframeRef = useRef(null);
+    var userRef = useRef(null);
+    var shopRef = useRef(null);
+    var lastSavedAt = useRef(0);
+    var historyPushed = useRef(false);
+
+    userRef.current = user;
+    shopRef.current = selectedShop;
+
+    var notify = function (text, type) {
+      setToast({ text: text, type: type || "info" });
+      clearTimeout(toastTimer.current);
+      toastTimer.current = setTimeout(function () { setToast(null); }, 4200);
+    };
+
+    // ---- réseau / installation ----
+    useEffect(function () {
+      var on = function () { setOnline(true); }, off = function () { setOnline(false); };
+      var beforeInstall = function (e) { e.preventDefault(); setInstallEvt(e); };
+      window.addEventListener("online", on);
+      window.addEventListener("offline", off);
+      window.addEventListener("beforeinstallprompt", beforeInstall);
+      return function () {
+        window.removeEventListener("online", on);
+        window.removeEventListener("offline", off);
+        window.removeEventListener("beforeinstallprompt", beforeInstall);
+      };
+    }, []);
+
+    // ---- iframe : envoi de l'authentification (uniquement à l'origine de la boutique) ----
+    var sendAuth = function (u) {
+      var shop = shopRef.current, frame = iframeRef.current;
+      if (!shop || !frame || !frame.contentWindow) return;
+      try {
+        frame.contentWindow.postMessage({ type: "SOG_AUTH", payload: { user: u } }, new URL(shop.url).origin);
+      } catch (e) {}
+    };
+
+    // ---- authentification ----
+    useEffect(function () {
+      var unsub = auth.onAuthStateChanged(async function (fu) {
+        if (fu) {
+          var data = {
+            uid: fu.uid, email: fu.email,
+            name: fu.displayName || (fu.email ? fu.email.split("@")[0] : "Client"),
+            phone: fu.phoneNumber || "", address: ""
+          };
+          try {
+            var snap = await db.ref("users/" + fu.uid).once("value");
+            var extra = snap.val();
+            if (extra) { data.name = extra.name || data.name; data.phone = extra.phone || ""; data.address = extra.address || ""; }
+          } catch (e) {}
+          var cleaned = cleanObject(data);
+          userRef.current = cleaned;
+          setUser(cleaned);
+          sendAuth(cleaned);
+        } else {
+          userRef.current = null;
+          setUser(null);
+          sendAuth(null);
+          setIsAdmin(false); setIsVendor(false); setVendorName(null);
+          setOrders([]); setVendorOrders([]); setUsers([]); setVendors([]);
+          setRoute("home");
+        }
+        setAuthReady(true);
+      });
+      return function () { unsub(); };
+    }, []);
+
+    // ---- rôles (admin / vendeur) ----
+    useEffect(function () {
+      if (!user) return;
+      var cancelled = false;
+      db.ref("admins").once("value").then(function (s) {
+        var list = s.val() || [];
+        if (!cancelled) setIsAdmin(Array.isArray(list) && list.indexOf(user.uid) > -1);
+      }).catch(function () {});
+      db.ref("vendors").once("value").then(function (s) {
+        var all = s.val() || {};
+        var found = null;
+        Object.keys(all).forEach(function (k) { if (all[k] && all[k].uid === user.uid) found = k; });
+        if (!cancelled) { setIsVendor(!!found); setVendorName(found); }
+      }).catch(function () {});
+      return function () { cancelled = true; };
+    }, [user && user.uid]);
+
+    // ---- commandes du client (en direct) + alerte « commande prête » ----
+    useEffect(function () {
+      if (!user) return;
+      var a = [], b = [], aDone = false, bDone = false, prev = null;
+      var merge = function () {
+        var map = {};
+        a.concat(b).forEach(function (o) { map[o.id] = o; });
+        var list = Object.keys(map).map(function (k) { return map[k]; }).sort(byDateDesc);
+        setOrders(list);
+        if (!(aDone && bDone)) return;
+        if (prev) {
+          list.forEach(function (o) {
+            if (prev[o.id] && prev[o.id] !== o.status && o.status === "ready") notify("Votre commande chez " + decodeEntities(o.vendor) + " est prête !", "order");
+          });
+        }
+        prev = {};
+        list.forEach(function (o) { prev[o.id] = o.status; });
+      };
+      var toList = function (snap) {
+        var d = snap.val() || {};
+        return Object.keys(d).map(function (k) { return Object.assign({ id: k }, d[k]); });
+      };
+      var r1 = db.ref("orders").orderByChild("userId").equalTo(user.uid);
+      var r2 = db.ref("orders").orderByChild("customerEmail").equalTo(user.email || "");
+      var c1 = r1.on("value", function (s) { a = toList(s); aDone = true; merge(); }, function () { aDone = true; merge(); });
+      var c2 = r2.on("value", function (s) { b = toList(s); bDone = true; merge(); }, function () { bDone = true; merge(); });
+      return function () { r1.off("value", c1); r2.off("value", c2); };
+    }, [user && user.uid]);
+
+    // ---- commandes du vendeur (en direct) + alerte « nouvelle commande » ----
+    useEffect(function () {
+      if (!vendorName) return;
+      var known = null;
+      var ref = db.ref("orders").orderByChild("vendor").equalTo(vendorName);
+      var cb = ref.on("value", function (s) {
+        var d = s.val() || {};
+        var list = Object.keys(d).map(function (k) { return Object.assign({ id: k }, d[k]); }).sort(byDateDesc);
+        setVendorOrders(list);
+        if (known) {
+          list.forEach(function (o) {
+            if (!known[o.id] && o.status === "pending") notify("Nouvelle commande de " + (decodeEntities(o.customerName) || "client") + " !", "order");
+          });
+        }
+        known = {};
+        list.forEach(function (o) { known[o.id] = true; });
+      }, function () {});
+      return function () { ref.off("value", cb); };
+    }, [vendorName]);
+
+    // ---- chargement des boutiques ----
+    var fetchShopList = async function () {
+      var urls = [SHOPS_RAW_URL + "?t=" + Date.now(), FALLBACK_SHOPS_URL + "?t=" + Date.now()];
+      for (var i = 0; i < urls.length; i++) {
+        try {
+          var res = await fetch(urls[i], { cache: "no-store" });
+          if (res.ok) { var d = await res.json(); if (Array.isArray(d)) return d; }
+        } catch (e) {}
+      }
+      return null;
+    };
+    var loadShopInfo = function (list) {
+      list.forEach(function (shop) {
+        fetch(shop.url + "don.json?v=" + Math.floor(Date.now() / 600000))
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (d) {
+            if (!d) return;
+            var s = d.settings || {};
+            var products = Array.isArray(d.products) ? d.products : [];
+            var info = {
+              title: decodeEntities(s.title || ""),
+              tagline: decodeEntities(s.tagline || ""),
+              accent: /^#[0-9a-f]{6}$/i.test(s.accent || "") ? s.accent : "",
+              logo: safeUrl(s.logo),
+              count: products.length,
+              images: products.map(function (p) { return safeUrl(p.image); }).filter(Boolean).slice(0, 3)
+            };
+            setShopInfo(function (prev) { var n = Object.assign({}, prev); n[shop.vendor] = info; return n; });
+          }).catch(function () {});
+        db.ref("ratings/" + shop.vendor).once("value").then(function (s) {
+          setRatings(function (prev) { var n = Object.assign({}, prev); n[shop.vendor] = s.val() || {}; return n; });
+        }).catch(function () {});
+      });
+    };
+    var loadShops = async function (manual) {
+      if (manual) setRefreshing(true);
+      var list = await fetchShopList();
+      if (list) {
+        var clean = list.filter(function (s) { return s && s.vendor && s.url; }).map(function (s) {
+          return { vendor: String(s.vendor), name: decodeEntities(s.name || s.vendor), url: String(s.url).replace(/\/?$/, "/") };
+        });
+        setShops(clean); setShopsState("ok");
+        lsSet("sog_shops", JSON.stringify(clean));
+        loadShopInfo(clean);
+      } else {
+        setShopsState(shops.length ? "ok" : "error");
+        if (manual) notify("Impossible d'actualiser. Vérifiez votre connexion.", "error");
+        if (shops.length) loadShopInfo(shops);
+      }
+      if (manual) setRefreshing(false);
+    };
+    useEffect(function () { loadShops(false); }, []);
+
+    // ---- ouverture / fermeture d'une boutique (bouton retour du téléphone inclus) ----
+    var openShop = function (shop) {
+      setFrameLoaded(false);
+      setSelectedShop(shop);
+      shopRef.current = shop;
+      try { history.pushState({ sogShop: shop.vendor }, ""); historyPushed.current = true; } catch (e) {}
+    };
+    var closeShop = function () {
+      if (historyPushed.current) { historyPushed.current = false; try { history.back(); return; } catch (e) {} }
+      setSelectedShop(null);
+    };
+    useEffect(function () {
+      var onPop = function () { historyPushed.current = false; setSelectedShop(null); };
+      window.addEventListener("popstate", onPop);
+      return function () { window.removeEventListener("popstate", onPop); };
+    }, []);
+
+    // ---- messages venant de la boutique (iframe) ----
+    var saveOrderFromShop = function (payload) {
+      var u = userRef.current;
+      if (!u || !payload) return;
+      db.ref("orders").push().set({
+        userId: u.uid, customerEmail: u.email, vendor: payload.vendor,
+        items: payload.items, total: payload.total, currency: payload.currency || "DZD",
+        status: "pending", createdAt: new Date().toISOString(),
+        customerName: payload.customerName || u.name,
+        customerPhone: payload.customerPhone || u.phone,
+        customerAddress: payload.customerAddress || u.address,
+        comments: payload.comments || ""
+      }).catch(function () {});
+    };
+    useEffect(function () {
+      var onMessage = function (event) {
+        var frame = iframeRef.current;
+        if (!frame || event.source !== frame.contentWindow || !event.data) return;
+        var t = event.data.type;
+        if (t === "SOG_READY") sendAuth(userRef.current);
+        else if (t === "SOG_LOGIN_REQUEST") { setSheetError(""); setSheetInfo(""); setSheet({ type: "login" }); }
+        else if (t === "SOG_ORDER_SAVED") { lastSavedAt.current = Date.now(); notify("Commande envoyée. Retrouvez-la dans « Commandes ».", "success"); }
+        else if (t === "SOG_ORDER") {
+          // Anciennes boutiques : elles enregistrent déjà la commande puis envoient aussi SOG_ORDER.
+          if (Date.now() - lastSavedAt.current > 6000) saveOrderFromShop(event.data.payload);
+        }
+      };
+      window.addEventListener("message", onMessage);
+      return function () { window.removeEventListener("message", onMessage); };
+    }, []);
+
+    // ---- blocage du défilement quand une feuille est ouverte ----
+    var anyOverlay = !!(sheet || confirm);
+    useEffect(function () {
+      document.body.style.overflow = (anyOverlay || selectedShop) ? "hidden" : "";
+      return function () { document.body.style.overflow = ""; };
+    }, [anyOverlay, selectedShop]);
+
+    // =========================================================
+    // ACTIONS
+    // =========================================================
+    var openSheet = function (s) { setSheetError(""); setSheetInfo(""); setSheet(s); };
+    var closeSheet = function () { setSheet(null); setSheetError(""); setSheetInfo(""); };
+
+    var doLogin = async function (email, password) {
+      setSheetError(""); setSheetInfo(""); setBusy("login");
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        closeSheet();
+        notify("Connexion réussie. Bienvenue !", "success");
+      } catch (e) { setSheetError(authMessage(e.code, "Connexion impossible. Réessayez.")); }
+      setBusy("");
+    };
+    var doReset = function (email) {
+      setSheetError(""); setSheetInfo("");
+      if (!email) { setSheetError("Saisissez d'abord votre email ci-dessus."); return; }
+      auth.sendPasswordResetEmail(email)
+        .then(function () { setSheetInfo("Email de réinitialisation envoyé à " + email + "."); })
+        .catch(function (e) { setSheetError(authMessage(e.code, "Impossible d'envoyer l'email.")); });
+    };
+    var doRegister = async function (f) {
+      setSheetError("");
+      var name = f.name.trim(), email = f.email.trim();
+      if (!name) { setSheetError("Le nom est obligatoire."); return; }
+      if (f.password.length < 6) { setSheetError("Mot de passe trop court (6 caractères minimum)."); return; }
+      setBusy("register");
+      try {
+        var cred = await auth.createUserWithEmailAndPassword(email, f.password);
+        try { await cred.user.updateProfile({ displayName: name }); } catch (e) {}
+        try {
+          await db.ref("users/" + cred.user.uid).set({ name: name, email: email, phone: f.phone.trim(), address: f.address.trim(), createdAt: new Date().toISOString() });
+        } catch (e) {}
+        // L'état d'authentification est émis avant l'écriture du profil : on applique les données saisies tout de suite.
+        var fresh = { uid: cred.user.uid, email: email, name: name, phone: f.phone.trim(), address: f.address.trim() };
+        userRef.current = fresh; setUser(fresh); sendAuth(fresh);
+        closeSheet();
+        notify("Compte créé. Bienvenue sur SOG !", "success");
+      } catch (e) { setSheetError(authMessage(e.code, "Inscription impossible. Réessayez.")); }
+      setBusy("");
+    };
+    var doLogout = function () {
+      auth.signOut().then(function () { setSelectedShop(null); notify("Vous êtes déconnecté.", "info"); })
+        .catch(function () { notify("La déconnexion a échoué.", "error"); });
+    };
+    var doProfile = async function (f) {
+      setSheetError("");
+      var name = f.name.trim();
+      if (!name) { setSheetError("Le nom est obligatoire."); return; }
+      setBusy("profile");
+      try {
+        await db.ref("users/" + user.uid).update({ name: name, phone: f.phone.trim(), address: f.address.trim() });
+        try { if (auth.currentUser) await auth.currentUser.updateProfile({ displayName: name }); } catch (e) {}
+        var updated = Object.assign({}, user, { name: name, phone: f.phone.trim(), address: f.address.trim() });
+        setUser(updated); userRef.current = updated; sendAuth(updated);
+        closeSheet();
+        notify("Profil mis à jour.", "success");
+      } catch (e) { setSheetError("Enregistrement impossible. Réessayez."); }
+      setBusy("");
+    };
+
+    var openRating = function (vendor) {
+      if (!user) { openSheet({ type: "login" }); return; }
+      var mine = ratings[vendor] && ratings[vendor][user.uid];
+      openSheet({ type: "rating", vendor: vendor, initial: mine || null });
+    };
+    var doRating = async function (rating, comment) {
+      setBusy("rating");
+      try {
+        var v = sheet.vendor;
+        await db.ref("ratings/" + v + "/" + user.uid).set({ rating: rating, comment: comment.trim(), createdAt: new Date().toISOString(), userName: user.name });
+        setRatings(function (prev) {
+          var n = Object.assign({}, prev), m = Object.assign({}, n[v] || {});
+          m[user.uid] = { rating: rating, comment: comment.trim(), createdAt: new Date().toISOString(), userName: user.name };
+          n[v] = m; return n;
+        });
+        closeSheet();
+        notify("Merci pour votre note !", "success");
+      } catch (e) { setSheetError("L'envoi de la note a échoué."); }
+      setBusy("");
+    };
+    var avgOf = function (vendor) {
+      var vals = Object.keys(ratings[vendor] || {}).map(function (k) { return ratings[vendor][k].rating || 0; });
+      return vals.length ? (vals.reduce(function (a, b) { return a + b; }, 0) / vals.length).toFixed(1) : 0;
+    };
+    var countOf = function (vendor) { return Object.keys(ratings[vendor] || {}).length; };
+
+    var changeStatus = function (order, status) {
+      db.ref("orders/" + order.id).update({ status: status }).then(function () {
+        notify("Commande mise à jour : " + STATUSES[status].label.toLowerCase() + ".", "success");
+        if (status === "ready") {
+          var topic = order.vendor + "_orders";
+          fetch("https://ntfy.sh/" + topic, {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ topic: topic, title: "Commande prête", message: "Votre commande chez " + order.vendor + " est prête !", priority: 5, click: window.location.href })
+          }).catch(function () {});
+        }
+      }).catch(function () { notify("Mise à jour impossible. Réessayez.", "error"); });
+    };
+
+    // ---- administration ----
+    var loadAdminData = function () {
+      db.ref("users").once("value").then(function (s) {
+        var d = s.val() || {};
+        db.ref("admins").once("value").then(function (a) {
+          var admins = a.val() || [];
+          setUsers(Object.keys(d).map(function (k) { return Object.assign({ uid: k, isAdmin: Array.isArray(admins) && admins.indexOf(k) > -1 }, d[k]); }));
+        });
+      }).catch(function () { notify("Lecture des utilisateurs refusée (règles Firebase).", "error"); });
+      db.ref("vendors").once("value").then(function (s) {
+        var d = s.val() || {};
+        setVendors(Object.keys(d).map(function (k) { return Object.assign({ key: k }, d[k]); }));
+      }).catch(function () {});
+    };
+    useEffect(function () { if (isAdmin) loadAdminData(); }, [isAdmin]);
+    var goAdmin = function (r) { loadAdminData(); setRoute(r); window.scrollTo(0, 0); };
+    var toggleAdmin = async function (u) {
+      try {
+        var snap = await db.ref("admins").once("value");
+        var list = snap.val() || [];
+        if (!Array.isArray(list)) list = [];
+        list = u.isAdmin ? list.filter(function (id) { return id !== u.uid; }) : (list.indexOf(u.uid) > -1 ? list : list.concat([u.uid]));
+        await db.ref("admins").set(list);
+        notify(u.isAdmin ? "Droits administrateur retirés." : "Nouvel administrateur ajouté.", "success");
+        loadAdminData();
+      } catch (e) { notify("Modification impossible.", "error"); }
+    };
+    var askToggleAdmin = function (u) {
+      setConfirm({
+        title: u.isAdmin ? "Retirer les droits admin ?" : "Nommer administrateur ?",
+        text: (decodeEntities(u.name || u.email)) + (u.isAdmin ? " ne pourra plus administrer SOG." : " pourra gérer les utilisateurs et les vendeurs."),
+        yesLabel: u.isAdmin ? "Retirer" : "Nommer", danger: u.isAdmin,
+        onYes: function () { setConfirm(null); toggleAdmin(u); }
+      });
+    };
+    var addVendor = async function (e) {
+      e.preventDefault();
+      var name = newVendor.name.trim().toLowerCase(), email = newVendor.email.trim();
+      if (!/^[a-z0-9-]{2,30}$/.test(name)) { notify("Nom de boutique : 2 à 30 caractères (lettres, chiffres, tirets).", "error"); return; }
+      if (!email) { notify("Saisissez l'email du vendeur.", "error"); return; }
+      setBusy("vendor");
+      try {
+        var snap = await db.ref("users").once("value");
+        var all = snap.val() || {}, uid = null;
+        Object.keys(all).forEach(function (k) { if (all[k] && String(all[k].email || "").toLowerCase() === email.toLowerCase()) uid = k; });
+        if (!uid) { notify("Cet email n'existe pas. Le vendeur doit d'abord créer un compte SOG.", "error"); setBusy(""); return; }
+        await db.ref("vendors/" + name).set({ uid: uid, name: name, email: email, createdAt: new Date().toISOString() });
+        setNewVendor({ name: "", email: "" });
+        notify("Vendeur ajouté.", "success");
+        loadAdminData();
+      } catch (err) { notify("Ajout impossible : " + err.message, "error"); }
+      setBusy("");
+    };
+    var askDeleteVendor = function (v) {
+      setConfirm({
+        title: "Supprimer ce vendeur ?", text: "« " + decodeEntities(v.name || v.key) + " » ne pourra plus gérer ses commandes.", yesLabel: "Supprimer", danger: true,
+        onYes: function () {
+          setConfirm(null);
+          db.ref("vendors/" + v.key).remove().then(function () { notify("Vendeur supprimé.", "success"); loadAdminData(); })
+            .catch(function () { notify("Suppression impossible.", "error"); });
+        }
+      });
+    };
+
+    var install = async function () {
+      if (!installEvt) return;
+      installEvt.prompt();
+      try { await installEvt.userChoice; } catch (e) {}
+      setInstallEvt(null);
+    };
+    var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalone;
+    var isStandalone = window.matchMedia && window.matchMedia("(display-mode: standalone)").matches;
+
+    // =========================================================
+    // RENDU
+    // =========================================================
+    if (!authReady) {
+      return <div className="boot"><div className="spinner"></div></div>;
+    }
+
+    var pendingClient = orders.filter(function (o) { return o.status === "pending" || o.status === "preparing" || o.status === "ready"; });
+    var pendingVendor = vendorOrders.filter(function (o) { return o.status === "pending"; }).length;
+    var activeOrder = orders.filter(function (o) { return o.status === "ready" || o.status === "preparing" || o.status === "pending"; })[0];
+
+    var q = fold(search.trim());
+    var filteredShops = shops.filter(function (s) {
+      if (!q) return true;
+      var i = shopInfo[s.vendor] || {};
+      return fold(s.name + " " + (i.title || "") + " " + (i.tagline || "")).indexOf(q) > -1;
+    });
+
+    // ---- navigation basse ----
+    var navItems = [{ id: "home", label: "Boutiques", icon: "home" }, { id: "orders", label: "Commandes", icon: "orders", badge: pendingClient.length }];
+    if (isVendor) navItems.push({ id: "sales", label: "Ventes", icon: "package", badge: pendingVendor });
+    navItems.push({ id: "account", label: user ? "Compte" : "Connexion", icon: "user" });
+    var navActive = route === "users" || route === "vendors" ? "account" : route;
+
+    var onNav = function (id) {
+      if (id === "account" && !user) { openSheet({ type: "login" }); return; }
+      if ((id === "orders" || id === "sales") && !user) { setRoute(id); return; }
+      setRoute(id); window.scrollTo(0, 0);
+    };
+
+    // ---- en-tête ----
+    var titles = { orders: "Mes commandes", sales: "Ventes", account: "Mon compte", users: "Utilisateurs", vendors: "Vendeurs" };
+    var isSub = route === "users" || route === "vendors";
+    var header = (
+      <header className="topbar">
+        <div className="topbar-in">
+          {isSub ? <button type="button" className="icon-btn" aria-label="Retour" onClick={function () { setRoute("account"); }}><Icon name="back" /></button> : null}
+          {route === "home" ? (
+            <div className="logo">
+              <span className="logo-mark">SOG</span>
+              <div><div className="logo-text">SOG</div><div className="logo-sub">Marché de proximité</div></div>
+            </div>
+          ) : <h1 className="page-title">{titles[route]}</h1>}
+          {route === "home" ? (
+            <button type="button" className={"icon-btn" + (refreshing ? " spin" : "")} aria-label="Actualiser les boutiques" onClick={function () { loadShops(true); }}><Icon name="refresh" size={20} /></button>
+          ) : null}
+          {route === "home" && !user ? (
+            <button type="button" className="btn btn-primary btn-sm" onClick={function () { openSheet({ type: "login" }); }}>Connexion</button>
+          ) : route === "home" && user ? (
+            <button type="button" className="icon-btn" aria-label="Mon compte" onClick={function () { setRoute("account"); }}><span className="avatar">{initial(user.name)}</span></button>
+          ) : null}
+        </div>
+      </header>
+    );
+
+    // ---- pages ----
+    var page = null;
+
+    if (route === "home") {
+      page = (
+        <div className="container page">
+          {!online ? <div className="note warn" role="status"><Icon name="wifi" size={16} /> Vous êtes hors connexion. Les informations affichées peuvent être anciennes.</div> : null}
+          {user ? (
+            <div className="hero small">
+              <h1>Bonjour {decodeEntities(user.name).split(" ")[0]} 👋</h1>
+              <p>Que souhaitez-vous commander aujourd'hui ?</p>
+            </div>
+          ) : (
+            <div className="hero">
+              <h1>Le marché de votre quartier, dans votre poche.</h1>
+              <p>Choisissez une boutique, commandez en quelques touches et retirez votre commande sans attendre.</p>
+              <div className="hero-act">
+                <button type="button" className="btn btn-white" onClick={function () { openSheet({ type: "register" }); }}>S'inscrire</button>
+                <button type="button" className="btn btn-outline-white" onClick={function () { openSheet({ type: "login" }); }}>Se connecter</button>
+              </div>
+            </div>
+          )}
+
+          {user && activeOrder ? (
+            <button type="button" className="active-order" onClick={function () { setRoute("orders"); }}>
+              <span className={"ao-ico " + STATUSES[activeOrder.status].cls}><Icon name={activeOrder.status === "ready" ? "check" : "clock"} /></span>
+              <span><b>{activeOrder.status === "ready" ? "Votre commande est prête" : "Commande en cours"}</b><span className="sub">{decodeEntities(activeOrder.vendor)} · {STATUSES[activeOrder.status].label}</span></span>
+              <Icon name="chevron" size={20} />
+            </button>
+          ) : null}
+
+          <div className="search">
+            <span className="s-icon"><Icon name="search" size={20} /></span>
+            <input type="search" enterKeyHint="search" placeholder="Rechercher une boutique…" aria-label="Rechercher une boutique" value={search} onChange={function (e) { setSearch(e.target.value); }} />
+            {search ? <button type="button" className="s-clear" aria-label="Effacer la recherche" onClick={function () { setSearch(""); }}><Icon name="x" size={18} /></button> : null}
+          </div>
+
+          <div className="section-head"><h2>Nos boutiques</h2>{shopsState === "ok" ? <span>{filteredShops.length} boutique{filteredShops.length > 1 ? "s" : ""}</span> : null}</div>
+
+          {shopsState === "loading" && shops.length === 0 ? (
+            <div className="shops">{[1, 2, 3].map(function (i) { return <div key={i} className="skel skel-shop"></div>; })}</div>
+          ) : shopsState === "error" ? (
+            <Empty icon="alert" title="Boutiques indisponibles" text="La liste n'a pas pu être chargée. Vérifiez votre connexion."
+              action={<button type="button" className="btn btn-primary" onClick={function () { setShopsState("loading"); loadShops(true); }}>Réessayer</button>} />
+          ) : filteredShops.length === 0 ? (
+            <Empty icon="search" title={search ? "Aucune boutique trouvée" : "Aucune boutique pour le moment"} text={search ? "Essayez un autre mot-clé." : "Revenez bientôt, de nouveaux commerçants arrivent."}
+              action={search ? <button type="button" className="btn btn-soft" onClick={function () { setSearch(""); }}>Voir toutes les boutiques</button> : null} />
+          ) : (
+            <div className="shops">
+              {filteredShops.map(function (s) {
+                return <ShopCard key={s.vendor} shop={s} info={shopInfo[s.vendor]} avg={avgOf(s.vendor)} count={countOf(s.vendor)} onOpen={openShop}
+                  onReviews={function (shop) { openSheet({ type: "reviews", shop: shop }); }} />;
+              })}
+            </div>
+          )}
+
+          {!user ? (
+            <div>
+              <div className="section-head"><h2>Comment ça marche</h2></div>
+              <div className="steps" style={{ marginTop: 0 }}>
+              <div className="step"><span className="step-n">1</span><div><b>Créez votre compte</b><span>Gratuit, en moins d'une minute.</span></div></div>
+              <div className="step"><span className="step-n">2</span><div><b>Choisissez une boutique</b><span>Parcourez les produits et ajoutez-les au panier.</span></div></div>
+              <div className="step"><span className="step-n">3</span><div><b>Retirez votre commande</b><span>Vous êtes prévenu dès qu'elle est prête.</span></div></div>
+              </div>
+            </div>
+          ) : null}
+
+        </div>
+      );
+    }
+
+    if (route === "orders") {
+      page = !user ? (
+        <div className="container page"><Empty icon="orders" title="Connectez-vous pour voir vos commandes" text="Vos commandes et leur avancement apparaissent ici."
+          action={<button type="button" className="btn btn-primary" onClick={function () { openSheet({ type: "login" }); }}>Se connecter</button>} /></div>
+      ) : (
+        <div className="container page">
+          {orders.length === 0 ? (
+            <Empty icon="orders" title="Aucune commande pour le moment" text="Choisissez une boutique pour passer votre première commande."
+              action={<button type="button" className="btn btn-primary" onClick={function () { setRoute("home"); }}>Voir les boutiques</button>} />
+          ) : orders.map(function (o) { return <ClientOrder key={o.id} order={o} shopName={shopInfo[o.vendor] && shopInfo[o.vendor].title} onRate={openRating} />; })}
+        </div>
+      );
+    }
+
+    if (route === "sales") {
+      var counts = { all: vendorOrders.length };
+      Object.keys(STATUSES).forEach(function (k) { counts[k] = vendorOrders.filter(function (o) { return o.status === k; }).length; });
+      var shownVendor = vendorOrders.filter(function (o) { return vendorFilter === "all" || o.status === vendorFilter; });
+      var filters = [["all", "Toutes"], ["pending", "En attente"], ["preparing", "En préparation"], ["ready", "Prêtes"], ["picked", "Retirées"]];
+      page = !user || !isVendor ? (
+        <div className="container page"><Empty icon="package" title="Espace réservé aux vendeurs" /></div>
+      ) : (
+        <div>
+          <div className="tabs-scroll"><div className="tabs-in" role="tablist">
+            {filters.map(function (f) {
+              return <button key={f[0]} type="button" role="tab" aria-selected={vendorFilter === f[0]} className={"tab" + (vendorFilter === f[0] ? " on" : "")} onClick={function () { setVendorFilter(f[0]); }}>{f[1]}<span className="n">{counts[f[0]]}</span></button>;
+            })}
+          </div></div>
+          <div className="container page" style={{ paddingTop: 4 }}>
+            {shownVendor.length === 0 ? <Empty icon="package" title="Aucune commande" text={vendorFilter === "all" ? "Les nouvelles commandes de vos clients apparaîtront ici." : "Aucune commande dans cette catégorie."} />
+              : shownVendor.map(function (o) { return <VendorOrder key={o.id} order={o} onStatus={changeStatus} />; })}
+          </div>
+        </div>
+      );
+    }
+
+    if (route === "account" && user) {
+      page = (
+        <div className="container page">
+          <div className="profile">
+            <span className="avatar lg">{initial(user.name)}</span>
+            <div style={{ minWidth: 0 }}>
+              <h2>{decodeEntities(user.name)}</h2>
+              <p>{user.email}</p>
+              <div className="roles">
+                <span className="role client">Client</span>
+                {isVendor ? <span className="role vendor"><Icon name="store" size={12} /> Vendeur · {vendorName}</span> : null}
+                {isAdmin ? <span className="role admin"><Icon name="shield" size={12} /> Admin</span> : null}
+              </div>
+            </div>
+          </div>
+
+          <div className="list">
+            <div className="info-row"><Icon name="phone" size={20} /><div><small>Téléphone</small>{user.phone || "Non renseigné"}</div></div>
+            <div className="info-row"><Icon name="pin" size={20} /><div><small>Adresse</small>{user.address || "Non renseignée"}</div></div>
+          </div>
+
+          <div className="list">
+            <button type="button" className="list-item" onClick={function () { openSheet({ type: "profile" }); }}>
+              <span className="list-ico"><Icon name="edit" size={20} /></span><span><b>Modifier mon profil</b><small>Nom, téléphone, adresse</small></span><span className="chev"><Icon name="chevron" size={18} /></span>
+            </button>
+            {isVendor ? (
+              <button type="button" className="list-item" onClick={function () { setRoute("sales"); }}>
+                <span className="list-ico"><Icon name="package" size={20} /></span><span><b>Mes ventes</b><small>{pendingVendor ? pendingVendor + " nouvelle(s) commande(s)" : "Commandes de ma boutique"}</small></span><span className="chev"><Icon name="chevron" size={18} /></span>
+              </button>
+            ) : null}
+          </div>
+
+          {isAdmin ? (
+            <div>
+              <div className="section-head"><h2>Administration</h2></div>
+              <div className="stats">
+                <div className="stat"><b>{users.length || "–"}</b><span>Utilisateurs</span></div>
+                <div className="stat"><b>{shops.length}</b><span>Boutiques</span></div>
+                <div className="stat"><b>{vendors.length || "–"}</b><span>Vendeurs</span></div>
+              </div>
+              <div className="list">
+                <button type="button" className="list-item" onClick={function () { goAdmin("users"); }}>
+                  <span className="list-ico"><Icon name="users" size={20} /></span><span><b>Utilisateurs</b><small>Voir les comptes et les droits admin</small></span><span className="chev"><Icon name="chevron" size={18} /></span>
+                </button>
+                <button type="button" className="list-item" onClick={function () { goAdmin("vendors"); }}>
+                  <span className="list-ico"><Icon name="store" size={20} /></span><span><b>Vendeurs</b><small>Associer un compte à une boutique</small></span><span className="chev"><Icon name="chevron" size={18} /></span>
+                </button>
+              </div>
+            </div>
+          ) : null}
+
+          {!isStandalone && installEvt ? (
+            <div className="install">
+              <span className="list-ico"><Icon name="download" size={20} /></span>
+              <div><b>Installer SOG</b><span>Accès direct depuis votre écran d'accueil.</span></div>
+              <button type="button" className="btn btn-primary btn-block" onClick={install}>Installer l'application</button>
+            </div>
+          ) : null}
+          {!isStandalone && !installEvt && isIOS ? (
+            <div className="install">
+              <span className="list-ico"><Icon name="download" size={20} /></span>
+              <div><b>Installer SOG</b><span>Dans Safari, touchez « Partager » puis « Sur l'écran d'accueil ».</span></div>
+            </div>
+          ) : null}
+
+          <div className="list">
+            <button type="button" className="list-item" onClick={doLogout}>
+              <span className="list-ico danger"><Icon name="logout" size={20} /></span><span><b style={{ color: "var(--danger)" }}>Se déconnecter</b></span><span></span>
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (route === "users" && isAdmin) {
+      var uq = fold(userSearch.trim());
+      var shownUsers = users.filter(function (u) { return !uq || fold((u.name || "") + " " + (u.email || "") + " " + (u.phone || "")).indexOf(uq) > -1; });
+      page = (
+        <div className="container page">
+          <div className="search" style={{ marginTop: 0 }}>
+            <span className="s-icon"><Icon name="search" size={20} /></span>
+            <input type="search" placeholder="Rechercher un utilisateur…" aria-label="Rechercher un utilisateur" value={userSearch} onChange={function (e) { setUserSearch(e.target.value); }} />
+          </div>
+          <div className="section-head"><h2>{shownUsers.length} compte{shownUsers.length > 1 ? "s" : ""}</h2></div>
+          {shownUsers.length === 0 ? <Empty icon="users" title="Aucun utilisateur" /> : shownUsers.map(function (u) {
+            var me = u.uid === user.uid;
+            return (
+              <div className="row" key={u.uid}>
+                <span className="avatar">{initial(u.name || u.email)}</span>
+                <div style={{ minWidth: 0 }}>
+                  <div className="row-name">{decodeEntities(u.name || u.email)}{u.isAdmin ? <span className="role admin" style={{ marginLeft: 8 }}>Admin</span> : null}</div>
+                  <div className="row-meta">{decodeEntities(u.email)}{u.phone ? " · " + decodeEntities(u.phone) : ""}</div>
+                </div>
+                <button type="button" className={"btn btn-sm " + (u.isAdmin ? "btn-danger" : "btn-soft")} disabled={me} onClick={function () { askToggleAdmin(u); }} aria-label={(u.isAdmin ? "Retirer admin : " : "Nommer admin : ") + (u.name || u.email)}>
+                  {me ? "Vous" : u.isAdmin ? "Retirer" : "Admin"}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    if (route === "vendors" && isAdmin) {
+      page = (
+        <div className="container page">
+          <form className="panel" style={{ marginTop: 0 }} onSubmit={addVendor}>
+            <h3>Ajouter un vendeur</h3>
+            <Field id="v-name" label="Nom de la boutique" hint="Le même nom que celui du forkeur, par exemple « milo »."><input id="v-name" className="input" autoCapitalize="none" value={newVendor.name} onChange={function (e) { setNewVendor({ name: e.target.value, email: newVendor.email }); }} /></Field>
+            <Field id="v-email" label="Email du vendeur" hint="Le vendeur doit avoir créé un compte SOG avec cet email."><input id="v-email" className="input" type="email" inputMode="email" autoCapitalize="none" value={newVendor.email} onChange={function (e) { setNewVendor({ name: newVendor.name, email: e.target.value }); }} /></Field>
+            <button type="submit" className="btn btn-primary btn-block" disabled={busy === "vendor"}>{busy === "vendor" ? "Ajout…" : "Ajouter le vendeur"}</button>
+          </form>
+          <div className="section-head"><h2>Vendeurs enregistrés</h2><span>{vendors.length}</span></div>
+          {vendors.length === 0 ? <Empty icon="store" title="Aucun vendeur enregistré" /> : vendors.map(function (v) {
+            return (
+              <div className="row" key={v.key}>
+                <span className="avatar">{initial(v.name || v.key)}</span>
+                <div style={{ minWidth: 0 }}><div className="row-name">{decodeEntities(v.name || v.key)}</div><div className="row-meta">{decodeEntities(v.email)}</div></div>
+                <button type="button" className="icon-btn sm" style={{ color: "var(--danger)" }} aria-label={"Supprimer " + (v.name || v.key)} onClick={function () { askDeleteVendor(v); }}><Icon name="trash" size={20} /></button>
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
+
+    if (!page) page = <div className="container page"><Empty icon="alert" title="Page indisponible" action={<button type="button" className="btn btn-primary" onClick={function () { setRoute("home"); }}>Retour à l'accueil</button>} /></div>;
+
+    var reviewShop = sheet && sheet.type === "reviews" ? sheet.shop : null;
+
+    return (
+      <div>
+        {header}
+        {page}
+
+        <nav className="nav" aria-label="Navigation principale">
+          <div className="nav-in">
+            {navItems.map(function (n) {
+              var on = navActive === n.id;
+              return (
+                <button key={n.id} type="button" className={"nav-item" + (on ? " on" : "")} aria-current={on ? "page" : undefined} onClick={function () { onNav(n.id); }}>
+                  <i className="pill-bg"></i>
+                  <span style={{ position: "relative", display: "inline-flex" }}><Icon name={n.icon} size={22} />{n.badge ? <span className="badge">{n.badge}</span> : null}</span>
+                  <span>{n.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </nav>
+
+        {/* ---- boutique en plein écran ---- */}
+        {selectedShop ? (
+          <div className="shop-view">
+            <iframe
+              ref={iframeRef} key={selectedShop.vendor} src={selectedShop.url} title={selectedShop.name}
+              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox allow-modals"
+              onLoad={function () { setFrameLoaded(true); sendAuth(userRef.current); }}
+            />
+            {!frameLoaded ? (
+              <div className="shop-loading"><div className="spinner"></div><div>Ouverture de {selectedShop.name}…</div></div>
+            ) : null}
+            <button type="button" className="back-btn" onClick={closeShop} aria-label="Retour aux boutiques"><Icon name="back" size={20} /> Retour</button>
+          </div>
+        ) : null}
+
+        {/* ---- feuilles ---- */}
+        {sheet && sheet.type === "login" ? (
+          <LoginSheet busy={busy === "login"} error={sheetError} info={sheetInfo} onSubmit={doLogin} onReset={doReset} onClose={closeSheet}
+            onSwitch={function () { openSheet({ type: "register" }); }} />
+        ) : null}
+        {sheet && sheet.type === "register" ? (
+          <RegisterSheet busy={busy === "register"} error={sheetError} onSubmit={doRegister} onClose={closeSheet} onSwitch={function () { openSheet({ type: "login" }); }} />
+        ) : null}
+        {sheet && sheet.type === "profile" && user ? (
+          <ProfileSheet user={user} busy={busy === "profile"} error={sheetError} onSubmit={doProfile} onClose={closeSheet} />
+        ) : null}
+        {sheet && sheet.type === "rating" ? (
+          <RatingSheet vendor={sheet.vendor} initial={sheet.initial} busy={busy === "rating"} onSubmit={doRating} onClose={closeSheet} />
+        ) : null}
+        {reviewShop ? (
+          <ReviewsSheet name={(shopInfo[reviewShop.vendor] && shopInfo[reviewShop.vendor].title) || reviewShop.name} ratings={ratings[reviewShop.vendor] || {}} onClose={closeSheet}
+            onRate={function () { openRating(reviewShop.vendor); }} />
+        ) : null}
+        {confirm ? <Confirm title={confirm.title} text={confirm.text} yesLabel={confirm.yesLabel} danger={confirm.danger} onYes={confirm.onYes} onNo={function () { setConfirm(null); }} /> : null}
+
+        {toast ? (
+          <div className="toasts" role="status" aria-live="polite"><div className={"toast " + toast.type}>{toast.text}</div></div>
+        ) : null}
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App, null));
 </script>
 
 <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('./sw.js');
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("./sw.js").catch(function () {});
     });
   }
 </script>
