@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
   <title>SOG - Marché de proximité</title>
   <meta name="description" content="SOG : le marché de proximité. Commandez chez vos commerçants et retirez votre commande." />
-  <meta name="theme-color" content="#2f5bea" />
+  <meta name="theme-color" content="#0f766e" />
   <meta name="color-scheme" content="light dark" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -27,25 +27,25 @@
        THÈME
        ========================================================= */
     :root {
-      --accent: #2f5bea;
-      --accent-2: #1e3fb8;
+      --accent: #0f766e;
+      --accent-2: #115e59;
       --accent-ink: #ffffff;
-      --accent-soft: rgba(47, 91, 234, 0.11);
+      --accent-soft: rgba(15, 118, 110, 0.10);
 
-      --bg: #f4f6fa;
+      --bg: #f6f8f7;
       --surface: #ffffff;
-      --surface-2: #eceff5;
-      --ink: #0f172a;
-      --ink-2: #475569;
-      --ink-3: #8592a8;
-      --line: #e2e6ee;
+      --surface-2: #e9efec;
+      --ink: #14211c;
+      --ink-2: #4b5d56;
+      --ink-3: #82938c;
+      --line: #e1e8e4;
 
       --ok: #059669;       --ok-soft: rgba(5, 150, 105, 0.12);
       --warn: #d97706;     --warn-soft: rgba(217, 119, 6, 0.13);
       --info: #2563eb;     --info-soft: rgba(37, 99, 235, 0.12);
       --danger: #dc2626;   --danger-soft: rgba(220, 38, 38, 0.1);
       --star: #f59e0b;
-      --shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 8px 24px rgba(15, 23, 42, 0.06);
+      --shadow: 0 1px 2px rgba(20, 33, 28, 0.05), 0 8px 22px rgba(20, 33, 28, 0.08);
 
       --hdr: 56px;
       --nav: 64px;
@@ -54,16 +54,17 @@
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --accent: #5b82ff;
-        --accent-2: #3a5fe0;
-        --accent-soft: rgba(91, 130, 255, 0.16);
-        --bg: #0b1120;
-        --surface: #131c2e;
-        --surface-2: #1b2740;
-        --ink: #f1f5f9;
-        --ink-2: #b4bfd0;
-        --ink-3: #7f8ba0;
-        --line: #243049;
+        --accent: #2dd4bf;
+        --accent-2: #14b8a6;
+        --accent-ink: #062a26;
+        --accent-soft: rgba(45, 212, 191, 0.15);
+        --bg: #0b1512;
+        --surface: #121f1b;
+        --surface-2: #1a2c26;
+        --ink: #eef5f2;
+        --ink-2: #b2c3bb;
+        --ink-3: #7b8e86;
+        --line: #223630;
         --ok: #34d399;     --ok-soft: rgba(52, 211, 153, 0.15);
         --warn: #fbbf24;   --warn-soft: rgba(251, 191, 36, 0.15);
         --info: #60a5fa;   --info-soft: rgba(96, 165, 250, 0.16);
@@ -114,8 +115,6 @@
     .btn-soft { background: var(--accent-soft); color: var(--accent); }
     .btn-ghost { background: var(--surface-2); color: var(--ink); }
     .btn-danger { background: var(--danger-soft); color: var(--danger); }
-    .btn-white { background: #fff; color: #1e3fb8; }
-    .btn-outline-white { background: rgba(255, 255, 255, 0.16); color: #fff; }
     .btn-block { width: 100%; }
     .btn-sm { min-height: 40px; padding: 0 14px; font-size: 14px; border-radius: 11px; }
     .link-btn { color: var(--accent); font-weight: 600; font-size: 14px; padding: 8px 0; min-height: 40px; }
@@ -132,7 +131,6 @@
     .logo { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
     .logo-mark { width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; letter-spacing: 0.02em; flex: none; }
     .logo-text { font-weight: 800; font-size: 19px; letter-spacing: 0.01em; }
-    .logo-sub { font-size: 12px; color: var(--ink-3); line-height: 1.1; }
     .page-title { flex: 1; min-width: 0; font-size: 18px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; flex: none; }
     .avatar.lg { width: 64px; height: 64px; font-size: 26px; }
@@ -151,57 +149,33 @@
     /* =========================================================
        ACCUEIL
        ========================================================= */
-    .hero { border-radius: 22px; padding: 22px 20px; color: #fff; background: radial-gradient(120% 140% at 100% 0%, #5b82ff 0%, transparent 55%), linear-gradient(135deg, #2f5bea, #1a2f93); }
-    .hero h1 { font-size: 24px; font-weight: 800; line-height: 1.2; }
-    .hero p { margin-top: 8px; font-size: 15px; opacity: 0.92; }
-    .hero-act { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .hero-act .btn { white-space: normal; line-height: 1.2; padding: 0 10px; }
-    @media (max-width: 359px) { .hero-act { grid-template-columns: 1fr; } }
-    .hero.small { padding: 18px 20px; }
-    .hero.small h1 { font-size: 21px; }
-
-    .steps { display: grid; gap: 10px; margin-top: 14px; }
-    .step { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; }
-    .step-n { width: 40px; height: 40px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 800; }
-    .step b { display: block; font-size: 15px; }
-    .step span { font-size: 13.5px; color: var(--ink-2); }
-
-    .search { position: relative; margin: 16px 0 4px; }
+    .search { position: relative; margin: 4px 0 0; }
     .search input { -webkit-appearance: none; appearance: none; width: 100%; height: 48px; padding: 0 44px; border-radius: 14px; border: 1px solid var(--line); background: var(--surface); font-size: 16px; }
     .search input::-webkit-search-cancel-button, .search input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
     .search .s-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--ink-3); pointer-events: none; display: flex; }
     .search .s-clear { position: absolute; right: 2px; top: 2px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--ink-3); }
 
-    .section-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 20px 0 10px; }
-    .section-head h2 { font-size: 18px; font-weight: 800; }
-    .section-head span { font-size: 13px; color: var(--ink-3); }
+    /* Carreaux de boutiques : photo + nom, rien d'autre */
+    .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+    .tile { position: relative; display: block; width: 100%; aspect-ratio: 4 / 5; border-radius: 20px; overflow: hidden; background: var(--surface-2); box-shadow: var(--shadow); color: #fff; text-align: left; transition: transform 0.12s; }
+    .tile:active { transform: scale(0.97); }
+    .tile-ph { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 44px; font-weight: 800; color: rgba(255, 255, 255, 0.85); }
+    .tile img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+    .tile::after { content: ""; position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: linear-gradient(to top, rgba(8, 20, 15, 0.78) 0%, rgba(8, 20, 15, 0.25) 38%, rgba(8, 20, 15, 0) 62%); }
+    .tile-name { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; padding: 12px 14px; font-size: 16px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+    .tile-name span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    @media (min-width: 640px) { .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
-    .active-order { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 12px; align-items: center; width: 100%; margin-top: 14px; padding: 12px 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); box-shadow: var(--shadow); }
-    .active-order .ao-ico { width: 44px; height: 44px; border-radius: 13px; display: flex; align-items: center; justify-content: center; }
-    .active-order b { display: block; font-size: 15px; }
-    .active-order span.sub { font-size: 13px; color: var(--ink-2); }
-
-    /* Carte boutique */
-    .shops { display: grid; gap: 14px; }
-    @media (min-width: 640px) { .shops { grid-template-columns: 1fr 1fr; } }
-    .shop { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); cursor: pointer; display: flex; flex-direction: column; min-width: 0; }
-    .shop:active { transform: scale(0.99); }
-    .shop-top { position: relative; padding: 16px 16px 14px; color: #fff; display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 12px; align-items: center; }
-    .shop-logo { width: 52px; height: 52px; border-radius: 16px; background: rgba(255, 255, 255, 0.22); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; overflow: hidden; }
-    .shop-logo img { width: 100%; height: 100%; object-fit: cover; }
-    .shop-name { font-size: 18px; font-weight: 800; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .shop-tag { font-size: 13px; opacity: 0.92; margin-top: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .shop-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
-    .shop-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
-    .chip { display: inline-flex; align-items: center; gap: 5px; min-height: 30px; padding: 0 11px; border-radius: 15px; background: var(--surface-2); font-size: 13px; font-weight: 600; color: var(--ink-2); }
-    .chip.rating { color: var(--ink); min-height: 40px; padding: 0 14px; }
-    .chip.rating svg { color: var(--star); }
-    .thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .thumbs img, .thumbs .ph { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; object-fit: cover; background: var(--surface-2); }
-    .shop-body .btn { margin-top: auto; }
+    /* Message flottant d'accueil */
+    .greet { position: fixed; left: 0; right: 0; z-index: 95; display: flex; justify-content: center; padding: 0 16px; top: calc(var(--hdr) + var(--safe-top) + 12px); pointer-events: none; }
+    .greet-card { pointer-events: auto; width: 100%; max-width: 360px; background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 16px 18px; box-shadow: 0 14px 40px rgba(20, 32, 27, 0.18); animation: greet 4.4s ease forwards; }
+    .greet-card b { display: block; font-size: 18px; }
+    .greet-card span { display: block; margin-top: 2px; color: var(--ink-2); font-size: 15px; }
+    @keyframes greet { 0% { opacity: 0; transform: translateY(-14px) scale(0.98); } 8% { opacity: 1; transform: none; } 86% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-8px); } }
+    @media (prefers-reduced-motion: reduce) { .greet-card { animation: none !important; opacity: 1; } }
 
     .skel { background: linear-gradient(90deg, var(--surface-2) 25%, var(--line) 37%, var(--surface-2) 63%); background-size: 200% 100%; animation: shimmer 1.3s linear infinite; border-radius: 12px; }
-    .skel-shop { height: 230px; border-radius: 20px; }
+    .skel-tile { aspect-ratio: 4 / 5; border-radius: 20px; }
 
     .empty { text-align: center; padding: 44px 16px; color: var(--ink-2); }
     .empty .e-ico { width: 68px; height: 68px; margin: 0 auto 14px; border-radius: 50%; background: var(--surface-2); color: var(--ink-3); display: flex; align-items: center; justify-content: center; }
@@ -320,12 +294,6 @@
     .stars { display: flex; justify-content: center; gap: 4px; margin: 6px 0 16px; }
     .stars button { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; color: var(--line); }
     .stars button.on { color: var(--star); }
-    .review { padding: 12px 0; border-top: 1px solid var(--line); }
-    .review:first-child { border-top: 0; padding-top: 0; }
-    .review-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-weight: 600; font-size: 14px; }
-    .review p { margin-top: 4px; color: var(--ink-2); font-size: 14px; overflow-wrap: anywhere; }
-    .stars-sm { display: inline-flex; gap: 1px; color: var(--star); }
-    .stars-sm .off { color: var(--line); }
 
     /* =========================================================
        BOUTIQUE (plein écran)
@@ -418,7 +386,7 @@
   var hexToRgb = function (hex) { var h = hex.replace("#", ""); return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)]; };
   var rgbToHex = function (c) { return "#" + c.map(function (v) { return ("0" + Math.max(0, Math.min(255, Math.round(v))).toString(16)).slice(-2); }).join(""); };
   var shopGradient = function (accent) {
-    var a = /^#[0-9a-f]{6}$/i.test(accent || "") ? accent : "#2f5bea";
+    var a = /^#[0-9a-f]{6}$/i.test(accent || "") ? accent : "#0f766e";
     var d = rgbToHex(hexToRgb(a).map(function (v) { return v * 0.62; }));
     return "linear-gradient(135deg, " + a + ", " + d + ")";
   };
@@ -557,50 +525,28 @@
     );
   }
 
-  function Stars(p) {
-    var n = Math.round(Number(p.value) || 0);
+  function ShopTile(p) {
+    var shop = p.shop, info = p.info || {};
+    var title = info.title || shop.name;
+    var img = info.cover || info.logo;
     return (
-      <span className="stars-sm" aria-label={n + " sur 5"}>
-        {[1, 2, 3, 4, 5].map(function (i) { return <span key={i} className={i <= n ? "" : "off"}><Icon name="star" size={p.size || 14} fill /></span>; })}
-      </span>
+      <button type="button" className="tile" aria-label={"Ouvrir " + title} onClick={function () { p.onOpen(shop); }}>
+        <span className="tile-ph" style={{ background: shopGradient(info.accent) }}>{initial(title)}</span>
+        {img ? <img src={optimizeImg(img, 500)} alt="" loading="lazy" decoding="async" onError={function (e) { e.target.style.display = "none"; }} /> : null}
+        <span className="tile-name"><span>{title}</span></span>
+      </button>
     );
   }
 
-  // =========================================================
-  // BOUTIQUES
-  // =========================================================
-  function ShopCard(p) {
-    var shop = p.shop, info = p.info || {};
-    var title = info.title || shop.name;
-    var images = info.images || [];
+  function Greeting(p) {
+    useEffect(function () {
+      var t = setTimeout(p.onDone, 4400);
+      return function () { clearTimeout(t); };
+    }, []);
     return (
-      <article className="shop" onClick={function () { p.onOpen(shop); }}>
-        <div className="shop-top" style={{ background: shopGradient(info.accent) }}>
-          <div className="shop-logo">
-            {info.logo ? <img src={optimizeImg(info.logo, 120)} alt="" loading="lazy" onError={function (e) { e.target.style.display = "none"; }} /> : initial(title)}
-          </div>
-          <div style={{ minWidth: 0 }}>
-            <div className="shop-name">{title}</div>
-            <div className="shop-tag">{info.tagline || "Boutique du marché"}</div>
-          </div>
-        </div>
-        <div className="shop-body">
-          <div className="shop-meta">
-            <button type="button" className="chip rating" onClick={function (e) { e.stopPropagation(); p.onReviews(shop); }} aria-label={"Avis sur " + title}>
-              <Icon name="star" size={14} fill /> {p.count ? p.avg : "Nouveau"}{p.count ? <span style={{ color: "var(--ink-3)", fontWeight: 500 }}>({p.count})</span> : null}
-            </button>
-            {info.count !== undefined ? <span className="chip"><Icon name="bag" size={14} /> {info.count} produit{info.count > 1 ? "s" : ""}</span> : null}
-          </div>
-          {images.length ? (
-            <div className="thumbs">
-              {images.slice(0, 3).map(function (src, i) {
-                return <img key={i} src={optimizeImg(src, 220)} alt="" loading="lazy" decoding="async" onError={function (e) { e.target.src = PLACEHOLDER; }} />;
-              })}
-            </div>
-          ) : null}
-          <button type="button" className="btn btn-primary btn-block">Ouvrir la boutique</button>
-        </div>
-      </article>
+      <div className="greet" role="status" aria-live="polite">
+        <div className="greet-card" onClick={p.onDone}><b>Bonjour 👋</b><span>Que souhaitez-vous commander aujourd'hui ?</span></div>
+      </div>
     );
   }
 
@@ -769,27 +715,6 @@
     );
   }
 
-  function ReviewsSheet(p) {
-    var list = Object.keys(p.ratings || {}).map(function (k) { return p.ratings[k]; }).sort(byDateDesc);
-    return (
-      <Sheet title={"Avis · " + p.name} onClose={p.onClose}
-        footer={<button type="button" className="btn btn-soft btn-block" onClick={p.onRate}><Icon name="star" size={18} /> Donner mon avis</button>}>
-        {list.length === 0 ? <Empty icon="star" title="Pas encore d'avis" text="Soyez le premier à noter cette boutique." /> : (
-          <div>
-            {list.map(function (r, i) {
-              return (
-                <div className="review" key={i}>
-                  <div className="review-top"><span>{decodeEntities(r.userName) || "Client"}</span><Stars value={r.rating} /></div>
-                  {r.comment ? <p>{decodeEntities(r.comment)}</p> : null}
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </Sheet>
-    );
-  }
-
   // =========================================================
   // APPLICATION
   // =========================================================
@@ -802,9 +727,8 @@
     var [shops, setShops] = useState(function () { try { return JSON.parse(lsGet("sog_shops") || "[]"); } catch (e) { return []; } });
     var [shopsState, setShopsState] = useState("loading");
     var [shopInfo, setShopInfo] = useState({});
-    var [ratings, setRatings] = useState({});
+    var [greeting, setGreeting] = useState(false);
     var [search, setSearch] = useState("");
-    var [refreshing, setRefreshing] = useState(false);
 
     var [selectedShop, setSelectedShop] = useState(null);
     var [frameLoaded, setFrameLoaded] = useState(false);
@@ -840,10 +764,19 @@
     shopRef.current = selectedShop;
 
     var notify = function (text, type) {
+      setGreeting(false);
       setToast({ text: text, type: type || "info" });
       clearTimeout(toastTimer.current);
       toastTimer.current = setTimeout(function () { setToast(null); }, 4200);
     };
+
+    // ---- message d'accueil flottant (une fois par session) ----
+    useEffect(function () {
+      if (!authReady) return;
+      var seen = false;
+      try { seen = sessionStorage.getItem("sog_greeted") === "1"; sessionStorage.setItem("sog_greeted", "1"); } catch (e) {}
+      if (!seen) setGreeting(true);
+    }, [authReady]);
 
     // ---- réseau / installation ----
     useEffect(function () {
@@ -989,18 +922,13 @@
               tagline: decodeEntities(s.tagline || ""),
               accent: /^#[0-9a-f]{6}$/i.test(s.accent || "") ? s.accent : "",
               logo: safeUrl(s.logo),
-              count: products.length,
-              images: products.map(function (p) { return safeUrl(p.image); }).filter(Boolean).slice(0, 3)
+              cover: products.map(function (p) { return safeUrl(p.image); }).filter(Boolean)[0] || ""
             };
             setShopInfo(function (prev) { var n = Object.assign({}, prev); n[shop.vendor] = info; return n; });
           }).catch(function () {});
-        db.ref("ratings/" + shop.vendor).once("value").then(function (s) {
-          setRatings(function (prev) { var n = Object.assign({}, prev); n[shop.vendor] = s.val() || {}; return n; });
-        }).catch(function () {});
       });
     };
     var loadShops = async function (manual) {
-      if (manual) setRefreshing(true);
       var list = await fetchShopList();
       if (list) {
         var clean = list.filter(function (s) { return s && s.vendor && s.url; }).map(function (s) {
@@ -1014,9 +942,13 @@
         if (manual) notify("Impossible d'actualiser. Vérifiez votre connexion.", "error");
         if (shops.length) loadShopInfo(shops);
       }
-      if (manual) setRefreshing(false);
     };
-    useEffect(function () { loadShops(false); }, []);
+    useEffect(function () {
+      loadShops(false);
+      var onVisible = function () { if (document.visibilityState === "visible" && !shopRef.current) loadShops(false); };
+      document.addEventListener("visibilitychange", onVisible);
+      return function () { document.removeEventListener("visibilitychange", onVisible); };
+    }, []);
 
     // ---- ouverture / fermeture d'une boutique (bouton retour du téléphone inclus) ----
     var openShop = function (shop) {
@@ -1135,31 +1067,21 @@
       setBusy("");
     };
 
-    var openRating = function (vendor) {
+    var openRating = async function (vendor) {
       if (!user) { openSheet({ type: "login" }); return; }
-      var mine = ratings[vendor] && ratings[vendor][user.uid];
+      var mine = null;
+      try { mine = (await db.ref("ratings/" + vendor + "/" + user.uid).once("value")).val(); } catch (e) {}
       openSheet({ type: "rating", vendor: vendor, initial: mine || null });
     };
     var doRating = async function (rating, comment) {
       setBusy("rating");
       try {
-        var v = sheet.vendor;
-        await db.ref("ratings/" + v + "/" + user.uid).set({ rating: rating, comment: comment.trim(), createdAt: new Date().toISOString(), userName: user.name });
-        setRatings(function (prev) {
-          var n = Object.assign({}, prev), m = Object.assign({}, n[v] || {});
-          m[user.uid] = { rating: rating, comment: comment.trim(), createdAt: new Date().toISOString(), userName: user.name };
-          n[v] = m; return n;
-        });
+        await db.ref("ratings/" + sheet.vendor + "/" + user.uid).set({ rating: rating, comment: comment.trim(), createdAt: new Date().toISOString(), userName: user.name });
         closeSheet();
         notify("Merci pour votre note !", "success");
       } catch (e) { setSheetError("L'envoi de la note a échoué."); }
       setBusy("");
     };
-    var avgOf = function (vendor) {
-      var vals = Object.keys(ratings[vendor] || {}).map(function (k) { return ratings[vendor][k].rating || 0; });
-      return vals.length ? (vals.reduce(function (a, b) { return a + b; }, 0) / vals.length).toFixed(1) : 0;
-    };
-    var countOf = function (vendor) { return Object.keys(ratings[vendor] || {}).length; };
 
     var changeStatus = function (order, status) {
       db.ref("orders/" + order.id).update({ status: status }).then(function () {
@@ -1256,7 +1178,6 @@
 
     var pendingClient = orders.filter(function (o) { return o.status === "pending" || o.status === "preparing" || o.status === "ready"; });
     var pendingVendor = vendorOrders.filter(function (o) { return o.status === "pending"; }).length;
-    var activeOrder = orders.filter(function (o) { return o.status === "ready" || o.status === "preparing" || o.status === "pending"; })[0];
 
     var q = fold(search.trim());
     var filteredShops = shops.filter(function (s) {
@@ -1285,14 +1206,8 @@
         <div className="topbar-in">
           {isSub ? <button type="button" className="icon-btn" aria-label="Retour" onClick={function () { setRoute("account"); }}><Icon name="back" /></button> : null}
           {route === "home" ? (
-            <div className="logo">
-              <span className="logo-mark">SOG</span>
-              <div><div className="logo-text">SOG</div><div className="logo-sub">Marché de proximité</div></div>
-            </div>
+            <div className="logo"><span className="logo-mark">SOG</span><div className="logo-text">Marché</div></div>
           ) : <h1 className="page-title">{titles[route]}</h1>}
-          {route === "home" ? (
-            <button type="button" className={"icon-btn" + (refreshing ? " spin" : "")} aria-label="Actualiser les boutiques" onClick={function () { loadShops(true); }}><Icon name="refresh" size={20} /></button>
-          ) : null}
           {route === "home" && !user ? (
             <button type="button" className="btn btn-primary btn-sm" onClick={function () { openSheet({ type: "login" }); }}>Connexion</button>
           ) : route === "home" && user ? (
@@ -1309,40 +1224,16 @@
       page = (
         <div className="container page">
           {!online ? <div className="note warn" role="status"><Icon name="wifi" size={16} /> Vous êtes hors connexion. Les informations affichées peuvent être anciennes.</div> : null}
-          {user ? (
-            <div className="hero small">
-              <h1>Bonjour {decodeEntities(user.name).split(" ")[0]} 👋</h1>
-              <p>Que souhaitez-vous commander aujourd'hui ?</p>
+          {shops.length > 6 ? (
+            <div className="search">
+              <span className="s-icon"><Icon name="search" size={20} /></span>
+              <input type="search" enterKeyHint="search" placeholder="Rechercher une boutique…" aria-label="Rechercher une boutique" value={search} onChange={function (e) { setSearch(e.target.value); }} />
+              {search ? <button type="button" className="s-clear" aria-label="Effacer la recherche" onClick={function () { setSearch(""); }}><Icon name="x" size={18} /></button> : null}
             </div>
-          ) : (
-            <div className="hero">
-              <h1>Le marché de votre quartier, dans votre poche.</h1>
-              <p>Choisissez une boutique, commandez en quelques touches et retirez votre commande sans attendre.</p>
-              <div className="hero-act">
-                <button type="button" className="btn btn-white" onClick={function () { openSheet({ type: "register" }); }}>S'inscrire</button>
-                <button type="button" className="btn btn-outline-white" onClick={function () { openSheet({ type: "login" }); }}>Se connecter</button>
-              </div>
-            </div>
-          )}
-
-          {user && activeOrder ? (
-            <button type="button" className="active-order" onClick={function () { setRoute("orders"); }}>
-              <span className={"ao-ico " + STATUSES[activeOrder.status].cls}><Icon name={activeOrder.status === "ready" ? "check" : "clock"} /></span>
-              <span><b>{activeOrder.status === "ready" ? "Votre commande est prête" : "Commande en cours"}</b><span className="sub">{decodeEntities(activeOrder.vendor)} · {STATUSES[activeOrder.status].label}</span></span>
-              <Icon name="chevron" size={20} />
-            </button>
           ) : null}
 
-          <div className="search">
-            <span className="s-icon"><Icon name="search" size={20} /></span>
-            <input type="search" enterKeyHint="search" placeholder="Rechercher une boutique…" aria-label="Rechercher une boutique" value={search} onChange={function (e) { setSearch(e.target.value); }} />
-            {search ? <button type="button" className="s-clear" aria-label="Effacer la recherche" onClick={function () { setSearch(""); }}><Icon name="x" size={18} /></button> : null}
-          </div>
-
-          <div className="section-head"><h2>Nos boutiques</h2>{shopsState === "ok" ? <span>{filteredShops.length} boutique{filteredShops.length > 1 ? "s" : ""}</span> : null}</div>
-
           {shopsState === "loading" && shops.length === 0 ? (
-            <div className="shops">{[1, 2, 3].map(function (i) { return <div key={i} className="skel skel-shop"></div>; })}</div>
+            <div className="tiles">{[1, 2, 3, 4].map(function (i) { return <div key={i} className="skel skel-tile"></div>; })}</div>
           ) : shopsState === "error" ? (
             <Empty icon="alert" title="Boutiques indisponibles" text="La liste n'a pas pu être chargée. Vérifiez votre connexion."
               action={<button type="button" className="btn btn-primary" onClick={function () { setShopsState("loading"); loadShops(true); }}>Réessayer</button>} />
@@ -1350,24 +1241,10 @@
             <Empty icon="search" title={search ? "Aucune boutique trouvée" : "Aucune boutique pour le moment"} text={search ? "Essayez un autre mot-clé." : "Revenez bientôt, de nouveaux commerçants arrivent."}
               action={search ? <button type="button" className="btn btn-soft" onClick={function () { setSearch(""); }}>Voir toutes les boutiques</button> : null} />
           ) : (
-            <div className="shops">
-              {filteredShops.map(function (s) {
-                return <ShopCard key={s.vendor} shop={s} info={shopInfo[s.vendor]} avg={avgOf(s.vendor)} count={countOf(s.vendor)} onOpen={openShop}
-                  onReviews={function (shop) { openSheet({ type: "reviews", shop: shop }); }} />;
-              })}
+            <div className="tiles">
+              {filteredShops.map(function (s) { return <ShopTile key={s.vendor} shop={s} info={shopInfo[s.vendor]} onOpen={openShop} />; })}
             </div>
           )}
-
-          {!user ? (
-            <div>
-              <div className="section-head"><h2>Comment ça marche</h2></div>
-              <div className="steps" style={{ marginTop: 0 }}>
-              <div className="step"><span className="step-n">1</span><div><b>Créez votre compte</b><span>Gratuit, en moins d'une minute.</span></div></div>
-              <div className="step"><span className="step-n">2</span><div><b>Choisissez une boutique</b><span>Parcourez les produits et ajoutez-les au panier.</span></div></div>
-              <div className="step"><span className="step-n">3</span><div><b>Retirez votre commande</b><span>Vous êtes prévenu dès qu'elle est prête.</span></div></div>
-              </div>
-            </div>
-          ) : null}
 
         </div>
       );
@@ -1537,8 +1414,6 @@
 
     if (!page) page = <div className="container page"><Empty icon="alert" title="Page indisponible" action={<button type="button" className="btn btn-primary" onClick={function () { setRoute("home"); }}>Retour à l'accueil</button>} /></div>;
 
-    var reviewShop = sheet && sheet.type === "reviews" ? sheet.shop : null;
-
     return (
       <div>
         {header}
@@ -1588,11 +1463,9 @@
         {sheet && sheet.type === "rating" ? (
           <RatingSheet vendor={sheet.vendor} initial={sheet.initial} busy={busy === "rating"} onSubmit={doRating} onClose={closeSheet} />
         ) : null}
-        {reviewShop ? (
-          <ReviewsSheet name={(shopInfo[reviewShop.vendor] && shopInfo[reviewShop.vendor].title) || reviewShop.name} ratings={ratings[reviewShop.vendor] || {}} onClose={closeSheet}
-            onRate={function () { openRating(reviewShop.vendor); }} />
-        ) : null}
         {confirm ? <Confirm title={confirm.title} text={confirm.text} yesLabel={confirm.yesLabel} danger={confirm.danger} onYes={confirm.onYes} onNo={function () { setConfirm(null); }} /> : null}
+
+        {greeting && !toast && route === "home" && !selectedShop && !sheet ? <Greeting onDone={function () { setGreeting(false); }} /> : null}
 
         {toast ? (
           <div className="toasts" role="status" aria-live="polite"><div className={"toast " + toast.type}>{toast.text}</div></div>
